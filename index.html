@@ -1,177 +1,248 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SA Mubin | Syed Sakib Alam Mubin | Cybersecurity Expert & Mentor</title>
-  <meta
-    name="description"
-    content="SA Mubin, also known as Syed Sakib Alam Mubin, Sakib Alam Mubin, SAM, S4M, and S4MC71. Cybersecurity expert and mentor from Bangladesh focused on offensive security, secure architecture, and ethical hacking education."
-  />
-  <meta
-    name="keywords"
-    content="SA Mubin, Syed Sakib Alam Mubin, Sakib Alam Mubin, SAM, S4M, S4MC71, cybersecurity expert, cybersecurity mentor, bd cybersecurity expert, Bangladesh cybersecurity, ethical hacking mentor"
-  />
-  <meta name="author" content="SA Mubin" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://s4mc71.github.io/" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="SA Mubin | Syed Sakib Alam Mubin" />
-  <meta
-    property="og:description"
-    content="Cybersecurity expert and mentor from Bangladesh. Known as SA Mubin, Syed Sakib Alam Mubin, Sakib Alam Mubin, SAM, S4M, and S4MC71."
-  />
-  <meta property="og:url" content="https://s4mc71.github.io/" />
-  <meta property="og:image" content="https://s4mc71.github.io/assets/p.png" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="SA Mubin | Syed Sakib Alam Mubin" />
-  <meta
-    name="twitter:description"
-    content="Cybersecurity expert and mentor from Bangladesh. Known as SA Mubin, S4M, and S4MC71."
-  />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Syed Sakib Alam Mubin (SA Mubin) | Cybersecurity Faculty & Penetration Tester</title>
+  <meta name="description" content="Official portfolio of Syed Sakib Alam Mubin (SA Mubin). Cybersecurity instructor, penetration tester, and security tooling developer specializing in web security, automation, and vulnerability research.">
+  <link rel="canonical" href="https://samubin.com">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Syed Sakib Alam Mubin (SA Mubin) — Cybersecurity Portfolio">
+  <meta property="og:description" content="Cybersecurity Faculty, Penetration Tester & Python Tool Developer.">
+  <meta property="og:url" content="https://samubin.com">
+  <meta property="og:type" content="website">
+
+  <!-- Entity SEO: Schema.org Structured Data -->
   <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Syed Sakib Alam Mubin",
-      "alternateName": [
-        "SA Mubin",
-        "Sakib Alam Mubin",
-        "SAM",
-        "S4M",
-        "S4MC71"
-      ],
-      "jobTitle": "Cybersecurity Expert and Mentor",
-      "description": "Cybersecurity expert and mentor from Bangladesh focused on offensive security, secure architecture, and ethical hacking education.",
-      "url": "https://s4mc71.github.io/",
-      "image": "https://s4mc71.github.io/assets/p.png",
-      "nationality": "Bangladeshi"
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Syed Sakib Alam Mubin",
+    "alternateName": [
+      "Sakib Alam Mubin",
+      "SA Mubin",
+      "Mubin"
+    ],
+    "url": "https://samubin.com",
+    "jobTitle": "Cybersecurity Faculty Member & Penetration Tester",
+    "email": "mailto:thesamubin@gmail.com",
+    "sameAs": [
+      "https://github.com/thesamubin",
+      "https://gitlab.com/samubin",
+      "https://linkedin.com/in/samubin",
+      "https://x.com/thesamubin",
+      "https://samubin.medium.com",
+      "https://thesamubin.wordpress.com"
+    ]
+  }
+  </script>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              500: '#22c55e',
+              900: '#14532d',
+            }
+          },
+          fontFamily: {
+            mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
     }
   </script>
-  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <!-- Boot sequence overlay (shown first for ~3 seconds) -->
-  <section id="boot-sequence" aria-live="polite">
-    <div class="boot-frame">
-      <h2 class="boot-title">S4M_OS SECURITY BOOT CONSOLE</h2>
-      <pre id="boot-log"></pre>
+<body class="bg-slate-950 text-slate-200 font-sans antialiased selection:bg-emerald-500 selection:text-black">
+
+  <!-- Navigation -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-slate-800">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="#hero" class="font-mono font-bold text-lg text-emerald-400 tracking-wider">
+        samubin<span class="text-slate-500">.com</span>
+      </a>
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+        <a href="#about" class="hover:text-emerald-400 transition-colors">About</a>
+        <a href="#skills" class="hover:text-emerald-400 transition-colors">Technical Stack</a>
+        <a href="#experience" class="hover:text-emerald-400 transition-colors">Experience</a>
+        <a href="#projects" class="hover:text-emerald-400 transition-colors">Projects</a>
+        <a href="#contact" class="hover:text-emerald-400 transition-colors">Contact</a>
+      </nav>
+      <a href="mailto:thesamubin@gmail.com" class="font-mono text-xs border border-emerald-500/40 text-emerald-400 hover:bg-emerald-500 hover:text-black transition-all px-4 py-2 rounded">
+        terminal@init
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="max-w-6xl mx-auto px-6 pt-24 pb-20 border-b border-slate-800/80">
+    <div class="space-y-6 max-w-3xl">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-emerald-950/60 border border-emerald-800/60 text-emerald-300">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Available for Research & Engagements
+      </div>
+      <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white">
+        Syed Sakib Alam Mubin
+      </h1>
+      <p class="font-mono text-lg text-emerald-400">
+        aka SA Mubin <span class="text-slate-500">|</span> @thesamubin
+      </p>
+      <p class="text-slate-400 text-lg leading-relaxed">
+        Cybersecurity Faculty Member, Penetration Tester, and Security Software Developer. Specializing in web application security auditing (OWASP Top 10), offensive pipeline automation, custom exploitation labs, and system hardening.
+      </p>
+      <div class="flex flex-wrap gap-4 pt-4">
+        <a href="#contact" class="px-6 py-3 rounded bg-emerald-500 text-black font-semibold hover:bg-emerald-400 transition-all text-sm">
+          Get in Touch
+        </a>
+        <a href="https://github.com/thesamubin" target="_blank" rel="me noopener" class="px-6 py-3 rounded border border-slate-700 hover:border-slate-500 font-mono text-sm text-slate-300 hover:text-white transition-all">
+          GitHub: @thesamubin
+        </a>
+      </div>
     </div>
   </section>
 
-  <main id="dashboard" class="hidden">
-    <div class="layout">
-      <!-- Left: interactive terminal -->
-      <section class="panel terminal-panel">
-        <header class="panel-header">
-          <span class="dot red"></span>
-          <span class="dot yellow"></span>
-          <span class="dot green"></span>
-          <p>secure-shell://s4m@soc-core</p>
-        </header>
-
-        <div id="terminal-output" class="terminal-output"></div>
-
-        <form id="terminal-form" class="terminal-input-wrap" autocomplete="off">
-          <label for="terminal-input" class="prompt">s4m@soc:~$</label>
-          <input
-            id="terminal-input"
-            type="text"
-            spellcheck="false"
-            aria-label="Terminal command input"
-            placeholder="type 'help' and press enter..."
-          />
-        </form>
-      </section>
-
-      <!-- Right: HUD data and modules -->
-      <section class="panel hud-panel">
-        <div class="hud-card identity-module">
-          <p class="module-label">IDENTITY MODULE</p>
-          <div class="identity-top">
-            <div class="avatar-shell">
-              <img src="assets/p.png" alt="Profile of Syed Sakib Alam Mubin" />
-              <span class="avatar-tag">FACULTY NODE</span>
-            </div>
-            <div class="identity-copy">
-              <h1 class="glitch-hover" data-text="Syed Sakib Alam Mubin">
-                Syed Sakib Alam Mubin
-              </h1>
-              <p id="typed-title" class="typed-title"></p>
-              <p class="title-badge">Cybersecurity Expert • Mentor • Faculty Member, Arena Web Security</p>
-              <p class="alias-line">
-                Also known as SA Mubin, Sakib Alam Mubin, SAM, S4M, and S4MC71.
-              </p>
-            </div>
-          </div>
-          <p class="bio">
-            Cybersecurity expert and mentor from Bangladesh, specializing in
-            offensive security, secure architecture, and Python automation.
-            Mentoring the next generation of ethical hackers.
-          </p>
-          <div class="lab-shortcuts">
-            <a
-              href="https://s4mc71.github.io/LFI-Simulator/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="lab-link"
-            >
-              Open LFI Class Demo
-            </a>
-            <a
-              href="https://s4mc71.github.io/interactive-xss-simulator/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="lab-link"
-            >
-              Open XSS Class Demo
-            </a>
-          </div>
-        </div>
-
-        <div class="hud-card skills-module">
-          <p class="module-label">CAPABILITY MATRIX</p>
-          <div class="skill-row">
-            <span>Penetration Testing</span>
-            <div class="skill-bar"><span class="skill-fill" data-level="94%"></span></div>
-          </div>
-          <div class="skill-row">
-            <span>Secure Architecture</span>
-            <div class="skill-bar"><span class="skill-fill" data-level="89%"></span></div>
-          </div>
-          <div class="skill-row">
-            <span>Python Automation</span>
-            <div class="skill-bar"><span class="skill-fill" data-level="96%"></span></div>
-          </div>
-          <div class="skill-row">
-            <span>Web App Security</span>
-            <div class="skill-bar"><span class="skill-fill" data-level="91%"></span></div>
-          </div>
-        </div>
-
-        <div class="hud-card project-nodes">
-          <p class="module-label">PROJECT NODES</p>
-          <div class="node-map">
-            <span class="node node-static">Node Alpha</span>
-            <span class="node node-static">Node Beta</span>
-            <span class="node node-static">Node Gamma</span>
-          </div>
-        </div>
-
-        <div class="hud-card arsenal-module">
-          <p class="module-label">AUTOMATION ARSENAL (PYTHON)</p>
-          <div class="under-dev-card">
-            <h3>AUTOMATION ARSENAL — UNDER DEVELOPMENT</h3>
-            <p>
-              Python tools are currently in active build phase and not published
-              yet. This section will be updated after deployment.
-            </p>
-          </div>
-        </div>
-      </section>
+  <!-- About Section -->
+  <section id="about" class="max-w-6xl mx-auto px-6 py-20 border-b border-slate-800/80">
+    <h2 class="text-xs font-mono tracking-widest uppercase text-emerald-400 mb-3">01. Entity & Background</h2>
+    <h3 class="text-2xl sm:text-3xl font-bold text-white mb-6">Profile & Professional Focus</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-slate-400 leading-relaxed">
+      <div class="md:col-span-2 space-y-4">
+        <p>
+          I am <strong class="text-slate-200">Syed Sakib Alam Mubin</strong> (commonly referenced as <strong class="text-slate-200">SA Mubin</strong> or <strong class="text-slate-200">Mubin</strong>). With a primary focus on offensive security methodologies, penetration testing, and vulnerability assessment, my work bridges classroom instruction with hands-on exploit mechanics.
+        </p>
+        <p>
+          My operational workflow involves engineering automated reconnaissance pipelines, fuzzing applications within controlled lab environments, simulating attacks like Local File Inclusion (LFI) and Cross-Site Scripting (XSS), and building defensive architectures with structured logging and audit controls.
+        </p>
+      </div>
+      <div class="bg-slate-900/60 p-6 rounded-lg border border-slate-800 font-mono text-xs space-y-3">
+        <div class="text-slate-500 uppercase tracking-wider font-bold">Canonical Identity</div>
+        <div><span class="text-slate-500">Legal Name:</span> Syed Sakib Alam Mubin</div>
+        <div><span class="text-slate-500">Short Identity:</span> SA Mubin</div>
+        <div><span class="text-slate-500">Primary Domain:</span> samubin.com</div>
+        <div><span class="text-slate-500">Universal Handle:</span> thesamubin / samubin</div>
+        <div><span class="text-slate-500">Base Location:</span> Bangladesh</div>
+      </div>
     </div>
-  </main>
+  </section>
 
-  <script src="script.js"></script>
+  <!-- Technical Stack -->
+  <section id="skills" class="max-w-6xl mx-auto px-6 py-20 border-b border-slate-800/80">
+    <h2 class="text-xs font-mono tracking-widest uppercase text-emerald-400 mb-3">02. Technical Arsenal</h2>
+    <h3 class="text-2xl sm:text-3xl font-bold text-white mb-8">Methodologies & Technologies</h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="p-6 rounded-lg bg-slate-900/40 border border-slate-800 space-y-4">
+        <h4 class="font-bold text-white text-base">Offensive Web Security</h4>
+        <ul class="text-sm text-slate-400 space-y-2 font-mono">
+          <li>• OWASP Top 10 Exploitation</li>
+          <li>• WAF Profiling & Bypass</li>
+          <li>• SQL Injection & SSRF Research</li>
+          <li>• LFI/RFI Mechanics</li>
+          <li>• Burp Suite Professional & sqlmap</li>
+        </ul>
+      </div>
+
+      <div class="p-6 rounded-lg bg-slate-900/40 border border-slate-800 space-y-4">
+        <h4 class="font-bold text-white text-base">Recon & Automation</h4>
+        <ul class="text-sm text-slate-400 space-y-2 font-mono">
+          <li>• Python Security Scripting</li>
+          <li>• Subdomain Resolving (massdns, puredns)</li>
+          <li>• Nmap & Masscan Network Audits</li>
+          <li>• Custom Fuzzing Logic</li>
+          <li>• Nessus & Vulnerability Scanners</li>
+        </ul>
+      </div>
+
+      <div class="p-6 rounded-lg bg-slate-900/40 border border-slate-800 space-y-4">
+        <h4 class="font-bold text-white text-base">Systems & Development</h4>
+        <ul class="text-sm text-slate-400 space-y-2 font-mono">
+          <li>• Linux Hardening & Administration</li>
+          <li>• Docker Container Isolation</li>
+          <li>• Python, Django, TypeScript</li>
+          <li>• Next.js & Tailwind CSS</li>
+          <li>• Hardware/Microcontrollers (ESP32, RP2040)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects / Work -->
+  <section id="projects" class="max-w-6xl mx-auto px-6 py-20 border-b border-slate-800/80">
+    <h2 class="text-xs font-mono tracking-widest uppercase text-emerald-400 mb-3">03. Engineering & Labs</h2>
+    <h3 class="text-2xl sm:text-3xl font-bold text-white mb-8">Selected Projects & Research</h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="p-6 rounded-lg bg-slate-900/30 border border-slate-800/90 space-y-3">
+        <span class="text-xs font-mono text-emerald-400">Security Education Simulation</span>
+        <h4 class="text-xl font-bold text-white">Interactive Web Attack Simulators</h4>
+        <p class="text-slate-400 text-sm">
+          Single-file interactive animation simulators demonstrating LFI execution and DOM-based Cross-Site Scripting flows for professional student training.
+        </p>
+        <div class="pt-2 flex gap-3 text-xs font-mono text-slate-500">
+          <span>JavaScript</span> <span>Interactive Canvas</span> <span>DOM Analysis</span>
+        </div>
+      </div>
+
+      <div class="p-6 rounded-lg bg-slate-900/30 border border-slate-800/90 space-y-3">
+        <span class="text-xs font-mono text-emerald-400">Offensive Automation Pipeline</span>
+        <h4 class="text-xl font-bold text-white">Active Subdomain Enumeration Suite</h4>
+        <p class="text-slate-400 text-sm">
+          Automated multi-threaded domain resolution script integrating high-performance mass resolver engines for attack-surface reconnaissance.
+        </p>
+        <div class="pt-2 flex gap-3 text-xs font-mono text-slate-500">
+          <span>Python</span> <span>massdns</span> <span>puredns</span> <span>Bash</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact / Verified Backlink Footprint -->
+  <section id="contact" class="max-w-6xl mx-auto px-6 py-20">
+    <h2 class="text-xs font-mono tracking-widest uppercase text-emerald-400 mb-3">04. Connection</h2>
+    <h3 class="text-2xl sm:text-3xl font-bold text-white mb-6">Verified Footprint & Inquiries</h3>
+    <p class="text-slate-400 max-w-xl mb-8">
+      For authorized pentesting engagements, academic lecturing, or security research discussions, direct inquiries can be routed via email or social handles.
+    </p>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 font-mono text-xs">
+      <a href="mailto:thesamubin@gmail.com" class="p-4 rounded border border-slate-800 hover:border-emerald-500/60 bg-slate-900/30 hover:bg-slate-900 text-center transition-all">
+        <span class="block text-slate-500 mb-1">Email</span>
+        <span class="text-white">Direct Mail</span>
+      </a>
+      <a href="https://github.com/thesamubin" target="_blank" rel="me noopener" class="p-4 rounded border border-slate-800 hover:border-emerald-500/60 bg-slate-900/30 hover:bg-slate-900 text-center transition-all">
+        <span class="block text-slate-500 mb-1">GitHub</span>
+        <span class="text-white">@thesamubin</span>
+      </a>
+      <a href="https://gitlab.com/samubin" target="_blank" rel="me noopener" class="p-4 rounded border border-slate-800 hover:border-emerald-500/60 bg-slate-900/30 hover:bg-slate-900 text-center transition-all">
+        <span class="block text-slate-500 mb-1">GitLab</span>
+        <span class="text-white">@samubin</span>
+      </a>
+      <a href="https://linkedin.com/in/samubin" target="_blank" rel="me noopener" class="p-4 rounded border border-slate-800 hover:border-emerald-500/60 bg-slate-900/30 hover:bg-slate-900 text-center transition-all">
+        <span class="block text-slate-500 mb-1">LinkedIn</span>
+        <span class="text-white">@samubin</span>
+      </a>
+      <a href="https://x.com/thesamubin" target="_blank" rel="me noopener" class="p-4 rounded border border-slate-800 hover:border-emerald-500/60 bg-slate-900/30 hover:bg-slate-900 text-center transition-all">
+        <span class="block text-slate-500 mb-1">X (Twitter)</span>
+        <span class="text-white">@thesamubin</span>
+      </a>
+      <a href="https://samubin.medium.com" target="_blank" rel="me noopener" class="p-4 rounded border border-slate-800 hover:border-emerald-500/60 bg-slate-900/30 hover:bg-slate-900 text-center transition-all">
+        <span class="block text-slate-500 mb-1">Medium</span>
+        <span class="text-white">@samubin</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-900 py-8 text-center text-xs text-slate-600 font-mono">
+    <p>© 2026 Syed Sakib Alam Mubin (SA Mubin). Canonical hub: <a href="https://samubin.com" class="text-slate-400 hover:underline">samubin.com</a></p>
+  </footer>
+
 </body>
 </html>
