@@ -1,0 +1,14 @@
+{
+  "canonical_name": "Syed Sakib Alam Mubin",
+  "alternate_names": ["Sakib Alam Mubin", "SA Mubin"],
+  "primary_username": "@samubin",
+  "alternate_username": "@thesamubin",
+  "domain": "https://samubin.com/",
+  "professional_positioning": {
+    "primary": ["Full-Stack Developer", "Security Engineer"],
+    "secondary": ["Cybersecurity Educator", "Ethical Hacking Instructor"]
+  },
+  "verified_profiles": {
+    "github": "https://github.com/thesamubin"
+  }
+}

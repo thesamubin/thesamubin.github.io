@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engineering & Security Projects | SA Mubin</title>
+  <meta name="description" content="Explore engineering projects and security tools built by Syed Sakib Alam Mubin, showcasing technical problem-solving and secure architectures.">
+  <link rel="canonical" href="https://samubin.com/projects.html">
+  
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://samubin.com/projects.html">
+  <meta property="og:title" content="Engineering & Security Projects | SA Mubin">
+  <meta property="og:description" content="Explore engineering projects and security tools built by Syed Sakib Alam Mubin, showcasing technical problem-solving and secure architectures.">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Engineering & Security Projects | SA Mubin">
+  <meta name="twitter:description" content="Explore engineering projects and security tools built by Syed Sakib Alam Mubin, showcasing technical problem-solving and secure architectures.">
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "SA Mubin",
+    "url": "https://samubin.com/"
+  }
+  </script>
+
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="brand-logo">SA Mubin.</div>
+      <button class="menu-toggle" aria-label="Toggle Menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-overlay"></div>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="projects.html" class="active">Projects</a>
+        <a href="research.html">Research</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <section>
+      <div class="container reveal">
+        <h1 style="margin-bottom: var(--space-lg);">Engineering & <span class="text-accent">Security</span> Projects</h1>
+        <div class="grid grid-cols-2">
+          
+          <div class="card reveal">
+            <h3 style="margin-bottom: 0.5rem;">Interactive XSS Simulator</h3>
+            <p class="text-mono text-accent" style="margin-bottom: 1rem;">Web Security, JavaScript</p>
+            <p style="margin-bottom: 1rem;"><strong>Problem:</strong> Abstract vulnerability explanations fail to show developers the immediate impact of Cross-Site Scripting.</p>
+            <p style="margin-bottom: 1rem;"><strong>Implementation:</strong> Engineered an interactive, visual environment to safely demonstrate, exploit, and mitigate XSS payloads in real-time.</p>
+            <div style="display: flex; gap: var(--space-sm); margin-top: 1rem;">
+              <a href="https://github.com/thesamubin/interactive-xss-simulator" target="_blank" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">View Source</a>
+              <a href="https://thesamubin.github.io/interactive-xss-simulator/" target="_blank" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Live Demo</a>
+            </div>
+          </div>
+
+          <div class="card reveal" style="transition-delay: 100ms;">
+            <h3 style="margin-bottom: 0.5rem;">LFI Simulator</h3>
+            <p class="text-mono text-accent" style="margin-bottom: 1rem;">Web Security, Directory Traversal</p>
+            <p style="margin-bottom: 1rem;"><strong>Problem:</strong> Local File Inclusion vulnerabilities are often misunderstood in standard web applications.</p>
+            <p style="margin-bottom: 1rem;"><strong>Implementation:</strong> Built a practical educational tool simulating LFI to demonstrate directory traversal and server misconfigurations.</p>
+            <div style="display: flex; gap: var(--space-sm); margin-top: 1rem;">
+              <a href="https://github.com/thesamubin/LFI-Simulator" target="_blank" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">View Source</a>
+              <a href="https://thesamubin.github.io/LFI-Simulator/" target="_blank" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Live Demo</a>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2026 Syed Sakib Alam Mubin. All rights reserved.</p>
+    </div>
+  </footer>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
+  <script src="assets/js/animations.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design System - SA Mubin</title>
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/layout.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container">
+      <div class="brand-logo">SA Mubin.</div>
+      <button class="menu-toggle" aria-label="Toggle Menu" aria-expanded="false"><span></span><span></span><span></span></button><div class="nav-overlay"></div><nav class="nav-links">
+        <a href="#" class="active">Home</a>
+        <a href="#">About</a>
+        <a href="#">Projects</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="container">
+        <h1>Heading 1 (Hero)</h1>
+        <h2>Heading 2 (Section Title)</h2>
+        <h3>Heading 3 (Card Title)</h3>
+        <p>This is a standard paragraph. The quick brown fox jumps over the lazy dog. Building modern web applications, engineering security-focused solutions, and empowering the next generation of cybersecurity professionals.</p>
+        
+        <div style="margin-top: var(--space-md); display: flex; gap: var(--space-sm); justify-content: center;">
+          <button class="btn btn-primary">Primary Action</button>
+          <button class="btn btn-secondary">Secondary Action</button>
+        </div>
+      </div>
+    </section>
+
+    <section style="background-color: var(--bg-muted);">
+      <div class="container">
+        <h2>Component Grid</h2>
+        <div class="grid grid-cols-2">
+          <div class="card">
+            <h3>Card Component</h3>
+            <p>This card demonstrates the surface color, border, subtle shadow, and corner radius configured in the design tokens.</p>
+            <p class="text-mono text-accent">console.log("Secure design")</p>
+          </div>
+          <div class="card">
+            <h3>Hover State</h3>
+            <p>Hover over this card to see the restrained lift and shadow transition as per the design guidelines.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2026 Syed Sakib Alam Mubin. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
+
