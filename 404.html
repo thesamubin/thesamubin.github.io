@@ -3,51 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page Not Found | SA Mubin</title>
+  <title>404 — Route Not Found | Sakib Alam Mubin (SA Mubin)</title>
   <meta name="robots" content="noindex">
-  <link rel="stylesheet" href="assets/css/tokens.css">
-  <link rel="stylesheet" href="assets/css/base.css">
-  <link rel="stylesheet" href="assets/css/layout.css">
-  <link rel="stylesheet" href="assets/css/components.css">
-  <link rel="stylesheet" href="assets/css/animations.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#111215">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/css/site.css">
 </head>
 <body>
+  <a class="skip" href="#main">Skip to main content</a>
+
   <header class="site-header">
-    <div class="container">
-      <div class="brand-logo">SA Mubin.</div>
-      <button class="menu-toggle" aria-label="Toggle Menu" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <div class="nav-overlay"></div>
-      <nav class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="projects.html">Projects</a>
-        <a href="research.html">Research</a>
-        <a href="contact.html">Contact</a>
+    <div class="wrap">
+      <a class="brand" href="/" aria-label="Sakib Alam Mubin — Home">
+        <span class="brand-cap" aria-hidden="true">SA</span>
+        <span class="brand-word">SA Mubin</span>
+      </a>
+      <nav class="nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/work/">Work</a>
+        <a href="/about/">About</a>
+        <a href="/contact/">Contact</a>
       </nav>
+      <div class="tools">
+        <button class="tool tool--cmd" type="button" data-palette aria-label="Open command palette (Ctrl+K)">⌘K</button>
+        <button class="tool" type="button" data-sound-toggle aria-pressed="true" aria-label="Mute sound">
+          <svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.8 5.8a9 9 0 0 1 0 12.4"/>
+          </svg>
+          <svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M22 9l-6 6"/><path d="M16 9l6 6"/>
+          </svg>
+        </button>
+      </div>
     </div>
   </header>
-  <main>
-    <section>
-      <div class="container content-wrapper reveal" style="text-align: center;">
-        <h1 style="font-size: clamp(4rem, 10vw, 6rem); margin-bottom: 1rem;" class="text-accent">404</h1>
-        <h2 style="margin-bottom: var(--space-md);">Page Not Found</h2>
-        <p style="margin-bottom: var(--space-lg);">The page you are looking for does not exist or has been moved.</p>
-        <a href="index.html" class="btn btn-primary">Return Home</a>
+
+  <main id="main">
+    <section class="page-head page-head--borderless">
+      <div class="wrap">
+        <h1>404 — Route Not Found</h1>
+        <p class="lede">
+          That URL doesn’t match any route on Sakib Alam Mubin’s site, or an old page moved to clean directory URLs.
+        </p>
+        <div class="keys" style="margin-top: 2.25rem;">
+          <a class="key key--accent" href="/">Back to Home</a>
+          <a class="key" href="/work/">Explore Work</a>
+          <button class="key key--slate" type="button" data-palette>Open Palette (⌘K)</button>
+        </div>
       </div>
     </section>
   </main>
-  <footer class="site-footer">
-    <div class="container">
-      <p>&copy; 2026 Syed Sakib Alam Mubin. All rights reserved.</p>
+
+  <footer class="site-footer site-footer--plain">
+    <div class="wrap">
+      <div>
+        <div class="footer-name">Sakib Alam Mubin</div>
+        <p class="footer-role">Full-Stack Software Developer · SA Mubin</p>
+      </div>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/work/">Work</a>
+        <a href="/about/">About</a>
+        <a href="/contact/">Contact</a>
+      </div>
+      <p class="copy">&copy; 2026 Sakib Alam Mubin (SA Mubin).</p>
     </div>
   </footer>
-  <script src="https://unpkg.com/@studio-freight/lenis@1.0.34/dist/lenis.min.js"></script>
-  <script src="assets/js/animations.js"></script>
-  <script src="assets/js/main.js"></script>
+
+  <dialog class="palette" id="palette" aria-label="Command palette">
+    <div class="palette-form">
+      <span>samubin$</span>
+      <input type="text" placeholder="Type a command (whoami, work, boop, switch, hire)…" aria-label="Command input" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="palette-out" aria-live="polite"></div>
+    <ul class="palette-list" role="listbox" aria-label="Commands"></ul>
+    <div class="palette-foot">
+      <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
+      <span><kbd>Enter</kbd> run</span>
+      <span><kbd>Esc</kbd> close</span>
+    </div>
+  </dialog>
+
+  <script type="module" src="/assets/js/app.js"></script>
 </body>
 </html>

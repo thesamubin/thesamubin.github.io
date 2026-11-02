@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://samubin.com/sitemap.xml
+Sitemap: https://thesamubin.github.io/sitemap.xml
