@@ -1,6 +1,5 @@
-// Shared UI: tactile keys, sticky header, toast notifications, and developer command palette.
+// Shared UI: tactile keys, header, toast, crypt effect, switch, command palette.
 import { sound } from "./sound.js";
-import { boopPrimaryAvatar } from "./avatar.js";
 
 export const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -9,25 +8,23 @@ const TACTILE = ".key, .tool, .chip, .seg button, .palette-list button";
 export function initTactile() {
   document.addEventListener("pointerdown", (e) => {
     const el = e.target.closest(TACTILE);
-    if (!el || el.hasAttribute("data-switch-profile")) return;
+    if (!el) return;
     sound.play(el.matches(".chip, .seg button, .palette-list button") ? "click" : "down");
   });
   document.addEventListener("pointerup", (e) => {
-    const el = e.target.closest(".key, .tool");
-    if (el && !el.hasAttribute("data-switch-profile")) sound.play("up");
+    if (e.target.closest(".key, .tool")) sound.play("up");
   });
+  // keyboard activation gets the same travel and sound
   document.addEventListener("keydown", (e) => {
     if (e.repeat || (e.key !== "Enter" && e.key !== " ")) return;
     const el = document.activeElement?.closest?.(".key, .tool");
     if (!el) return;
     el.classList.add("is-down");
-    if (!el.hasAttribute("data-switch-profile")) sound.play("down");
+    sound.play("down");
   });
   document.addEventListener("keyup", (e) => {
     if (e.key !== "Enter" && e.key !== " ") return;
-    document
-      .querySelectorAll(".key.is-down, .tool.is-down")
-      .forEach((el) => el.classList.remove("is-down"));
+    document.querySelectorAll(".key.is-down, .tool.is-down").forEach((el) => el.classList.remove("is-down"));
   });
 }
 
@@ -69,7 +66,68 @@ export function toast(msg, { auth = false, ms = 3200 } = {}) {
   toastTimer = setTimeout(() => toastEl.classList.remove("is-on"), ms);
 }
 
-/* ---------- developer command palette ---------- */
+/* ---------- crypt: scramble text to ciphertext, then decrypt ---------- */
+const GLYPHS = "0123456789abcdef";
+const running = new WeakSet();
+export function crypt(el, { hold = 380, dur = 900 } = {}) {
+  if (!el || running.has(el) || reduceMotion) return Promise.resolve();
+  running.add(el);
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) if (walker.currentNode.nodeValue.trim()) nodes.push([walker.currentNode, walker.currentNode.nodeValue]);
+  const total = nodes.reduce((n, [, t]) => n + t.length, 0) || 1;
+  el.setAttribute("aria-busy", "true");
+  el.classList.add("is-crypt");
+  const t0 = performance.now();
+  return new Promise((resolve) => {
+    const frame = (now) => {
+      const p = Math.max(0, (now - t0 - hold) / dur);
+      let idx = 0;
+      for (const [node, text] of nodes) {
+        let out = "";
+        for (const ch of text) {
+          const revealed = idx / total < p;
+          out += ch === " " || ch === "\n" || revealed ? ch : GLYPHS[(Math.random() * 16) | 0];
+          idx++;
+        }
+        node.nodeValue = out;
+      }
+      if (p >= 0.35) el.classList.remove("is-crypt");
+      if (p < 1) requestAnimationFrame(frame);
+      else {
+        nodes.forEach(([node, text]) => (node.nodeValue = text));
+        el.classList.remove("is-crypt");
+        el.removeAttribute("aria-busy");
+        running.delete(el);
+        resolve();
+      }
+    };
+    requestAnimationFrame(frame);
+  });
+}
+export function cryptVisible() {
+  const els = [...document.querySelectorAll("main h1, main h2, main h3")].filter((el) => {
+    const r = el.getBoundingClientRect();
+    return r.bottom > 0 && r.top < innerHeight;
+  });
+  els.forEach((el, i) => setTimeout(() => crypt(el), i * 90));
+  return els.length;
+}
+
+/* ---------- build / break switch ---------- */
+export function initSwitches() {
+  document.querySelectorAll("[data-switch]").forEach((sw) => {
+    const panels = document.querySelectorAll(`[data-switch-panel="${sw.dataset.switch}"]`);
+    sw.addEventListener("click", () => {
+      const on = sw.getAttribute("aria-checked") !== "true";
+      sw.setAttribute("aria-checked", String(on));
+      panels.forEach((p) => (p.hidden = (p.dataset.mode === "break") !== on));
+      sound.play("switch");
+    });
+  });
+}
+
+/* ---------- command palette ---------- */
 export function initPalette() {
   const dlg = document.getElementById("palette");
   if (!dlg) return;
@@ -87,78 +145,36 @@ export function initPalette() {
   const print = (txt) => {
     out.textContent = txt;
   };
-
   const cmds = [
-    {
-      c: "whoami",
-      d: "Developer profile",
-      run: () =>
-        print(
-          "Sakib Alam Mubin (SA Mubin)\nFull-Stack Software Developer — tactile UIs, clean APIs, resilient web apps.\nSocial: @thesamubin · @samubin"
-        ),
-    },
-    { c: "work", d: "Selected engineering & teaching labs", run: go("work/") },
-    { c: "about", d: "Story, stack & how SA Mubin builds", run: go("about/") },
-    { c: "contact", d: "Email & quick message composer", run: go("contact/") },
-    {
-      c: "boop",
-      d: "Boop SA Mubin's interactive avatar",
-      run: () => {
-        dlg.close();
-        if (!boopPrimaryAvatar("Booped from the command palette!")) {
-          toast("SA Mubin says hi from the terminal!", { auth: true });
-        }
-      },
-    },
-    {
-      c: "switch",
-      d: "Cycle keycap switch (Thock / Clicky / Synth)",
-      run: () => {
-        const next = sound.cycleProfile();
-        print(`active switch profile: ${next}`);
-      },
-    },
-    { c: "hire", d: "Start a project or role conversation", run: runHire },
-    {
-      c: "github",
-      d: "Open github.com/thesamubin",
-      run: () => {
-        dlg.close();
-        window.open("https://github.com/thesamubin", "_blank", "noopener");
-      },
-    },
-    {
-      c: "sound",
-      d: "Toggle audio on or off",
-      run: () => {
-        sound.toggle();
-        print(`sound: ${sound.enabled ? "on" : "off"} (${sound.profile})`);
-      },
-    },
-    { c: "home", d: "Back to Home", run: go("./") },
-    { c: "clear", d: "Clear terminal output", run: () => print("") },
+    { c: "whoami", d: "Who is this?", run: () => print("Sakib Alam Mubin\naka SA Mubin · Mubin · @thesamubin · @samubin\nFull-stack developer & security engineer. Ethical hacking instructor.") },
+    { c: "ls work", d: "Projects and security tools", run: go("work/") },
+    { c: "cat about", d: "Story, focus, teaching", run: go("about/") },
+    { c: "contact", d: "Email and profiles", run: go("contact/") },
+    { c: "sudo hire mubin", d: "Elevated request", run: sudo },
+    { c: "open github", d: "github.com/thesamubin", run: () => { dlg.close(); window.open("https://github.com/thesamubin", "_blank", "noopener"); } },
+    { c: "encrypt", d: "Scramble the page, then decrypt it", run: () => { dlg.close(); sound.play("whoosh"); cryptVisible(); } },
+    { c: "bugs", d: "Your bug report count", run: () => { const n = +localStorage.getItem("sam.bugs") || 0; print(`bugs reported: ${n}/5${n >= 5 ? "  · hall of fame unlocked" : "  · they perch on ledges. catch them."}`); } },
+    { c: "sound", d: "Toggle sound on or off", run: () => { sound.toggle(); print(`sound: ${sound.enabled ? "on" : "off"}`); } },
+    { c: "home", d: "Back to the start", run: go("./") },
+    { c: "clear", d: "Clear output", run: () => print("") },
   ];
-  cmds.push({
-    c: "help",
-    d: "List available commands",
-    run: () => print(cmds.map((x) => x.c.padEnd(14) + x.d).join("\n")),
-  });
+  cmds.push({ c: "help", d: "List every command", run: () => print(cmds.map((x) => x.c.padEnd(18) + x.d).join("\n")) });
 
-  function runHire() {
-    print("building collaboration bundle ");
+  function sudo() {
+    print("[sudo] password for recruiter: ");
     let n = 0;
     const t = setInterval(() => {
-      out.textContent += ".";
+      out.textContent += "*";
       sound.play("click");
-      if (++n === 6) {
+      if (++n === 8) {
         clearInterval(t);
         setTimeout(() => {
-          out.textContent += "\n[ok] checks green — opening /contact/…";
+          out.textContent += "\naccess granted. opening a secure channel…";
           sound.play("auth");
-          setTimeout(go("contact/"), 750);
-        }, 200);
+          setTimeout(go("contact/"), 900);
+        }, 250);
       }
-    }, 65);
+    }, 70);
   }
 
   function render() {
@@ -180,8 +196,7 @@ export function initPalette() {
       list.append(li);
     });
   }
-
-  function execute() {
+  function run() {
     const q = input.value.trim().toLowerCase();
     const exact = cmds.find((x) => x.c === q);
     const pick = exact || shown[sel];
@@ -191,7 +206,6 @@ export function initPalette() {
       print(`command not found: ${q}\ntry: help`);
     }
   }
-
   function open() {
     if (dlg.open) return;
     out.textContent = "";
@@ -215,7 +229,7 @@ export function initPalette() {
       list.querySelector('[aria-selected="true"]')?.scrollIntoView({ block: "nearest" });
     } else if (e.key === "Enter") {
       e.preventDefault();
-      execute();
+      run();
     } else if (e.key.length === 1) {
       sound.play("up");
     }
@@ -235,3 +249,4 @@ export function initPalette() {
     }
   });
 }
+

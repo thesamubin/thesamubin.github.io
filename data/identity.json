@@ -1,14 +1,15 @@
 {
   "canonical_name": "Sakib Alam Mubin",
   "short_name": "SA Mubin",
-  "alternate_names": ["SA Mubin"],
-  "social_handles": ["samubin", "thesamubin"],
+  "nickname": "Mubin",
+  "alternate_names": ["SA Mubin", "Mubin", "thesamubin", "samubin"],
+  "handles": ["thesamubin", "samubin"],
   "site_url": "https://thesamubin.github.io/",
   "future_domain": "https://samubin.com/",
   "email": "hello@samubin.com",
   "professional_positioning": {
-    "primary": ["Full-Stack Developer", "Software Engineer"],
-    "secondary": ["Application Security", "Technical Educator"]
+    "primary": ["Full-Stack Developer", "Security Engineer"],
+    "secondary": ["Cybersecurity Educator", "Ethical Hacking Instructor"]
   },
   "same_as": [
     "https://github.com/thesamubin"
@@ -19,6 +20,7 @@
     "facebook": "",
     "instagram": "",
     "youtube": "",
-    "medium_or_devto": ""
+    "medium_or_devto": "",
+    "tryhackme_or_hackthebox": ""
   }
 }

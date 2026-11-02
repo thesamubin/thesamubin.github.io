@@ -1,15 +1,17 @@
-// Shared ES Module entry point across all pages.
-import { initTactile, initHeader, initPalette } from "./ui.js";
-import { initAvatars } from "./avatar.js";
-import { initPlaygrounds } from "./playground.js";
+// Entry point shared across all pages.
+import { initTactile, initHeader, initSwitches, initPalette } from "./ui.js";
+import { initKeypad } from "./keypad.js";
+import { initLabs } from "./lab.js";
 import { initBugs } from "./bug.js";
 
 initTactile();
 initHeader();
-initAvatars();
-initPlaygrounds();
+initSwitches();
 initPalette();
+initKeypad();
+initLabs();
 
-// Lazy-init the funny perched bug mascot right after first paint so LCP stays instant.
+// Lazy-init the perched bug mascot right after first paint so LCP is never delayed.
 const runIdle = window.requestIdleCallback || ((fn) => setTimeout(fn, 120));
 runIdle(() => initBugs());
+

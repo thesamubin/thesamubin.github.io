@@ -1,27 +1,12 @@
-// Synthesized mechanical switch & UI sound kit (Web Audio API, zero audio files).
-// Honours user gesture gating and persists both mute state and switch profile.
+// Tiny synthesized sound kit (Web Audio, no audio files).
+// Sounds only start after a user gesture; the toggle is remembered.
 
-const STORE_MUTE = "sam.sound";
-const STORE_PROFILE = "sam.switch";
-const PROFILES = ["thock", "clicky", "synth"];
-const PENTA = [261.63, 293.66, 329.63, 392.0, 440.0, 523.25];
-
+const STORE = "sam.sound";
 let ctx = null;
 let master = null;
 let noiseBuf = null;
-let enabled = localStorage.getItem(STORE_MUTE) !== "off";
-let profile = PROFILES.includes(localStorage.getItem(STORE_PROFILE))
-  ? localStorage.getItem(STORE_PROFILE)
-  : "thock";
-let noteIdx = 0;
-
-const muteListeners = new Set();
-const profileListeners = new Set();
-const waveListeners = new Set();
-
-function emitWave(energy = 0.7, hue = "thock") {
-  waveListeners.forEach((fn) => fn({ energy, hue, profile, time: performance.now() }));
-}
+let enabled = localStorage.getItem(STORE) !== "off";
+const listeners = new Set();
 
 function ensure() {
   if (!ctx) {
@@ -45,7 +30,7 @@ function noise() {
   return noiseBuf;
 }
 
-function burst({ freq = 2000, q = 1, dur = 0.04, gain = 0.35, type = "bandpass", when = 0 }) {
+function burst({ freq = 2000, q = 1, dur = 0.04, gain = 0.4, type = "bandpass", when = 0 }) {
   const t = ctx.currentTime + when;
   const src = ctx.createBufferSource();
   src.buffer = noise();
@@ -61,12 +46,12 @@ function burst({ freq = 2000, q = 1, dur = 0.04, gain = 0.35, type = "bandpass",
   src.stop(t + dur + 0.03);
 }
 
-function tone({ freq = 200, to = null, dur = 0.06, gain = 0.24, type = "sine", when = 0 }) {
+function tone({ freq = 200, to = null, dur = 0.06, gain = 0.25, type = "sine", when = 0 }) {
   const t = ctx.currentTime + when;
   const o = ctx.createOscillator();
   o.type = type;
   o.frequency.setValueAtTime(freq, t);
-  if (to) o.frequency.exponentialRampToValueAtTime(Math.max(20, to), t + dur);
+  if (to) o.frequency.exponentialRampToValueAtTime(to, t + dur);
   const g = ctx.createGain();
   g.gain.setValueAtTime(0.0001, t);
   g.gain.exponentialRampToValueAtTime(gain, t + 0.004);
@@ -76,106 +61,40 @@ function tone({ freq = 200, to = null, dur = 0.06, gain = 0.24, type = "sine", w
   o.stop(t + dur + 0.03);
 }
 
-const switchDown = {
-  thock(r) {
-    burst({ freq: 1450 * r, q: 1.05, dur: 0.026, gain: 0.3 });
-    tone({ freq: 172 * r, to: 78, dur: 0.072, gain: 0.34, type: "triangle" });
-  },
-  clicky(r) {
-    burst({ freq: 3900 * r, q: 3.1, dur: 0.015, gain: 0.34 });
-    burst({ freq: 4650 * r, q: 2.6, dur: 0.012, gain: 0.22, when: 0.014 });
-    tone({ freq: 410 * r, to: 185, dur: 0.032, gain: 0.14, type: "square" });
-  },
-  synth(r) {
-    const base = PENTA[noteIdx % PENTA.length] * (0.98 + (r - 1) * 0.15);
-    noteIdx++;
-    tone({ freq: base, to: base * 0.995, dur: 0.13, gain: 0.2, type: "triangle" });
-    tone({ freq: base * 1.5, dur: 0.09, gain: 0.09, type: "sine", when: 0.008 });
-    burst({ freq: 2400, q: 1.8, dur: 0.014, gain: 0.12 });
-  },
-};
-
-const switchUp = {
-  thock(r) {
-    burst({ freq: 2950 * r, q: 1.5, dur: 0.014, gain: 0.11 });
-  },
-  clicky(r) {
-    burst({ freq: 4300 * r, q: 2.8, dur: 0.012, gain: 0.16 });
-  },
-  synth() {
-    tone({ freq: 1046.5, dur: 0.028, gain: 0.045, type: "sine" });
-  },
-};
-
 const recipes = {
+  // keycap bottom-out: a short filtered tick plus a low body thump
   down(r) {
-    (switchDown[profile] || switchDown.thock)(r);
-    emitWave(0.85, profile);
+    burst({ freq: 1900 * r, q: 0.9, dur: 0.028, gain: 0.32 });
+    tone({ freq: 160 * r, to: 85, dur: 0.07, gain: 0.32, type: "triangle" });
   },
+  // keycap release: a brighter, quieter tick
   up(r) {
-    (switchUp[profile] || switchUp.thock)(r);
+    burst({ freq: 3600 * r, q: 1.6, dur: 0.016, gain: 0.12 });
   },
   click(r) {
-    burst({ freq: 2800 * r, q: 2.2, dur: 0.018, gain: 0.24 });
-    tone({ freq: 520 * r, to: 300, dur: 0.028, gain: 0.06, type: "square" });
-    emitWave(0.45, profile);
+    burst({ freq: 2800 * r, q: 2.2, dur: 0.02, gain: 0.28 });
+    tone({ freq: 520 * r, to: 300, dur: 0.03, gain: 0.07, type: "square" });
   },
   switch() {
-    burst({ freq: 1400, q: 2.8, dur: 0.028, gain: 0.34 });
-    burst({ freq: 3200, q: 2.0, dur: 0.02, gain: 0.2, when: 0.038 });
-    emitWave(0.65, profile);
-  },
-  boop(r) {
-    tone({ freq: 330 * r, to: 760 * r, dur: 0.095, gain: 0.22, type: "sine" });
-    tone({ freq: 988 * r, to: 1318 * r, dur: 0.08, gain: 0.11, type: "triangle", when: 0.055 });
-    emitWave(1.0, "boop");
-  },
-  shades() {
-    [329.63, 415.3, 493.88, 659.25].forEach((f, i) =>
-      tone({ freq: f, dur: 0.15, gain: 0.11, type: "triangle", when: i * 0.042 })
-    );
-    emitWave(0.9, "shades");
-  },
-  wave(r) {
-    tone({ freq: 523.25 * r, to: 659.25 * r, dur: 0.085, gain: 0.15, type: "sine" });
-    tone({ freq: 659.25 * r, to: 880 * r, dur: 0.11, gain: 0.14, type: "sine", when: 0.085 });
-    emitWave(0.8, "wave");
-  },
-  pop(r) {
-    tone({ freq: 440 * r, to: 960 * r, dur: 0.045, gain: 0.2, type: "sine" });
-    emitWave(0.6, "pop");
-  },
-  boing(r) {
-    tone({ freq: 190 * r, to: 520 * r, dur: 0.11, gain: 0.18, type: "sine" });
-    tone({ freq: 340 * r, to: 640 * r, dur: 0.13, gain: 0.13, type: "triangle", when: 0.08 });
-    emitWave(0.95, "boing");
-  },
-  slide() {
-    tone({ freq: 860, to: 185, dur: 0.26, gain: 0.16, type: "sine" });
-    tone({ freq: 195, to: 145, dur: 0.12, gain: 0.1, type: "triangle", when: 0.24 });
-    emitWave(0.75, "slide");
-  },
-  taDa() {
-    [523.25, 659.25, 783.99, 1046.5].forEach((f, i) =>
-      tone({ freq: f, dur: i === 3 ? 0.24 : 0.11, gain: 0.14, type: "triangle", when: i * 0.065 })
-    );
-    emitWave(1.0, "taDa");
+    burst({ freq: 1300, q: 3, dur: 0.03, gain: 0.38 });
+    burst({ freq: 3100, q: 2, dur: 0.02, gain: 0.22, when: 0.04 });
   },
   chirp(r) {
-    tone({ freq: 1850 * r, to: 3100, dur: 0.055, gain: 0.08 });
-    tone({ freq: 2350 * r, to: 3600, dur: 0.048, gain: 0.06, when: 0.068 });
+    tone({ freq: 2000 * r, to: 3400, dur: 0.06, gain: 0.08 });
+    tone({ freq: 2500 * r, to: 3900, dur: 0.05, gain: 0.06, when: 0.075 });
+  },
+  catch() {
+    tone({ freq: 520, to: 1040, dur: 0.12, gain: 0.16, type: "triangle" });
+    tone({ freq: 780, to: 1560, dur: 0.16, gain: 0.12, type: "triangle", when: 0.09 });
   },
   auth() {
-    [587.33, 783.99, 1174.66].forEach((f, i) =>
-      tone({ freq: f, dur: 0.14, gain: 0.12, type: "triangle", when: i * 0.078 })
-    );
-    emitWave(0.9, "auth");
+    [660, 880, 1320].forEach((f, i) => tone({ freq: f, dur: 0.14, gain: 0.12, when: i * 0.085 }));
   },
   deny() {
-    tone({ freq: 240, to: 150, dur: 0.16, gain: 0.08, type: "square" });
+    tone({ freq: 240, to: 150, dur: 0.18, gain: 0.08, type: "square" });
   },
   whoosh() {
-    burst({ freq: 920, q: 0.65, dur: 0.2, gain: 0.13, type: "lowpass" });
+    burst({ freq: 900, q: 0.6, dur: 0.22, gain: 0.12, type: "lowpass" });
   },
 };
 
@@ -183,50 +102,22 @@ export const sound = {
   get enabled() {
     return enabled;
   },
-  get profile() {
-    return profile;
-  },
-  get profiles() {
-    return PROFILES;
-  },
   set(v) {
     enabled = !!v;
-    localStorage.setItem(STORE_MUTE, enabled ? "on" : "off");
-    muteListeners.forEach((fn) => fn(enabled));
+    localStorage.setItem(STORE, enabled ? "on" : "off");
+    listeners.forEach((fn) => fn(enabled));
     if (enabled) this.play("switch");
   },
   toggle() {
     this.set(!enabled);
   },
-  setProfile(next, { silent = false } = {}) {
-    if (!PROFILES.includes(next)) return profile;
-    profile = next;
-    localStorage.setItem(STORE_PROFILE, profile);
-    profileListeners.forEach((fn) => fn(profile));
-    if (!silent) this.play("down");
-    return profile;
-  },
-  cycleProfile() {
-    const idx = (PROFILES.indexOf(profile) + 1) % PROFILES.length;
-    return this.setProfile(PROFILES[idx]);
-  },
   onChange(fn) {
-    muteListeners.add(fn);
+    listeners.add(fn);
   },
-  onProfileChange(fn) {
-    profileListeners.add(fn);
-  },
-  onWave(fn) {
-    waveListeners.add(fn);
-  },
-  play(name, scale = null) {
-    if (!recipes[name]) return;
-    if (!enabled) {
-      emitWave(0.5, name);
-      return;
-    }
+  play(name) {
+    if (!enabled || !recipes[name]) return;
     if (!ensure()) return;
-    const r = scale ?? 0.94 + Math.random() * 0.12;
-    recipes[name](r);
+    recipes[name](0.92 + Math.random() * 0.16);
   },
 };
+

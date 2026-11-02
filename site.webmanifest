@@ -1,7 +1,7 @@
 {
   "name": "Sakib Alam Mubin (SA Mubin)",
   "short_name": "SA Mubin",
-  "description": "Portfolio of Sakib Alam Mubin (SA Mubin) — Full-Stack Software Developer.",
+  "description": "Sakib Alam Mubin (SA Mubin / Mubin / @thesamubin / @samubin) — Full-Stack Developer, Security Engineer, and Ethical Hacking Instructor.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#111215",
@@ -19,3 +19,4 @@
     }
   ]
 }
+
