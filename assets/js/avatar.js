@@ -271,14 +271,15 @@ function peekerSvg(prefix) {
       <stop offset="52%" stop-color="#1e1b22"/>
       <stop offset="100%" stop-color="#110f14"/>
     </linearGradient>
-    <radialGradient id="${prefix}-hood" cx="50%" cy="75%" r="75%">
+    <radialGradient id="${prefix}-hood" cx="50%" cy="68%" r="76%">
       <stop offset="0%" stop-color="#ff8a57"/>
-      <stop offset="55%" stop-color="#ff5a1f"/>
-      <stop offset="100%" stop-color="#a83208"/>
+      <stop offset="54%" stop-color="#ff5a1f"/>
+      <stop offset="100%" stop-color="#9e2d06"/>
     </radialGradient>
     <linearGradient id="${prefix}-chest" x1="50%" y1="100%" x2="50%" y2="0%">
-      <stop offset="0%" stop-color="#f8f4ec"/>
-      <stop offset="100%" stop-color="#cfc8b6"/>
+      <stop offset="0%" stop-color="#2c303a"/>
+      <stop offset="65%" stop-color="#1d2027"/>
+      <stop offset="100%" stop-color="#121419"/>
     </linearGradient>
     <filter id="${prefix}-shadow" x="-20%" y="-15%" width="140%" height="140%">
       <feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#050608" flood-opacity="0.55"/>
@@ -287,10 +288,15 @@ function peekerSvg(prefix) {
 
   <!-- Flipped 180deg around center so character hangs upside-down naturally -->
   <g filter="url(#${prefix}-shadow)" transform="translate(220 190) rotate(180)">
-    <!-- Torso / Raglan Hoodie (at top when flipped) -->
-    <path d="M58 126 C54 152, 56 184, 66 196 L154 196 C164 184, 166 152, 162 126 C146 116, 74 116, 58 126 Z" fill="url(#${prefix}-hood)"/>
-    <path d="M80 127 C77 150, 78 180, 84 196 L136 196 C142 180, 143 150, 140 127 Z" fill="url(#${prefix}-chest)"/>
+    <!-- Torso / Raglan Hoodie with high-contrast charcoal raglan chest & drawstrings -->
+    <path d="M58 126 C54 152, 56 184, 66 196 L154 196 C164 184, 166 152, 162 126 C146 116, 74 116, 58 126 Z" fill="url(#${prefix}-hood)" stroke="#7c2004" stroke-width="1.5"/>
+    <path d="M81 128 C78 150, 79 180, 85 196 L135 196 C141 180, 142 150, 139 128 Z" fill="url(#${prefix}-chest)"/>
     <path d="M66 120 C66 136, 154 136, 154 120 C154 111, 142 108, 136 114 C124 122, 96 122, 84 114 C78 108, 66 111, 66 120 Z" fill="url(#${prefix}-hood)"/>
+    <path d="M74 121 C90 130, 130 130, 146 121" fill="none" stroke="rgba(255,235,220,0.34)" stroke-width="2" stroke-linecap="round"/>
+    <path d="M96 131 Q95 147 97 156" fill="none" stroke="#ece8df" stroke-width="2.8" stroke-linecap="round"/>
+    <path d="M124 131 Q125 147 123 156" fill="none" stroke="#ece8df" stroke-width="2.8" stroke-linecap="round"/>
+    <circle cx="97" cy="157" r="2.4" fill="#ff5a1f"/>
+    <circle cx="123" cy="157" r="2.4" fill="#ff5a1f"/>
 
     <!-- Back hair -->
     <path d="M56 70 C52 30, 78 6, 110 6 C142 6, 168 30, 164 70 C162 88, 154 100, 146 104 L74 104 C66 100, 58 88, 56 70 Z" fill="url(#${prefix}-hair)"/>
@@ -734,8 +740,10 @@ function initPeeker() {
 
     const note = btn.parentElement?.querySelector("[data-peeker-note]");
     const pupils = [...btn.querySelectorAll(".pk-pupil")];
-    let y = -46;
-    let targetY = -46;
+    const REST_Y = -41;
+    const OPEN_Y = -4;
+    let y = REST_Y;
+    let targetY = REST_Y;
     let vy = 0;
     let raf = 0;
     let pinned = false;
@@ -757,7 +765,7 @@ function initPeeker() {
 
     function setOpen(open, fromClick = false) {
       btn.classList.toggle("is-peeking", open);
-      targetY = open ? -6 : -46;
+      targetY = open ? OPEN_Y : REST_Y;
       if (fromClick && !reduceMotion) vy += 5.5;
       if (reduceMotion) {
         y = targetY;
@@ -767,7 +775,7 @@ function initPeeker() {
       }
     }
 
-    art.style.transform = "translate3d(0, -46px, 0)";
+    art.style.transform = `translate3d(0, ${REST_Y}px, 0)`;
 
     btn.addEventListener("pointerenter", () => {
       if (!pinned) setOpen(true, false);

@@ -1,40 +1,47 @@
 ---
 name: Sakib Alam Mubin Portfolio
-description: Tactile Security Lab — Anodized aluminium, bone PBT keycaps, and live client-side vulnerability sandboxes.
+description: Interactive Developer Studio & Tactile Keycaps — Anodized graphite, bone PBT switches, 3D-shaded interactive avatar, and live physics benches.
 colors:
   ground-dark: "#111215"
   ground-dark-surface: "#17191d"
   ground-dark-card: "#1f2227"
   line-dark: "#2b2e35"
   ink-light: "#ece8df"
-  ink-light-muted: "#b1ada5"
+  ink-light-muted: "#b8b4ac"
+  ink-light-subtle: "#9a968e"
   ground-bone: "#e6e0d2"
   ground-bone-surface: "#d8d1c0"
   bone-side: "#b9b19e"
   ink-bone: "#1a1a1c"
-  ink-bone-muted: "#4a4740"
+  ink-bone-muted: "#48453e"
+  bone-accent: "#9c2805"
+  slate-cap: "#3d414a"
+  slate-side: "#252830"
   accent-signal: "#ff5a1f"
   accent-signal-deep: "#b8380c"
   accent-signal-ink: "#1a0d06"
   accent-auth: "#4ade80"
+  kinetic-sky: "#38bdf8"
+  kinetic-orchid: "#a855f7"
+  kinetic-amber: "#facc15"
 typography:
   display:
     fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(2.8rem, 7.5vw, 6rem)"
+    fontSize: "clamp(2.65rem, 4.9vw, 4.45rem)"
     fontWeight: 820
-    lineHeight: 0.92
+    lineHeight: 0.93
     letterSpacing: "-0.04em"
   headline:
     fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "clamp(2rem, 4.6vw, 3.5rem)"
+    fontSize: "clamp(2rem, 4.4vw, 3.4rem)"
     fontWeight: 800
-    lineHeight: 1.02
+    lineHeight: 1.03
     letterSpacing: "-0.025em"
   title:
     fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
     fontSize: "clamp(1.35rem, 2.2vw, 1.75rem)"
-    fontWeight: 700
-    lineHeight: 1.15
+    fontWeight: 800
+    lineHeight: 1.08
     letterSpacing: "-0.015em"
   body:
     fontFamily: "Archivo, ui-sans-serif, system-ui, sans-serif"
@@ -43,137 +50,179 @@ typography:
     lineHeight: 1.6
     letterSpacing: "normal"
   label:
-    fontFamily: "JetBrains Mono, ui-monospace, monospace"
-    fontSize: "0.85rem"
-    fontWeight: 500
-    lineHeight: 1.4
-    letterSpacing: "0.05em"
+    fontFamily: "JetBrains Mono, ui-monospace, Cascadia Code, monospace"
+    fontSize: "0.8125rem"
+    fontWeight: 600
+    lineHeight: 1.45
+    letterSpacing: "normal"
 rounded:
-  sm: "7px"
+  sm: "8px"
   md: "11px"
-  lg: "16px"
+  lg: "18px"
+  xl: "28px"
   pill: "999px"
 spacing:
   xs: "0.5rem"
   sm: "1rem"
   md: "1.5rem"
   lg: "2.5rem"
-  xl: "4rem"
+  xl: "4.75rem"
+  xxl: "7.5rem"
 components:
   button-primary:
     backgroundColor: "{colors.accent-signal}"
     textColor: "{colors.accent-signal-ink}"
     rounded: "{rounded.md}"
     padding: "0.7rem 1.3rem 1rem"
-  button-primary-hover:
-    backgroundColor: "{colors.accent-signal}"
-    textColor: "{colors.accent-signal-ink}"
+  button-bone:
+    backgroundColor: "{colors.ground-bone}"
+    textColor: "{colors.ink-bone}"
+    rounded: "{rounded.md}"
+    padding: "0.7rem 1.3rem 1rem"
   button-slate:
-    backgroundColor: "#3d414a"
+    backgroundColor: "{colors.slate-cap}"
     textColor: "{colors.ink-light}"
     rounded: "{rounded.md}"
     padding: "0.7rem 1.3rem 1rem"
+  input-field:
+    backgroundColor: "{colors.ground-dark-surface}"
+    textColor: "{colors.ink-light}"
+    rounded: "{rounded.sm}"
+    padding: "0.82rem 0.95rem"
+  card-enclosure:
+    backgroundColor: "{colors.ground-dark-surface}"
+    textColor: "{colors.ink-light}"
+    rounded: "{rounded.lg}"
+    padding: "1.5rem 1.6rem"
 ---
 
 # Design System: Sakib Alam Mubin Portfolio
 
 ## Overview
 
-**Creative North Star: "Tactile Security Lab"**
+**Creative North Star: "Interactive Developer Studio & Tactile Keycaps"**
 
-The visual world of Sakib Alam Mubin treats the screen as a physical hardware security workbench rather than an abstract SaaS landing page. It refuses the tired "hacker" clichés of green matrix rain, dark hoodies, and neon wireframes, grounding itself instead in authentic engineering materials: anodized graphite aluminium plates, weighted bone-white PBT keycap plastic, and safety-orange status accents.
+The portfolio of Sakib Alam Mubin (SA Mubin) treats the browser as a joyful, physical full-stack developer studio rather than a static résumé or dark "cyber hacker" template. Grounded in machined graphite aluminium (`#111215`) alternating with warm bone PBT keycap fields (`#E6E0D2`), the world invites visitors to poke, drag, type, and listen from the very first viewport.
 
-The interface lives and reacts physically: buttons possess tangible mechanical travel, synthesized Web Audio thocks provide acoustic feedback without downloading audio assets, untrusted input parameters execute in live client-side sandboxes, and a skittish pixel bug perches across structural ledges.
+An original 3D-vinyl-shaded developer avatar of SA Mubin anchors the hero over a 360-degree cursor-reactive capsule-stroke canvas and peeks upside-down across the curved bone-to-graphite footer seam. Controls behave like real desk hardware: keycaps depress with physical travel and selectable synthesized Web Audio switch voices (`Thock`, `Clicky`, `Synth`), UI motion runs on real Hooke's-law spring solvers, and a comedic roving production bug mutters developer one-liners when discovered.
 
 **Key Characteristics:**
-- **Material Ground Alternation:** High-contrast alternating bands of deep anodized graphite (`#111215`) and warm matte PBT plastic (`#E6E0D2`).
-- **Tactile Keycap Controls:** Deep interactive travel, spring rebound, and multi-tone Web Audio acoustic feedback on click.
-- **Hardware Authenticity:** Continuous cord specular, machined bulkheads, and FIDO2 status LEDs.
-- **Strict Typographic Roles:** High-impact variable Archivo for all editorial copy; JetBrains Mono strictly reserved for security toys, headers, and terminal commands.
+- **Alternating Physical Grounds:** Full-bleed sections alternate strictly between warm anodized graphite (`#111215`) and matte bone PBT polymer (`#E6E0D2`).
+- **Expressive 3D-Clay Avatar & Footer Peeker:** Custom multi-gradient SVG character rig with cursor-tracking parallax, `Boop` / `Shades` / `Say Hi` states, kinetic stroke wave, and upside-down footer peek.
+- **Tactile Switch Acoustics & Physics Toys:** Selectable mechanical switch profiles (`Thock`, `Clicky`, `Synth`), `SAMUBIN` desk macropad, and live 60fps Hooke's-law spring playground with zero external audio or 3D bundle files.
+- **Disciplined Typographic Voices:** Stretched variable `Archivo` carries display and human narrative; `JetBrains Mono` stays strictly inside hardware screens, code benches, and the `⌘K` terminal.
 
 ## Colors
 
-The palette derives from physical lab equipment: industrial graphite enclosures, unbleached polymer plastic, and high-visibility danger markers.
+The palette pairs calm, industrial desk hardware neutrals with safety-orange primary caps and lively multi-hue kinetic strokes reserved for active canvas waveforms and avatar stages.
 
 ### Primary
-- **Safety Signal Orange** (`#FF5A1F`): Used strictly for primary calls-to-action, keycaps, interactive alerts, and verification accents. Accompanied by `#B8380C` shadow depth and `#1A0D06` high-contrast ink.
+- **Safety Signal Orange** (`#ff5a1f`): Primary keycap CTAs, avatar raglan hoodie accents, active filter chips, and focus outlines, paired with `#b8380c` keycap side depth, `#9c2805` bone-surface emphasis, and `#1a0d06` espresso ink.
 
 ### Secondary
-- **FIDO Auth Green** (`#4ADE80`): Reserved exclusively for verified states, live sandbox status, successful cipher checks, and cryptographic passes.
+- **Verified Green** (`#4ade80`): Live bench indicators, successful macropad chord states, and pipeline readiness badges.
+
+### Tertiary
+- **Kinetic Studio Spectrum** (`#38bdf8`, `#a855f7`, `#facc15`): Electric sky, vivid orchid, and warm amber strokes used strictly inside the cursor-reactive avatar wave canvas, procedural audio oscilloscope traces, and playful avatar spark accents.
 
 ### Neutral
-- **Graphite Aluminium** (`#111215`, `#17191D`, `#1F2227`): Deep anodized dark surfaces with `#2B2E35` hairline structural dividers.
-- **Bone PBT Plastic** (`#E6E0D2`, `#D8D1C0`, `#B9B19E`): Warm polymer grounds, cards, and keycap chassis.
-- **Light Plate Ink** (`#ECE8DF`, `#B1ADA5`): Primary and muted text on dark aluminium surfaces.
-- **Dark Polymer Ink** (`#1A1A1C`, `#4A4740`): Primary and muted text on bone surfaces.
+- **Anodized Graphite Aluminium** (`#111215`, `#17191d`, `#1f2227`): Primary dark grounds, bench enclosures, and recessed tracks divided by `#2b2e35` hairlines.
+- **Bone PBT Polymer** (`#e6e0d2`, `#d8d1c0`, `#b9b19e`): Alternating light studio sections, keycap tops, speech bubbles, and the curved footer seam arch.
+- **Warm Studio Inks** (`#ece8df`, `#b8b4ac`, `#9a968e` on dark; `#1a1a1c`, `#48453e` on bone): Hue-tinted foregrounds calibrated well above WCAG AA contrast minimums.
 
 ### Named Rules
-**The Strict Semantic Bevel Rule.** Depressed bottom-lip shadow bevels (`inset 0 -3px/-5px/-6px 0`) are granted exclusively to interactive keys, caps, and switches that depress on press. Static cards, tags, and status containers remain flat or softly elevated to preserve true affordance clarity.
+**The Alternating Field Rule.** Full-width page bands alternate between Anodized Graphite (`#111215`) and Bone PBT (`#e6e0d2`), terminating in a curved bone wave seam where SA Mubin peeks upside-down into the dark footer.
 
-**The Reserved Mono Rule.** `JetBrains Mono` is permitted only in code sandboxes, simulated file paths, HTTP headers, and the `⌘K` command terminal. All human communication (bios, stories, titles, contact forms) stays in `Archivo`.
+**The Kinetic Color Containment Rule.** Multi-hue tertiary colors (`#38bdf8`, `#a855f7`, `#facc15`) live exclusively inside dynamic canvas waveforms, oscilloscope traces, and avatar spark accents—never on static page chrome or typography.
 
 ## Typography
 
-**Display Font:** Archivo Variable (Latin subset, self-hosted `.woff2`)
-**Body Font:** Archivo Variable (Latin subset, self-hosted `.woff2`)
-**Label/Mono Font:** JetBrains Mono (Latin subset, self-hosted `.woff2`)
+**Display Font:** Archivo Variable (Latin subset, self-hosted `.woff2`, stretch `62%–125%`)
+**Body Font:** Archivo Variable (Latin subset, self-hosted `.woff2`, stretch `100%`)
+**Label/Mono Font:** JetBrains Mono Variable (Latin subset, self-hosted `.woff2`)
 
-**Character:** Technical and authoritative yet deeply human: Archivo stretches up to 125% width at 820 weight for monumental, engraved display titles, relaxing to 100% width and 400 weight for effortless readability in body prose.
+**Character:** Monumental and architectural at display sizes—stretching `Archivo` to `125%` width at `820` weight—while settling into warm, unhurried `100%` normal-width proportions for long-form engineering copy.
 
 ### Hierarchy
-- **Display** (820 weight, `clamp(2.8rem, 7.5vw, 6rem)`, line-height 0.92, tracking -0.04em): Hero name and major section entries.
-- **Headline** (800 weight, `clamp(2rem, 4.6vw, 3.5rem)`, line-height 1.02, tracking -0.025em): Page section titles.
-- **Title** (700 weight, `clamp(1.35rem, 2.2vw, 1.75rem)`, line-height 1.15): Project cards and lab bench headings.
-- **Body** (400–600 weight, `1.0625rem`, line-height 1.6, max line length 68ch): Prose narratives and technical descriptions.
-- **Label / Code** (500–700 weight, `0.85rem`, tracking 0.05em): Terminal outputs, payload inputs, and HTTP header policies.
+- **Display** (820 weight, 125% stretch, `clamp(2.65rem, 4.9vw, 4.45rem)`, line-height 0.93, tracking `-0.04em`): Hero name and primary page headers (`<= 6rem` ceiling).
+- **Headline** (800 weight, 118% stretch, `clamp(2rem, 4.4vw, 3.4rem)`, line-height 1.03, tracking `-0.025em`): Section headings without kickers or eyebrows above them.
+- **Title** (800 weight, 110%–120% stretch, `clamp(1.35rem, 2.2vw, 1.75rem)`, line-height 1.08, tracking `-0.015em`): Project cards, craft switcher panels, and split-row subheadings.
+- **Body** (400–600 weight, `1.0625rem`, line-height 1.6, measure `66ch` max): Engineering narratives, descriptions, and form inputs.
+- **Label / Code** (600 weight, `0.8125rem` minimum, `tabular-nums`): OLED macropad readout, spring physics solver telemetry, middleware code panes, and `⌘K` palette commands.
+
+### Named Rules
+**The Reserved Mono Rule.** `JetBrains Mono` appears strictly inside code panes, hardware telemetry readouts, keyboard `<kbd>` legends, and the `⌘K` command terminal—never as a decorative "tech" costume on prose, headings, or navigation.
+
+**The No-Kicker Rule.** Headings carry their own visual authority; never place small uppercase eyebrow or kicker labels above `<h1>`, `<h2>`, or `<h3>`.
 
 ## Layout
 
-12-column responsive layout constrained to a maximum width of `1240px` with fluid gutters `clamp(1.25rem, 4vw, 3rem)`. Sections maintain a generous vertical rhythm of `clamp(4.5rem, 11vw, 8.5rem)` padding, strictly alternating between dark graphite fields and bone polymer fields.
+Content aligns to a `1240px` outer frame (`1144px` inner column) with explicit responsive gutters (`1.5rem` mobile, `2.5rem` at `768px+`, `3rem` at `1120px+`) and generous vertical section padding (`4.75rem` mobile up to `7.5rem` desktop). Asymmetric two-column splits (`1.12fr / 0.98fr` on Hero, `1.12fr / 0.88fr` on Craft + Macropad, `0.94fr / 1.06fr` on Spring Physics, `0.95fr / 1.05fr` on Work benches) collapse cleanly to single-column stacks below `860px–960px` with zero horizontal overflow at `390px`.
 
 ## Elevation & Depth
 
-Surfaces combine physical keycap drop-shadows with subtle ambient occlusion:
-- **Resting Keycap:** `inset 0 1px 0 rgba(255,255,255,.55), inset 0 -5px 0 var(--cap-side), 0 7px 14px -6px rgba(0,0,0,.65)`
-- **Depressed Keycap:** `translateY(3px)` with `inset 0 -2px 0 var(--cap-side), 0 2px 4px -2px rgba(0,0,0,.6)`
-- **Bench Enclosure:** `box-shadow: 0 0 0 1px var(--line), 0 30px 60px -30px rgba(0,0,0,.8)`
-- **Command Palette:** `box-shadow: 0 0 0 1px var(--line), 0 40px 80px -20px rgba(0,0,0,.9)`
+Depth separates pressable hardware switches from calm structural enclosures through physical keycap travel on controls and soft, offset ambient shadows on stages and benches.
+
+### Shadow Vocabulary
+- **Resting Keycap** (`inset 0 1px 0 rgba(255, 255, 255, 0.55), inset 0 -5px 0 var(--cap-side), 0 7px 14px -6px rgba(0, 0, 0, 0.65), 0 2px 4px rgba(0, 0, 0, 0.35)`): Tactile buttons and links (`.key`).
+- **Depressed Keycap** (`inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -2px 0 var(--cap-side), 0 2px 4px -2px rgba(0, 0, 0, 0.6)` with `translateY(3px)`): Active/pressed mechanical travel state.
+- **Desk Macropad Cap** (`inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 -6px 0 var(--cap-side), 0 5px 8px -3px rgba(0, 0, 0, 0.7)`): Sculpted spherical-dish keycaps inside `.macropad`.
+- **Avatar & Bench Stage** (`inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 28px 56px -24px rgba(0, 0, 0, 0.82)`): Single-layer hardware enclosures (`.avatar-stage`, `.spring-card`, `.bench`, `.macropad-shell`).
+
+### Named Rules
+**The Strict Semantic Bevel Rule.** Deep bottom-lip inset bevels (`inset 0 -5px/-6px 0`) belong exclusively to pressable buttons and keycaps that physically depress on click. Static badges, cards, and containers never mimic keycap lips or single-edge accent stripes.
+
+**The Single-Enclosure Rule.** Hardware benches (`.macropad-shell`, `.spring-card`, `.bench`, `.composer-box`) use one outer bordered/shadowed enclosure divided internally by `1px` hairlines—never cards nested inside cards.
 
 ## Shapes
 
-- Keycaps feature a rounded rectangular radius of `11px` (desktop) and `9px` (compact).
-- Lab enclosures and dialogs maintain a structured `16px` radius.
-- Switches feature full pill curvature (`999px`).
+- **Avatar Stage (`28px`):** Rounded studio window framing the 3D-shaded character and radial wave canvas.
+- **Hardware Enclosures (`18px–22px`):** Machined corners on `.macropad-shell`, `.spring-card`, `.bench`, `.teach-box`, and `.idcard`.
+- **Keycaps & Inputs (`9px–11px`):** Tactile PBT key radius with crisp `6px` focus-ring rounding.
+- **Speech Notes & Badges (`999px` / `10px`):** Pill badges for avatar reactions and comic speech bubbles (`1.5px` ink border on bone) for the roving bug.
+- **Footer Wave Seam:** Full-bleed curved SVG arch transitioning `#e6e0d2` bone into `#111215` graphite around the central upside-down peeker.
 
 ## Components
 
-### Keycap Buttons (`.key`)
-- **Primary (`.key--accent`):** Safety orange `#FF5A1F` body, `#B8380C` bottom lip, `#1A0D06` text.
-- **Secondary (`.key`):** Bone `#E6E0D2` body, `#B9B19E` bottom lip, `#1A1A1C` text.
-- **Slate (`.key--slate`):** Dark slate `#3D414A` body, `#262930` bottom lip, `#ECE8DF` text.
-- **Travel:** 3px mechanical downward displacement on `:active` and keyboard activation.
+### Buttons (`.key`)
+Tactile mechanical keycaps with 3px downward travel and Web Audio switch synthesis.
+- **Shape:** Gently sculpted keycap corners (`11px` default, `9px` on `.key--sm`).
+- **Primary (`.key--accent`):** Safety orange (`#ff5a1f`) top gradient, `#b8380c` bottom bevel, `#1a0d06` text, `0.7rem 1.3rem 1rem` padding.
+- **Hover / Focus:** Subtle `brightness(1.04)` lift on hover; `2px solid #ff5a1f` focus ring at `3px` offset; `translateY(3px)` physical depression on `:active` and `aria-pressed="true"`.
+- **Secondary / Slate:** Bone (`.key`, `#e6e0d2` with `#1a1a1c` ink) and Slate (`.key--slate`, `#3d414a` with `#ece8df` ink).
 
-### Hardware Security Keypad (`.pad`)
-- An 8-key spring-physics keypad dangling from a continuous specular cable anchored to a top ceiling bulkhead.
-- Features draggable physics, per-key acoustic thocks, auth LED status flashes, and interactive typing detection (`M-U-B-I-N`).
+### Chips & Segmented Controls (`.chip`, `.seg`)
+Compact tactile toggles for switch profiles, spring presets, and middleware layers.
+- **Style:** Recessed `#111215` or `#d3ccb9` track for `.seg`; `#1f2227` mono pill buttons (`8px` radius, `0.8125rem`) for `.chip`.
+- **State:** `aria-pressed="true"` shifts `.chip` to `#ff5a1f` (`#1a0d06` bold ink) and `.seg button` to raised slate or bone-ink pill.
 
-### Live Lab Benches (`.bench`)
-- Client-side security testbeds featuring real-time input reflection, payload sanitization analyzers, and directory traversal path resolver jails.
+### Cards / Containers (`.work-card`, `.bench`, `.spring-card`, `.macropad-shell`)
+Single-layer dark anodized enclosures with hairline header/footer bars.
+- **Corner Style:** `18px–20px` outer radius.
+- **Background:** `#17191d` (`--ground-2`) or subtle anodized linear gradient (`#21252d` to `#131519`).
+- **Shadow Strategy:** Soft offset ambient shadow (`0 24px 48px -22px`) with `1px` top inner specular.
+- **Border:** `1px solid #2b2e35`.
+- **Internal Padding:** `1.25rem–1.6rem` body padding (`2rem–3rem` on `.teach-box` and `.idcard`).
 
-### Command Terminal (`#palette`)
-- Clean keyboard-driven command palette (`Ctrl+K` or `/`) featuring commands like `whoami`, `ls work`, `cat about`, `sudo hire mubin`, and `encrypt`.
+### Inputs / Fields (`.composer-body input`, `.composer-body textarea`)
+Clean, tracker-free dark studio fields inside the mailto composer.
+- **Style:** `1px solid #2b2e35` stroke, `#17191d` background, `10px` radius, `#9c988f` accessible placeholder (`>= 4.5:1`).
+- **Focus:** `2px solid #ff5a1f` outline with `2px` offset and matching `#ff5a1f` border + caret.
+
+### Navigation (`.site-header`)
+Sticky translucent graphite bar (`backdrop-filter: saturate(1.2) blur(10px)`, `border-bottom: 1px solid #2b2e35`) housing the `SA Mubin` brand mark, 4 route links (`Home`, `Work`, `About`, `Contact`) with a `2px` `#ff5a1f` active underline, and compact slate tool keys (`⌘K` palette + persistent sound mute toggle).
+
+### Interactive 3D Avatar Stage & Footer Peeker (`[data-avatar]`, `[data-peeker]`)
+Signature character system built in pure SVG + `<canvas>`. The hero and `/about/` stages layer a 3D-shaded developer character over a cursor-tracked 360-degree multi-hue capsule wave, paired with `Boop`, `Shades`, and `Say Hi` keys plus a rapid-spin dizzy easter egg. At every main page footer, an upside-down twin hangs shyly behind the `#e6e0d2` wave arch and slides down with laughing `^ ^` eyes on hover or click.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** maintain the strict alternating rhythm of Dark Aluminium (`#111215`) and Bone Polymer (`#E6E0D2`) fields across every page.
-- **Do** preserve the physical travel and Web Audio click feedback on all newly added button-like controls.
-- **Do** keep `Sakib Alam Mubin` and short name `SA Mubin` verbatim in all entity tags, titles, and headers for search engine authority.
-- **Do** ensure all text inputs maintain `::placeholder` contrast `>= 4.5:1` against their container backgrounds.
+- **Do** use **Sakib Alam Mubin** and **SA Mubin** exclusively as names across all copy, metadata, JSON-LD, and social cards, keeping `@thesamubin` and `@samubin` strictly for social/profile handles.
+- **Do** keep the alternating `#111215` graphite and `#e6e0d2` bone section rhythm and single-layer bench enclosures (`>= 13px` minimum text size and `tabular-nums` on telemetry).
+- **Do** respect `prefers-reduced-motion: reduce` across every canvas loop, spring solver, avatar rig, and roving bug animation, and persist the user's mute preference.
 
 ### Don't:
-- **Don't** use `JetBrains Mono` for conversational copy, stories, or contact forms; keep it strictly in terminals and code blocks.
-- **Don't** add bevels or bottom-lip shadows to static, non-interactive containers.
-- **Don't** introduce generic AI slop: no glowing zero-offset halos, no repeating CSS stripes, and no bouncy cartoon easings.
-- **Don't** claim or reference `samubin.com` as canonical on this static deployment; preserve `https://thesamubin.github.io/` until the full Next.js site arrives.
-
+- **Don't** use standalone `"Mubin"`, `"Syed"`, or visible SEO alias dumps (`"also known as..."`) anywhere in user-facing or structured copy.
+- **Don't** place kickers/eyebrows above headings, nest bordered cards inside bordered cards, or put `inset 0 -3px/-4px 0` stripes on non-keycap elements.
+- **Don't** let heavy "cybersecurity hacker" tropes dominate the portfolio; lead ~80% with full-stack software engineering and interactive UI craft, keeping XSS/LFI labs strictly as 2 launch buttons in `/work/#teaching`.
