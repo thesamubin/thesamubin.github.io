@@ -606,15 +606,15 @@ function initContactTools() {
   const templates = {
     engineering: {
       subject: "Full-Stack Engineering Role / Collaboration — Sakib Alam Mubin",
-      body: "Hi SA Mubin,\n\nWe checked out your portfolio and would love to chat about a software engineering role / product build:\n\n- Team / product:\n- Stack & timeline:\n\nBest,",
+      body: "Hi Sakib,\n\nWe checked out your portfolio and would love to chat about a software engineering role / product build:\n\n- Team / product:\n- Stack & timeline:\n\nBest,",
     },
     product: {
       subject: "Interactive Web / Frontend Architecture Inquiry — SA Mubin",
-      body: "Hi SA Mubin,\n\nWe're building a web product that needs fast, polished UI engineering and clean backend APIs:\n\n- Project scope:\n- Target launch:\n\nBest,",
+      body: "Hi Sakib,\n\nWe're building a web product that needs fast, polished UI engineering and clean backend APIs:\n\n- Project scope:\n- Target launch:\n\nBest,",
     },
     teaching: {
       subject: "Developer Workshop / Web Security Session — Sakib Alam Mubin",
-      body: "Hi SA Mubin,\n\nWe're organizing a hands-on engineering / web security session and would love to invite you:\n\n- Audience:\n- Preferred dates:\n\nBest,",
+      body: "Hi Sakib,\n\nWe're organizing a hands-on engineering / web security session and would love to invite you:\n\n- Audience:\n- Preferred dates:\n\nBest,",
     },
   };
 
