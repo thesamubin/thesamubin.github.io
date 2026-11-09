@@ -1,546 +1,374 @@
-// Interactive 3D-clay-shaded developer avatar (Hero + About) + cursor-reactive wave
-// + upside-down peeking footer avatar. Zero external assets; 60fps rAF when visible.
+// Articulated Teenage Cartoon Character Avatar & Rive State-Machine Adapter.
+// Implements the full MorphStateMachine contract (lookX, lookY, hoodUp, typing, hackIdle,
+// wave, boop, celebrate) with 60fps spring kinematics, real-time keyboard typing sync,
+// two-handed hoodie pull animation, and drop-in support for assets/avatar/mubin.riv.
+
 import { sound } from "./sound.js";
-import { reduceMotion } from "./ui.js";
+import { getMode, toggleMode, onModeChange, reduceMotion } from "./mode.js";
 
 let uidSeq = 0;
+const instances = new Set();
 
-function avatarSvg(prefix, { compact = false } = {}) {
-  // Original 3D-vinyl-shaded character for SA Mubin:
-  // Warm South Asian complexion, thick sculpted espresso hair waves,
-  // safety-orange & bone-cream raglan developer hoodie, expressive eyes/shades/wave.
-  const vb = compact ? "40 16 240 232" : "0 0 320 310";
+function buildCharacterSvg(p) {
+  // Hand-illustrated teenage cartoon character (natural anatomical proportions,
+  // sculpted jawline, almond eyes with irises, layered wavy hair, raglan hoodie,
+  // articulated left/right arms + hands, laptop on lap, and dynamic hood canopy).
   return `
-<svg class="av-svg" viewBox="${vb}" aria-hidden="true">
+<svg class="av-svg" viewBox="0 0 420 430" aria-hidden="true">
   <defs>
-    <radialGradient id="${prefix}-skin" cx="38%" cy="30%" r="68%">
-      <stop offset="0%" stop-color="#f7d5b9"/>
-      <stop offset="56%" stop-color="#e2aa82"/>
-      <stop offset="100%" stop-color="#b97850"/>
+    <!-- Warm South Asian skin tones with subsurface warmth -->
+    <radialGradient id="${p}-skin" cx="42%" cy="32%" r="68%">
+      <stop offset="0%" stop-color="#f6d2b6"/>
+      <stop offset="55%" stop-color="#e0a67e"/>
+      <stop offset="100%" stop-color="#b5744c"/>
     </radialGradient>
-    <radialGradient id="${prefix}-ear" cx="45%" cy="40%" r="65%">
-      <stop offset="0%" stop-color="#eab58e"/>
-      <stop offset="100%" stop-color="#b5724b"/>
-    </radialGradient>
-    <radialGradient id="${prefix}-blush" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ff5e4d" stop-opacity="0.52"/>
-      <stop offset="100%" stop-color="#ff5e4d" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="${prefix}-hair" x1="25%" y1="0%" x2="75%" y2="100%">
-      <stop offset="0%" stop-color="#353038"/>
-      <stop offset="48%" stop-color="#1e1b21"/>
-      <stop offset="100%" stop-color="#110f14"/>
+    <linearGradient id="${p}-neck" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#c9855c"/>
+      <stop offset="100%" stop-color="#9e5e3a"/>
     </linearGradient>
-    <linearGradient id="${prefix}-hair-hi" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#524a56"/>
-      <stop offset="60%" stop-color="#26222a"/>
-      <stop offset="100%" stop-color="#151318"/>
+    <radialGradient id="${p}-blush" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ec5b49" stop-opacity="0.46"/>
+      <stop offset="100%" stop-color="#ec5b49" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Safelight crimson upward bounce on face in Hacker Mode -->
+    <linearGradient id="${p}-hack-rim" x1="50%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" stop-color="#e0352b" stop-opacity="0.58"/>
+      <stop offset="55%" stop-color="#c98a3a" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#e0352b" stop-opacity="0"/>
     </linearGradient>
-    <radialGradient id="${prefix}-hood" cx="36%" cy="22%" r="78%">
-      <stop offset="0%" stop-color="#ff8a57"/>
+
+    <!-- Espresso wavy hair -->
+    <linearGradient id="${p}-hair" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#2f2a33"/>
+      <stop offset="52%" stop-color="#1b181f"/>
+      <stop offset="100%" stop-color="#0e0c11"/>
+    </linearGradient>
+    <linearGradient id="${p}-hair-hi" x1="15%" y1="0%" x2="85%" y2="100%">
+      <stop offset="0%" stop-color="#48404e"/>
+      <stop offset="58%" stop-color="#231f28"/>
+      <stop offset="100%" stop-color="#121016"/>
+    </linearGradient>
+
+    <!-- Raglan Hoodie: Signal Orange sleeves/hood + Warm Bone torso -->
+    <linearGradient id="${p}-orange" x1="25%" y1="0%" x2="75%" y2="100%">
+      <stop offset="0%" stop-color="#ff7844"/>
       <stop offset="52%" stop-color="#ff5a1f"/>
-      <stop offset="100%" stop-color="#a83208"/>
+      <stop offset="100%" stop-color="#b8360a"/>
+    </linearGradient>
+    <linearGradient id="${p}-orange-dark" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#d94612"/>
+      <stop offset="100%" stop-color="#7c1f04"/>
+    </linearGradient>
+    <linearGradient id="${p}-hood-inner" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#190e0b"/>
+      <stop offset="65%" stop-color="#2d150e"/>
+      <stop offset="100%" stop-color="#4a1d10"/>
+    </linearGradient>
+    <linearGradient id="${p}-torso" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#f7f4ee"/>
+      <stop offset="68%" stop-color="#e4dfd4"/>
+      <stop offset="100%" stop-color="#c2bbb0"/>
+    </linearGradient>
+
+    <!-- Charcoal Joggers & Laptop Aluminium -->
+    <linearGradient id="${p}-pants" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#2c3038"/>
+      <stop offset="60%" stop-color="#1b1e24"/>
+      <stop offset="100%" stop-color="#101216"/>
+    </linearGradient>
+    <linearGradient id="${p}-laptop-lid" x1="15%" y1="0%" x2="85%" y2="100%">
+      <stop offset="0%" stop-color="#d5d3cd"/>
+      <stop offset="55%" stop-color="#aeb0b6"/>
+      <stop offset="100%" stop-color="#7c8089"/>
+    </linearGradient>
+    <linearGradient id="${p}-laptop-dark" x1="15%" y1="0%" x2="85%" y2="100%">
+      <stop offset="0%" stop-color="#2a2325"/>
+      <stop offset="55%" stop-color="#191315"/>
+      <stop offset="100%" stop-color="#0e0a0b"/>
+    </linearGradient>
+    <radialGradient id="${p}-screen-glow" cx="50%" cy="85%" r="65%">
+      <stop offset="0%" class="av-glow-stop-1" stop-color="#ff5a1f" stop-opacity="0.24"/>
+      <stop offset="100%" class="av-glow-stop-2" stop-color="#ff5a1f" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="${prefix}-chest" x1="30%" y1="0%" x2="70%" y2="100%">
-      <stop offset="0%" stop-color="#f8f4ec"/>
-      <stop offset="65%" stop-color="#e5dfd0"/>
-      <stop offset="100%" stop-color="#beb6a2"/>
-    </linearGradient>
-    <linearGradient id="${prefix}-pants" x1="20%" y1="0%" x2="80%" y2="100%">
-      <stop offset="0%" stop-color="#343943"/>
-      <stop offset="55%" stop-color="#20232a"/>
-      <stop offset="100%" stop-color="#13151a"/>
-    </linearGradient>
-    <linearGradient id="${prefix}-shoe" x1="20%" y1="0%" x2="80%" y2="100%">
-      <stop offset="0%" stop-color="#faf7f0"/>
-      <stop offset="70%" stop-color="#ded8c8"/>
-      <stop offset="100%" stop-color="#b4ad9b"/>
-    </linearGradient>
-    <linearGradient id="${prefix}-lens" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#2b3340"/>
-      <stop offset="50%" stop-color="#12161d"/>
-      <stop offset="100%" stop-color="#0b0d12"/>
-    </linearGradient>
-    <filter id="${prefix}-drop" x="-18%" y="-14%" width="136%" height="138%">
-      <feDropShadow dx="0" dy="8" stdDeviation="7" flood-color="#07080a" flood-opacity="0.45"/>
+
+    <filter id="${p}-shadow" x="-16%" y="-12%" width="132%" height="132%">
+      <feDropShadow dx="0" dy="12" stdDeviation="9" flood-color="#08070a" flood-opacity="0.34"/>
     </filter>
   </defs>
 
-  <g class="av-root" filter="url(#${prefix}-drop)">
-    ${
-      compact
-        ? ""
-        : `
-    <!-- Ground plinth shadow -->
-    <ellipse cx="160" cy="288" rx="86" ry="13" fill="rgba(0,0,0,0.42)"/>`
-    }
+  <g class="av-root" filter="url(#${p}-shadow)">
+    <!-- Ground contact shadow -->
+    <ellipse cx="210" cy="396" rx="124" ry="15" fill="rgba(0,0,0,0.28)"/>
 
-    <!-- Torso & Raglan Hoodie -->
-    <g class="av-body">
-      <!-- Back hood rim -->
-      <ellipse cx="160" cy="166" rx="46" ry="20" fill="#9c2d07"/>
-      <!-- Hoodie torso -->
-      <path d="M108 174 C104 202, 104 236, 114 252 L206 252 C216 236, 216 202, 212 174 C198 162, 122 162, 108 174 Z" fill="url(#${prefix}-hood)"/>
-      <!-- Cream raglan front panel -->
-      <path d="M130 175 C126 198, 127 232, 133 250 L187 250 C193 232, 194 198, 190 175 C176 169, 144 169, 130 175 Z" fill="url(#${prefix}-chest)"/>
-      <!-- Kangaroo pocket seam -->
-      <path d="M136 226 L142 214 L178 214 L184 226" fill="none" stroke="#c8c0ac" stroke-width="2" stroke-linecap="round"/>
-
-      <!-- Left resting arm -->
-      <path class="av-arm-rest-l" d="M114 176 C95 194, 96 228, 138 242 C145 244, 150 234, 143 229 C118 220, 118 199, 128 184 Z" fill="url(#${prefix}-hood)"/>
-      <!-- Right resting arm (hidden when waving) -->
-      <path class="av-arm-rest-r" d="M206 176 C225 194, 224 228, 182 242 C175 244, 170 234, 177 229 C202 220, 202 199, 192 184 Z" fill="url(#${prefix}-hood)"/>
-      <!-- Clasped 3D hands -->
-      <g class="av-hands">
-        <ellipse cx="153" cy="238" rx="12" ry="9.5" fill="url(#${prefix}-skin)"/>
-        <ellipse cx="167" cy="238" rx="12" ry="9.5" fill="url(#${prefix}-skin)"/>
-        <path d="M148 235 Q160 241 172 235" fill="none" stroke="#b97850" stroke-width="2" stroke-linecap="round"/>
+    <!-- Crossed legs / knees base -->
+    <g class="av-legs">
+      <path d="M92 346 C72 330, 96 296, 154 322 L238 354 C256 362, 248 386, 220 382 L112 366 C98 363, 88 354, 92 346 Z" fill="url(#${p}-pants)"/>
+      <path d="M328 346 C348 330, 324 296, 266 322 L182 354 C164 362, 172 386, 200 382 L308 366 C322 363, 332 354, 328 346 Z" fill="url(#${p}-pants)"/>
+      <!-- Sneakers -->
+      <g transform="translate(104 358) rotate(-11)">
+        <path d="M0 12 C0 4, 10 0, 26 0 L48 2 C56 3, 60 10, 58 18 L54 24 L2 24 Z" fill="#f4f2ec"/>
+        <path d="M2 21 L55 21" stroke="#ff5a1f" stroke-width="3.5" stroke-linecap="round"/>
       </g>
-
-      <!-- Waving right arm (shown when .is-waving) -->
-      <g class="av-arm-wave">
-        <path d="M202 180 C226 172, 242 146, 236 122 C234 114, 220 116, 221 126 C223 142, 212 158, 194 168 Z" fill="url(#${prefix}-hood)"/>
-        <circle cx="229" cy="115" r="12.5" fill="url(#${prefix}-skin)"/>
-        <circle cx="219" cy="113" r="4.5" fill="url(#${prefix}-skin)"/>
-        <!-- Motion wave arcs -->
-        <path d="M246 102 A18 18 0 0 1 252 122" fill="none" stroke="#facc15" stroke-width="3" stroke-linecap="round"/>
-        <path d="M254 96 A26 26 0 0 1 262 124" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+      <g transform="translate(258 348) rotate(11)">
+        <path d="M0 12 C0 4, 10 0, 26 0 L48 2 C56 3, 60 10, 58 18 L54 24 L2 24 Z" fill="#f4f2ec"/>
+        <path d="M2 21 L55 21" stroke="#ff5a1f" stroke-width="3.5" stroke-linecap="round"/>
       </g>
-
-      <!-- Sculpted puffy hood collar -->
-      <path d="M116 166 C116 183, 204 183, 204 166 C204 157, 192 154, 186 160 C174 169, 146 169, 134 160 C128 154, 116 157, 116 166 Z" fill="url(#${prefix}-hood)"/>
-      <path d="M124 166 C138 176, 182 176, 196 166" fill="none" stroke="rgba(255,235,220,0.35)" stroke-width="2.2" stroke-linecap="round"/>
-      <!-- Hoodie drawstrings -->
-      <path d="M146 176 Q145 192 147 200" fill="none" stroke="#f5efe2" stroke-width="3.2" stroke-linecap="round"/>
-      <path d="M174 176 Q175 192 173 200" fill="none" stroke="#f5efe2" stroke-width="3.2" stroke-linecap="round"/>
-      <circle cx="147" cy="201" r="2.6" fill="#ff5a1f"/>
-      <circle cx="173" cy="201" r="2.6" fill="#ff5a1f"/>
-
-      ${
-        compact
-          ? ""
-          : `
-      <!-- Cross-legged sculpted joggers & sneakers -->
-      <g class="av-legs">
-        <path d="M98 250 C82 238, 102 216, 142 236 L192 260 C206 266, 198 282, 178 278 L108 264 C99 261, 95 255, 98 250 Z" fill="url(#${prefix}-pants)"/>
-        <path d="M222 250 C238 238, 218 216, 178 236 L128 260 C114 266, 122 282, 142 278 L212 264 C221 261, 225 255, 222 250 Z" fill="url(#${prefix}-pants)"/>
-        <!-- Left sneaker -->
-        <g transform="translate(116 262) rotate(-14)">
-          <rect x="0" y="0" width="38" height="21" rx="10.5" fill="url(#${prefix}-shoe)"/>
-          <path d="M3 16 L35 16" stroke="#ff5a1f" stroke-width="3.2" stroke-linecap="round"/>
-          <path d="M14 5 L22 5 M13 9 L23 9" stroke="#8a8475" stroke-width="2" stroke-linecap="round"/>
-        </g>
-        <!-- Right sneaker -->
-        <g transform="translate(168 252) rotate(14)">
-          <rect x="0" y="0" width="38" height="21" rx="10.5" fill="url(#${prefix}-shoe)"/>
-          <path d="M3 16 L35 16" stroke="#ff5a1f" stroke-width="3.2" stroke-linecap="round"/>
-          <path d="M14 5 L22 5 M13 9 L23 9" stroke="#8a8475" stroke-width="2" stroke-linecap="round"/>
-        </g>
-      </g>`
-      }
     </g>
 
-    <!-- Neck shadow -->
-    <ellipse cx="160" cy="161" rx="22" ry="9" fill="#8f5332"/>
+    <!-- Articulated Upper Torso + Hoodie Body -->
+    <g class="av-torso">
+      <!-- Resting Down-Hood Back Collar (visible when hood is down) -->
+      <path class="av-hood-down-back" d="M128 202 C122 174, 152 158, 210 158 C268 158, 298 174, 292 202 C286 220, 134 220, 128 202 Z" fill="url(#${p}-orange-dark)"/>
 
-    <!-- Sculpted 3D Head & Hair -->
+      <!-- Natural teenage shoulders & raglan chest -->
+      <path d="M114 224 C122 198, 152 186, 210 186 C268 186, 298 198, 306 224 C316 258, 312 314, 296 338 L124 338 C108 314, 104 258, 114 224 Z" fill="url(#${p}-orange)"/>
+
+      <!-- Raglan center cream panel -->
+      <path d="M154 194 C172 188, 248 188, 266 194 L278 336 L142 336 Z" fill="url(#${p}-torso)"/>
+      <!-- Raglan seam lines -->
+      <path d="M154 194 L126 312 M266 194 L294 312" stroke="rgba(120,40,10,0.28)" stroke-width="2.2" stroke-linecap="round"/>
+      <!-- Kangaroo pocket details -->
+      <path d="M158 294 L168 272 L252 272 L262 294" fill="none" stroke="#c7bfb0" stroke-width="2.2" stroke-linecap="round"/>
+
+      <!-- Anatomical Neck & Collarbone shadow -->
+      <path d="M188 156 L188 194 C188 204, 232 204, 232 194 L232 156 Z" fill="url(#${p}-neck)"/>
+      <path d="M192 190 Q210 198 228 190" fill="none" stroke="#8b4f2f" stroke-width="2" opacity="0.6"/>
+
+      <!-- Sculpted Hoodie Collar Rim & Drawstrings (Interactive Hit Target for Mode Switch) -->
+      <g class="av-hood-collar">
+        <path d="M138 192 C136 214, 284 214, 282 192 C280 178, 262 174, 250 184 C232 198, 188 198, 170 184 C158 174, 140 178, 138 192 Z" fill="url(#${p}-orange)"/>
+        <path d="M148 193 C172 208, 248 208, 272 193" fill="none" stroke="rgba(255,240,228,0.42)" stroke-width="2.4" stroke-linecap="round"/>
+        <!-- Drawstrings -->
+        <path class="av-string-l" d="M182 204 C180 226, 181 242, 183 254" fill="none" stroke="#f5f0e4" stroke-width="3.6" stroke-linecap="round"/>
+        <path class="av-string-r" d="M238 204 C240 226, 239 242, 237 254" fill="none" stroke="#f5f0e4" stroke-width="3.6" stroke-linecap="round"/>
+        <circle cx="183" cy="256" r="3.2" fill="#ff5a1f"/>
+        <circle cx="237" cy="256" r="3.2" fill="#ff5a1f"/>
+      </g>
+    </g>
+
+    <!-- Articulated Head, Hair, Face & Hoodie Canopy -->
     <g class="av-head">
-      <!-- Back hair mass -->
-      <path d="M104 114 C100 72, 126 46, 162 46 C198 46, 220 72, 216 114 C215 132, 208 144, 200 148 L120 148 C112 144, 105 132, 104 114 Z" fill="url(#${prefix}-hair)"/>
+      <!-- Outer Back Hood Canopy (scales/slides up over head when hoodUp = true) -->
+      <g class="av-hood-up-back">
+        <path d="M114 148 C108 74, 146 28, 210 28 C274 28, 312 74, 306 148 C302 180, 284 198, 266 202 L154 202 C136 198, 118 180, 114 148 Z" fill="url(#${p}-orange)"/>
+        <path d="M126 146 C122 84, 154 42, 210 42 C266 42, 298 84, 294 146 C290 174, 274 190, 256 194 L164 194 C146 190, 130 174, 126 146 Z" fill="url(#${p}-hood-inner)"/>
+      </g>
+
+      <!-- Back Hair Volume -->
+      <path class="av-hair-back" d="M136 122 C130 68, 162 38, 210 38 C258 38, 290 68, 284 122 C282 146, 272 162, 260 168 L160 168 C148 162, 138 146, 136 122 Z" fill="url(#${p}-hair)"/>
 
       <!-- Ears -->
       <g class="av-ears">
-        <circle cx="111" cy="123" r="11.5" fill="url(#${prefix}-ear)"/>
-        <circle cx="112" cy="123" r="5" fill="#b06b45" opacity="0.55"/>
-        <circle cx="209" cy="123" r="11.5" fill="url(#${prefix}-ear)"/>
-        <circle cx="208" cy="123" r="5" fill="#b06b45" opacity="0.55"/>
+        <path d="M144 122 C134 118, 132 138, 142 146 C146 149, 150 146, 150 140 Z" fill="url(#${p}-skin)"/>
+        <path d="M140 128 C137 131, 138 138, 143 141" fill="none" stroke="#ad6842" stroke-width="2" stroke-linecap="round"/>
+        <path d="M276 122 C286 118, 288 138, 278 146 C274 149, 270 146, 270 140 Z" fill="url(#${p}-skin)"/>
+        <path d="M280 128 C283 131, 282 138, 277 141" fill="none" stroke="#ad6842" stroke-width="2" stroke-linecap="round"/>
       </g>
 
-      <!-- Sculpted clay face -->
-      <rect x="114" y="72" width="92" height="90" rx="43" fill="url(#${prefix}-skin)"/>
+      <!-- Natural Teenage Head & Sculpted Jawline (NOT a rectangle!) -->
+      <path d="M148 96 C148 62, 174 48, 210 48 C246 48, 272 62, 272 96 C272 128, 264 154, 244 169 C228 180, 192 180, 176 169 C156 154, 148 128, 148 96 Z" fill="url(#${p}-skin)"/>
 
-      <!-- Rosy 3D cheeks -->
+      <!-- Safelight Screen Upward Glow on Face (Hacker Mode) -->
+      <path class="av-hack-face-glow" d="M148 96 C148 128, 156 154, 176 169 C192 180, 228 180, 244 169 C264 154, 272 128, 272 96 Z" fill="url(#${p}-hack-rim)"/>
+
+      <!-- Subtle Cheek Warmth -->
       <g class="av-cheeks">
-        <circle cx="132" cy="133" r="13" fill="url(#${prefix}-blush)"/>
-        <circle cx="188" cy="133" r="13" fill="url(#${prefix}-blush)"/>
+        <ellipse cx="170" cy="138" rx="15" ry="10" fill="url(#${p}-blush)"/>
+        <ellipse cx="250" cy="138" rx="15" ry="10" fill="url(#${p}-blush)"/>
       </g>
 
-      <!-- Facial features (parallax inner layer) -->
+      <!-- Parallax Inner Facial Features -->
       <g class="av-face">
-        <!-- Brows -->
-        <g class="av-brows" fill="none" stroke="#221d24" stroke-width="4.2" stroke-linecap="round">
-          <path d="M133 106 Q142 101 150 105"/>
-          <path d="M170 105 Q178 101 187 106"/>
+        <!-- Expressive Brows (angle shifts slightly in Hack mode) -->
+        <g class="av-brows" fill="none" stroke="#1e1922" stroke-width="4.4" stroke-linecap="round">
+          <path class="av-brow-l" d="M166 102 Q179 96 192 101"/>
+          <path class="av-brow-r" d="M228 101 Q241 96 254 102"/>
         </g>
 
-        <!-- Open glossy vinyl bead eyes -->
+        <!-- Natural Almond Cartoon Eyes with Irises & Catchlights -->
         <g class="av-eyes-open">
-          <g class="av-eye" transform="translate(142 119)">
-            <circle r="8.2" fill="#17151a"/>
-            <circle class="av-pupil" cx="-2.4" cy="-2.6" r="2.7" fill="#ffffff"/>
-            <circle cx="2.5" cy="2.8" r="1.2" fill="#ffd9c4" opacity="0.75"/>
+          <!-- Left Eye -->
+          <g class="av-eye-l" transform="translate(180 118)">
+            <path d="M-14 1 C-9 -8, 9 -8, 14 1 C9 8, -9 8, -14 1 Z" fill="#faf8f5"/>
+            <g class="av-iris">
+              <circle r="6.8" fill="#2b1d16"/>
+              <circle r="4.1" fill="#120d10"/>
+              <circle cx="-2.2" cy="-2.4" r="2.2" fill="#ffffff"/>
+              <circle cx="2.4" cy="2.2" r="1.0" fill="#ff9e80" opacity="0.8"/>
+            </g>
+            <path d="M-15 1 C-9 -9, 9 -9, 15 1" fill="none" stroke="#18141c" stroke-width="3.2" stroke-linecap="round"/>
+            <path d="M-12 3 C-6 8, 6 8, 12 3" fill="none" stroke="#9e6240" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
           </g>
-          <g class="av-eye" transform="translate(178 119)">
-            <circle r="8.2" fill="#17151a"/>
-            <circle class="av-pupil" cx="-2.4" cy="-2.6" r="2.7" fill="#ffffff"/>
-            <circle cx="2.5" cy="2.8" r="1.2" fill="#ffd9c4" opacity="0.75"/>
+          <!-- Right Eye -->
+          <g class="av-eye-r" transform="translate(240 118)">
+            <path d="M-14 1 C-9 -8, 9 -8, 14 1 C9 8, -9 8, -14 1 Z" fill="#faf8f5"/>
+            <g class="av-iris">
+              <circle r="6.8" fill="#2b1d16"/>
+              <circle r="4.1" fill="#120d10"/>
+              <circle cx="-2.2" cy="-2.4" r="2.2" fill="#ffffff"/>
+              <circle cx="2.4" cy="2.2" r="1.0" fill="#ff9e80" opacity="0.8"/>
+            </g>
+            <path d="M-15 1 C-9 -9, 9 -9, 15 1" fill="none" stroke="#18141c" stroke-width="3.2" stroke-linecap="round"/>
+            <path d="M-12 3 C-6 8, 6 8, 12 3" fill="none" stroke="#9e6240" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
           </g>
         </g>
 
-        <!-- Blinking / Happy ^ ^ squint eyes -->
-        <g class="av-eyes-happy" fill="none" stroke="#17151a" stroke-width="4.4" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M134 121 Q142 111 150 121"/>
-          <path d="M170 121 Q178 111 186 121"/>
+        <!-- Blinking / Happy ^ ^ Eyes -->
+        <g class="av-eyes-happy" fill="none" stroke="#18141c" stroke-width="4.2" stroke-linecap="round">
+          <path d="M167 120 Q180 109 193 120"/>
+          <path d="M227 120 Q240 109 253 120"/>
         </g>
 
-        <!-- Dizzy @ @ spiral eyes -->
-        <g class="av-eyes-dizzy" fill="none" stroke="#17151a" stroke-width="2.5" stroke-linecap="round">
-          <path d="M142 119 m-1 0 a2 2 0 1 0 4 0 a4.5 4.5 0 1 0 -9 0 a7 7 0 1 0 14 0"/>
-          <path d="M178 119 m-1 0 a2 2 0 1 0 4 0 a4.5 4.5 0 1 0 -9 0 a7 7 0 1 0 14 0"/>
-        </g>
+        <!-- Sculpted Cartoon Nose Bridge & Tip -->
+        <path d="M208 112 L206 129 C206 133, 214 134, 216 130" fill="none" stroke="#b56f46" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <ellipse cx="211" cy="129" rx="3.2" ry="2" fill="#f9dfc8" opacity="0.55"/>
 
-        <!-- Cute 3D clay nose button -->
-        <ellipse cx="160" cy="126" rx="4.2" ry="3.1" fill="#cf8a62"/>
-        <ellipse cx="159" cy="125" rx="2" ry="1.2" fill="#f9dec6" opacity="0.65"/>
+        <!-- Calm / Focused Mouth -->
+        <path class="av-mouth-calm" d="M197 147 Q210 154 223 147" fill="none" stroke="#4d2518" stroke-width="3.3" stroke-linecap="round"/>
 
-        <!-- Calm/proximity smile -->
-        <path class="av-mouth-calm" d="M152 136 Q160 143 168 136" fill="none" stroke="#4a2518" stroke-width="3.4" stroke-linecap="round"/>
-
-        <!-- Joyful open laughing mouth (on boop) -->
+        <!-- Joyful Laughing Mouth (Wave / Boop / Celebrate) -->
         <g class="av-mouth-laugh">
-          <path d="M149 134 Q160 151 171 134 Z" fill="#4a1c17"/>
-          <path d="M153 141 Q160 147 167 141 Q160 138 153 141 Z" fill="#ff6e5e"/>
-        </g>
-
-        <!-- Sleek developer sunglasses (shown when .has-shades) -->
-        <g class="av-shades">
-          <path d="M115 113 L125 114 M205 113 L195 114" stroke="#14161c" stroke-width="3.5" stroke-linecap="round"/>
-          <rect x="124" y="108" width="32" height="21" rx="6" fill="url(#${prefix}-lens)" stroke="#14161c" stroke-width="3"/>
-          <rect x="164" y="108" width="32" height="21" rx="6" fill="url(#${prefix}-lens)" stroke="#14161c" stroke-width="3"/>
-          <path d="M156 114 Q160 111 164 114" fill="none" stroke="#14161c" stroke-width="3.2"/>
-          <path d="M129 113 L137 124 M169 113 L177 124" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round" opacity="0.65"/>
+          <path d="M194 144 Q210 163 226 144 Z" fill="#461914"/>
+          <path d="M199 152 Q210 159 221 152 Q210 148 199 152 Z" fill="#ff6b5b"/>
+          <path d="M196 145 L224 145" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
         </g>
       </g>
 
-      <!-- Chunky sculpted 3D hair locks (overlapping forehead with soft clay speculars) -->
+      <!-- Layered Wavy Teen Hair (compresses smoothly when hood is pulled up) -->
       <g class="av-hair-front">
-        <!-- Left side sweep -->
-        <path d="M111 116 C106 88, 120 64, 144 60 C132 76, 124 94, 121 114 C117 118, 112 119, 111 116 Z" fill="url(#${prefix}-hair)"/>
-        <!-- Right side sweep -->
-        <path d="M209 116 C214 88, 200 62, 174 58 C188 74, 196 92, 199 114 C203 118, 208 119, 209 116 Z" fill="url(#${prefix}-hair)"/>
-        <!-- Sculpted voluminous top waves -->
-        <path d="M116 92 C118 60, 148 44, 182 52 C198 56, 208 70, 204 88 C190 78, 174 76, 158 84 C142 90, 126 94, 116 92 Z" fill="url(#${prefix}-hair-hi)"/>
-        <!-- Signature 3D center-right swoop lock -->
-        <path d="M132 74 C146 52, 180 50, 196 72 C184 88, 158 95, 136 88 C130 85, 129 79, 132 74 Z" fill="url(#${prefix}-hair-hi)"/>
-        <!-- Secondary sculpted forelock -->
-        <path d="M122 86 C132 68, 156 64, 172 78 C158 92, 138 96, 124 92 Z" fill="url(#${prefix}-hair)"/>
-        <!-- Subtle clay rim highlights -->
-        <path d="M140 62 Q165 53 187 65" fill="none" stroke="rgba(255,245,235,0.2)" stroke-width="3" stroke-linecap="round"/>
-        <path d="M129 79 Q148 70 165 77" fill="none" stroke="rgba(255,245,235,0.16)" stroke-width="2.4" stroke-linecap="round"/>
+        <!-- Left temple lock -->
+        <path d="M146 116 C138 86, 152 56, 182 48 C166 66, 158 88, 156 112 Z" fill="url(#${p}-hair)"/>
+        <!-- Right temple lock -->
+        <path d="M274 116 C282 86, 268 56, 238 48 C254 66, 262 88, 264 112 Z" fill="url(#${p}-hair)"/>
+        <!-- Sweeping main volume -->
+        <path d="M148 88 C152 50, 186 34, 232 42 C256 46, 274 64, 270 88 C252 74, 228 70, 202 80 C180 88, 160 92, 148 88 Z" fill="url(#${p}-hair-hi)"/>
+        <!-- Natural side-part forelock -->
+        <path d="M168 68 C186 44, 226 42, 248 68 C232 86, 202 94, 174 86 C166 82, 164 74, 168 68 Z" fill="url(#${p}-hair-hi)"/>
+        <path d="M158 82 C170 62, 198 58, 218 74 C202 90, 178 95, 160 90 Z" fill="url(#${p}-hair)"/>
+        <!-- Hair sheen -->
+        <path d="M176 56 Q208 45 238 59" fill="none" stroke="rgba(255,246,238,0.2)" stroke-width="3" stroke-linecap="round"/>
+      </g>
+
+      <!-- Front Hood Cowl Overhang + Brow Shadow (slides down over forehead when hoodUp = true) -->
+      <g class="av-hood-up-front">
+        <!-- Soft darkroom shadow cast by hood across brow -->
+        <path d="M146 98 C156 70, 264 70, 274 98 C256 114, 164 114, 146 98 Z" fill="rgba(8, 5, 7, 0.56)"/>
+        <!-- Sculpted orange hood arch wrapping the head -->
+        <path d="M118 146 C112 72, 150 26, 210 26 C270 26, 308 72, 302 146 C298 168, 286 184, 272 190 C278 162, 278 112, 262 84 C248 60, 172 60, 158 84 C142 112, 142 162, 148 190 C134 184, 122 168, 118 146 Z" fill="url(#${p}-orange)"/>
+        <!-- Hood seam highlight -->
+        <path d="M148 186 C140 120, 156 58, 210 58 C264 58, 280 120, 272 186" fill="none" stroke="rgba(255,235,220,0.42)" stroke-width="3" stroke-linecap="round"/>
       </g>
     </g>
 
-    <!-- Joyful SVG burst sparks on boop -->
-    <g class="av-sparks" fill="none" stroke-width="3" stroke-linecap="round">
-      <path d="M88 86 L76 78 M86 102 L72 103" stroke="#ff5a1f"/>
-      <path d="M232 86 L244 78 M234 102 L248 103" stroke="#38bdf8"/>
-      <path d="M160 34 L160 20 M138 38 L131 26 M182 38 L189 26" stroke="#facc15"/>
+    <!-- Articulated Arms & Hands (Typing on Laptop / Pulling Hoodie / Waving Hi) -->
+    <!-- Left Arm & Hand -->
+    <g class="av-arm-l">
+      <path class="av-sleeve-l" d="M122 216 C96 244, 98 286, 146 306 C158 310, 166 294, 154 286 C126 272, 126 248, 140 228 Z" fill="url(#${p}-orange)"/>
+      <g class="av-hand-l" transform="translate(158 298)">
+        <ellipse cx="0" cy="0" rx="15" ry="10.5" fill="url(#${p}-skin)"/>
+        <!-- Typing fingers -->
+        <path d="M-8 6 L-6 14 M-1 7 L1 15 M6 6 L8 14" stroke="#b5724a" stroke-width="3.2" stroke-linecap="round"/>
+      </g>
+    </g>
+
+    <!-- Right Arm & Hand (Typing + Hood Pull state) -->
+    <g class="av-arm-r">
+      <path class="av-sleeve-r" d="M298 216 C324 244, 322 286, 274 306 C262 310, 254 294, 266 286 C294 272, 294 248, 280 228 Z" fill="url(#${p}-orange)"/>
+      <g class="av-hand-r" transform="translate(262 298)">
+        <ellipse cx="0" cy="0" rx="15" ry="10.5" fill="url(#${p}-skin)"/>
+        <path d="M-6 6 L-8 14 M1 7 L-1 15 M8 6 L6 14" stroke="#b5724a" stroke-width="3.2" stroke-linecap="round"/>
+      </g>
+    </g>
+
+    <!-- Waving Right Arm (active when waving / celebrating) -->
+    <g class="av-arm-wave">
+      <path d="M292 220 C324 206, 348 168, 340 132 C336 118, 316 122, 318 136 C322 160, 306 186, 282 202 Z" fill="url(#${p}-orange)"/>
+      <!-- Open Waving Palm & Fingers -->
+      <g transform="translate(330 120)">
+        <ellipse cx="0" cy="4" rx="13" ry="14" fill="url(#${p}-skin)"/>
+        <path d="M-11 0 L-16 -12 M-5 -4 L-7 -18 M2 -4 L3 -18 M8 -1 L12 -14 M11 6 L20 2" stroke="url(#${p}-skin)" stroke-width="5.2" stroke-linecap="round"/>
+        <!-- Motion wave arcs -->
+        <path d="M24 -14 A22 22 0 0 1 30 12" fill="none" stroke="#ff5a1f" stroke-width="3.2" stroke-linecap="round"/>
+      </g>
+    </g>
+
+    <!-- Sleek Laptop Resting on Lap -->
+    <g class="av-laptop">
+      <!-- Screen Upward Aura -->
+      <ellipse cx="210" cy="274" rx="92" ry="48" fill="url(#${p}-screen-glow)"/>
+      <!-- Laptop Base Deck -->
+      <path d="M118 332 L302 332 L314 344 C316 347, 313 350, 308 350 L112 350 C107 350, 104 347, 106 344 Z" class="av-laptop-base" fill="url(#${p}-laptop-lid)"/>
+      <!-- Laptop Lid (back of screen facing viewer) -->
+      <rect x="132" y="254" width="156" height="82" rx="10" class="av-laptop-shell" fill="url(#${p}-laptop-lid)" stroke="rgba(255,255,255,0.28)" stroke-width="1.5"/>
+      <!-- Glowing Status Emblem on Laptop Lid -->
+      <g class="av-laptop-logo" transform="translate(210 295)">
+        <rect x="-16" y="-11" width="32" height="22" rx="5" fill="#16171a"/>
+        <path d="M-8 -3 L-2 0 L-8 3 M0 4 L7 4" fill="none" stroke="#ff5a1f" class="av-laptop-glyph" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
     </g>
   </g>
 </svg>`;
 }
 
-function peekerSvg(prefix) {
-  // Upside-down 3D-clay SA Mubin hanging from the top wave seam of the footer!
-  // At rest: tucked up so hair + eyes + rosy cheeks peek shyly under the bone wave.
-  // Hovered/clicked: slides down showing orange/cream hoodie shoulders + huge laughing ^ ^ eyes!
-  return `
-<svg class="peeker-svg" viewBox="0 0 220 190" aria-hidden="true">
-  <defs>
-    <radialGradient id="${prefix}-skin" cx="50%" cy="65%" r="65%">
-      <stop offset="0%" stop-color="#f7d5b9"/>
-      <stop offset="58%" stop-color="#e2aa82"/>
-      <stop offset="100%" stop-color="#b97850"/>
-    </radialGradient>
-    <radialGradient id="${prefix}-blush" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#ff5e4d" stop-opacity="0.58"/>
-      <stop offset="100%" stop-color="#ff5e4d" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="${prefix}-hair" x1="20%" y1="100%" x2="80%" y2="0%">
-      <stop offset="0%" stop-color="#38323c"/>
-      <stop offset="52%" stop-color="#1e1b22"/>
-      <stop offset="100%" stop-color="#110f14"/>
-    </linearGradient>
-    <radialGradient id="${prefix}-hood" cx="50%" cy="68%" r="76%">
-      <stop offset="0%" stop-color="#ff8a57"/>
-      <stop offset="54%" stop-color="#ff5a1f"/>
-      <stop offset="100%" stop-color="#9e2d06"/>
-    </radialGradient>
-    <linearGradient id="${prefix}-chest" x1="50%" y1="100%" x2="50%" y2="0%">
-      <stop offset="0%" stop-color="#2c303a"/>
-      <stop offset="65%" stop-color="#1d2027"/>
-      <stop offset="100%" stop-color="#121419"/>
-    </linearGradient>
-    <filter id="${prefix}-shadow" x="-20%" y="-15%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#050608" flood-opacity="0.55"/>
-    </filter>
-  </defs>
-
-  <!-- Flipped 180deg around center so character hangs upside-down naturally -->
-  <g filter="url(#${prefix}-shadow)" transform="translate(220 190) rotate(180)">
-    <!-- Torso / Raglan Hoodie with high-contrast charcoal raglan chest & drawstrings -->
-    <path d="M58 126 C54 152, 56 184, 66 196 L154 196 C164 184, 166 152, 162 126 C146 116, 74 116, 58 126 Z" fill="url(#${prefix}-hood)" stroke="#7c2004" stroke-width="1.5"/>
-    <path d="M81 128 C78 150, 79 180, 85 196 L135 196 C141 180, 142 150, 139 128 Z" fill="url(#${prefix}-chest)"/>
-    <path d="M66 120 C66 136, 154 136, 154 120 C154 111, 142 108, 136 114 C124 122, 96 122, 84 114 C78 108, 66 111, 66 120 Z" fill="url(#${prefix}-hood)"/>
-    <path d="M74 121 C90 130, 130 130, 146 121" fill="none" stroke="rgba(255,235,220,0.34)" stroke-width="2" stroke-linecap="round"/>
-    <path d="M96 131 Q95 147 97 156" fill="none" stroke="#ece8df" stroke-width="2.8" stroke-linecap="round"/>
-    <path d="M124 131 Q125 147 123 156" fill="none" stroke="#ece8df" stroke-width="2.8" stroke-linecap="round"/>
-    <circle cx="97" cy="157" r="2.4" fill="#ff5a1f"/>
-    <circle cx="123" cy="157" r="2.4" fill="#ff5a1f"/>
-
-    <!-- Back hair -->
-    <path d="M56 70 C52 30, 78 6, 110 6 C142 6, 168 30, 164 70 C162 88, 154 100, 146 104 L74 104 C66 100, 58 88, 56 70 Z" fill="url(#${prefix}-hair)"/>
-
-    <!-- Ears -->
-    <circle cx="63" cy="79" r="10.5" fill="#d99d75"/>
-    <circle cx="157" cy="79" r="10.5" fill="#d99d75"/>
-
-    <!-- Sculpted clay face -->
-    <rect x="66" y="30" width="88" height="86" rx="41" fill="url(#${prefix}-skin)"/>
-
-    <!-- Cheeks -->
-    <circle cx="84" cy="88" r="12.5" fill="url(#${prefix}-blush)"/>
-    <circle cx="136" cy="88" r="12.5" fill="url(#${prefix}-blush)"/>
-
-    <!-- Curious bead eyes (default peek) -->
-    <g class="pk-eyes-calm">
-      <g transform="translate(93 75)">
-        <circle r="7.8" fill="#17151a"/>
-        <circle class="pk-pupil" cx="-2" cy="2.2" r="2.6" fill="#ffffff"/>
-      </g>
-      <g transform="translate(127 75)">
-        <circle r="7.8" fill="#17151a"/>
-        <circle class="pk-pupil" cx="-2" cy="2.2" r="2.6" fill="#ffffff"/>
-      </g>
-      <path d="M103 91 Q110 97 117 91" fill="none" stroke="#4a2518" stroke-width="3.2" stroke-linecap="round"/>
-    </g>
-
-    <!-- Laughing ^ ^ eyes & big grin (hover / click peek — just like Screenshot 3!) -->
-    <g class="pk-eyes-laugh">
-      <path d="M85 77 Q93 66 101 77" fill="none" stroke="#17151a" stroke-width="4.4" stroke-linecap="round"/>
-      <path d="M119 77 Q127 66 135 77" fill="none" stroke="#17151a" stroke-width="4.4" stroke-linecap="round"/>
-      <path d="M98 89 Q110 106 122 89 Z" fill="#4a1c17"/>
-      <path d="M102 96 Q110 102 118 96 Q110 93 102 96 Z" fill="#ff6e5e"/>
-    </g>
-
-    <!-- Nose -->
-    <ellipse cx="110" cy="82" rx="4" ry="2.8" fill="#cf8a62"/>
-
-    <!-- Hanging sculpted hair locks -->
-    <path d="M64 72 C60 44, 74 22, 98 18 C86 34, 78 52, 74 70 Z" fill="url(#${prefix}-hair)"/>
-    <path d="M156 72 C160 44, 146 22, 122 18 C134 34, 142 52, 146 70 Z" fill="url(#${prefix}-hair)"/>
-    <path d="M68 48 C72 18, 100 4, 132 12 C148 16, 156 30, 152 46 C138 36, 122 34, 106 42 C92 48, 78 50, 68 48 Z" fill="url(#${prefix}-hair)"/>
-    <path d="M84 32 C98 10, 130 8, 144 30 C132 46, 108 52, 88 45 Z" fill="url(#${prefix}-hair)"/>
-    <path d="M92 20 Q115 11 136 23" fill="none" stroke="rgba(255,245,235,0.22)" stroke-width="2.8" stroke-linecap="round"/>
-  </g>
-</svg>`;
-}
-
-// Multi-hue palette for the cursor-reactive radial capsule-dash wave
-const WAVE_STOPS = [
-  [255, 90, 31],   // #ff5a1f safety orange
-  [251, 146, 60],  // #fb923c warm amber
-  [168, 85, 247],  // #a855f7 vivid orchid
-  [56, 189, 248],  // #38bdf8 electric sky
-];
-
-function sampleWaveColor(t) {
-  const clamped = Math.max(0, Math.min(1, t));
-  const scaled = clamped * (WAVE_STOPS.length - 1);
-  const idx = Math.min(WAVE_STOPS.length - 2, Math.floor(scaled));
-  const f = scaled - idx;
-  const a = WAVE_STOPS[idx];
-  const b = WAVE_STOPS[idx + 1];
-  const r = Math.round(a[0] + (b[0] - a[0]) * f);
-  const g = Math.round(a[1] + (b[1] - a[1]) * f);
-  const bl = Math.round(a[2] + (b[2] - a[2]) * f);
-  return `rgb(${r},${g},${bl})`;
-}
-
-function initWaveCanvas(canvas, stage) {
-  if (!canvas) return { pulse() {}, setFocus() {} };
-  const ctx = canvas.getContext("2d");
-  let w = 0;
-  let h = 0;
-  let dpr = 1;
-  let targetFx = 0.22;
-  let targetFy = 0.62;
-  let fx = 0.22;
-  let fy = 0.62;
-  let phase = 0;
-  let ripple = 0;
-  let rippleRadius = 0;
-  let visible = true;
-  let raf = 0;
-
-  function resize() {
-    const r = stage.getBoundingClientRect();
-    w = Math.max(260, r.width);
-    h = Math.max(240, r.height);
-    dpr = Math.min(2, window.devicePixelRatio || 1);
-    canvas.width = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    drawFrame();
-  }
-
-  function drawFrame() {
-    ctx.clearRect(0, 0, w, h);
-    const ox = fx * w;
-    const oy = fy * h;
-    const maxDist = Math.hypot(w, h) * 1.05;
-    const rays = w < 460 ? 20 : 26;
-    ctx.lineCap = "round";
-
-    for (let i = 0; i < rays; i++) {
-      // Full 360-degree kinetic fan from the cursor-tracked vortex origin
-      const baseAngle = (i / rays) * Math.PI * 2;
-      const nx = -Math.sin(baseAngle);
-      const ny = Math.cos(baseAngle);
-      const dx = Math.cos(baseAngle);
-      const dy = Math.sin(baseAngle);
-
-      let dist = 28 + (i % 3) * 10;
-      let segIdx = 0;
-      while (dist < maxDist) {
-        const segLen = 15 + (segIdx % 3) * 6;
-        const gap = 12 + ((i + segIdx) % 2) * 4;
-        const tNorm = Math.min(1, dist / (maxDist * 0.72));
-
-        // Gentle sine ribbon + click shockwave ripple
-        const shock =
-          ripple > 0.01
-            ? Math.exp(-Math.pow((dist - rippleRadius) / 44, 2)) * ripple * 16
-            : 0;
-        const wave1 = Math.sin(dist * 0.034 - phase + i * 0.3) * (5 + tNorm * 11) + shock;
-        const wave2 =
-          Math.sin((dist + segLen) * 0.034 - phase + i * 0.3) * (5 + tNorm * 11) + shock;
-
-        const x1 = ox + dx * dist + nx * wave1;
-        const y1 = oy + dy * dist + ny * wave1;
-        const x2 = ox + dx * (dist + segLen) + nx * wave2;
-        const y2 = oy + dy * (dist + segLen) + ny * wave2;
-
-        if (x2 > -24 && x1 < w + 24 && y2 > -24 && y1 < h + 24) {
-          ctx.strokeStyle = sampleWaveColor(tNorm * 0.86 + (i / rays) * 0.14);
-          ctx.globalAlpha = 0.36 + (1 - tNorm) * 0.48;
-          ctx.lineWidth = w < 460 ? 5.5 : 7.0;
-          ctx.beginPath();
-          ctx.moveTo(x1, y1);
-          ctx.lineTo(x2, y2);
-          ctx.stroke();
-        }
-
-        dist += segLen + gap;
-        segIdx++;
-      }
-    }
-    ctx.globalAlpha = 1;
-  }
-
-  function tick() {
-    raf = 0;
-    if (!visible || reduceMotion) return;
-    fx += (targetFx - fx) * 0.075;
-    fy += (targetFy - fy) * 0.075;
-    phase += 0.032;
-    if (ripple > 0.005) {
-      rippleRadius += 9.5;
-      ripple *= 0.94;
-    } else {
-      ripple = 0;
-    }
-    drawFrame();
-    raf = requestAnimationFrame(tick);
-  }
-
-  function start() {
-    if (!raf && visible && !reduceMotion) raf = requestAnimationFrame(tick);
-  }
-
-  const io = new IntersectionObserver(
-    (entries) => {
-      visible = entries[0]?.isIntersecting ?? true;
-      if (visible) start();
-    },
-    { threshold: 0.05 }
-  );
-  io.observe(stage);
-
-  addEventListener("resize", resize, { passive: true });
-  resize();
-  start();
-
-  return {
-    pulse(originX = null, originY = null) {
-      if (originX !== null && originY !== null) {
-        targetFx = Math.max(0.08, Math.min(0.92, originX));
-        targetFy = Math.max(0.12, Math.min(0.88, originY));
-      }
-      ripple = 1;
-      rippleRadius = 18;
-      if (reduceMotion) drawFrame();
-      else start();
-    },
-    setFocus(nx, ny) {
-      targetFx = Math.max(0.08, Math.min(0.92, nx));
-      targetFy = Math.max(0.12, Math.min(0.88, ny));
-      if (!reduceMotion) start();
-    },
-  };
-}
-
-const AVATAR_LINES = [
-  "Hey! Welcome to my studio.",
-  "Boop registered at 60fps!",
-  "Built with zero frameworks.",
-  "Try flipping the switch sound below!",
-  "Press ⌘K for terminal shortcuts!",
-];
-
-function mountAvatarStage(stage) {
-  const prefix = `av${++uidSeq}`;
-  const compact = stage.dataset.avatar === "compact";
+function mountAvatar(stage) {
+  const prefix = `morph_av_${++uidSeq}`;
   const mount = stage.querySelector("[data-avatar-mount]") || stage;
-  mount.innerHTML = avatarSvg(prefix, { compact });
+  mount.innerHTML = buildCharacterSvg(prefix);
 
-  const canvas = stage.querySelector("canvas");
-  const wave = initWaveCanvas(canvas, stage);
   const root = stage.querySelector(".av-root");
+  const torso = stage.querySelector(".av-torso");
   const head = stage.querySelector(".av-head");
   const face = stage.querySelector(".av-face");
   const hairFront = stage.querySelector(".av-hair-front");
-  const body = stage.querySelector(".av-body");
-  const pupils = [...stage.querySelectorAll(".av-pupil")];
+  const irises = [...stage.querySelectorAll(".av-iris")];
   const mouthCalm = stage.querySelector(".av-mouth-calm");
+  const armL = stage.querySelector(".av-arm-l");
+  const armR = stage.querySelector(".av-arm-r");
+  const handL = stage.querySelector(".av-hand-l");
+  const handR = stage.querySelector(".av-hand-r");
+  const laptop = stage.querySelector(".av-laptop");
   const badge = stage.querySelector("[data-avatar-badge]");
-  const actorBtn = stage.querySelector("[data-avatar-hit]") || mount;
+  const hoodHit = stage.querySelector("[data-avatar-hood]");
+  const faceHit = stage.querySelector("[data-avatar-face]");
 
-  let tx = 0;
-  let ty = 0;
-  let cx = 0;
-  let cy = 0;
+  // State machine inputs (matching RIVE-SPEC.md)
+  const state = {
+    lookX: 0,       // -100..100
+    lookY: 0,       // -100..100
+    hoodUp: getMode() === "hack",
+    typing: true,
+    hackIdle: getMode() === "hack",
+  };
+
+  // Continuous interpolated physics values
+  let curX = 0;
+  let curY = 0;
   let hopY = 0;
   let hopV = 0;
-  let raf = 0;
-  let boopIdx = 0;
+  let typeEnergy = 0.35;
+  let hoodPullReach = 0; // 0..1 when hands reach up to pull the hood
+  let breathPhase = 0;
+  let typePhase = 0;
   let happyTimer = 0;
   let waveTimer = 0;
-  let dizzyTimer = 0;
-  let lastAngle = null;
-  let spinAccum = 0;
+  let hoodReachTimer = 0;
+  let boopIdx = 0;
 
-  function showBadge(text, ms = 2400) {
+  const DEV_LINES = [
+    "Aluminium Lab online — typing at 60fps.",
+    "Click my hoodie (or press H) to cut the lab lights!",
+    "Try pressing keys on the Loadout keyboard below.",
+    "Type S-A-M-U-B-I-N anywhere to test the page cipher!",
+  ];
+  const HACK_LINES = [
+    "Safelight Darkroom active — move your cursor torch.",
+    "Arsenal switches armed. Click my hood for lab light.",
+    "Every keycap below just flipped to offensive tooling.",
+    "Red-team mode: breaking unsafe assumptions.",
+  ];
+
+  function showBadge(text, ms = 2800) {
     if (!badge) return;
     badge.textContent = text;
     badge.classList.add("is-on");
@@ -548,294 +376,287 @@ function mountAvatarStage(stage) {
     badge._t = setTimeout(() => badge.classList.remove("is-on"), ms);
   }
 
-  function step() {
-    raf = 0;
-    cx += (tx - cx) * 0.14;
-    cy += (ty - cy) * 0.14;
-
-    // Damped spring hop in JS (no CSS overshoot easing)
-    const force = -hopY * 0.18;
-    hopV = (hopV + force) * 0.82;
-    hopY += hopV;
-
-    if (root) root.style.transform = `translate3d(0, ${hopY.toFixed(2)}px, 0)`;
-    if (head) {
-      const rot = (cx * 5.2).toFixed(2);
-      head.style.transform = `translate3d(${(cx * 9).toFixed(2)}px, ${(cy * 6.5).toFixed(2)}px, 0) rotate(${rot}deg)`;
-    }
-    if (face) {
-      face.style.transform = `translate3d(${(cx * 5.5).toFixed(2)}px, ${(cy * 4.5).toFixed(2)}px, 0)`;
-    }
-    if (hairFront) {
-      hairFront.style.transform = `translate3d(${(cx * 2.5).toFixed(2)}px, ${(cy * 2).toFixed(2)}px, 0)`;
-    }
-    if (body) {
-      body.style.transform = `translate3d(${(cx * 3).toFixed(2)}px, ${(cy * 1.8).toFixed(2)}px, 0)`;
-    }
-    pupils.forEach((p) => {
-      p.setAttribute("cx", (-1.6 + cx * 3.1).toFixed(2));
-      p.setAttribute("cy", (-2.0 + cy * 2.8).toFixed(2));
-    });
-
-    const moving =
-      Math.abs(tx - cx) + Math.abs(ty - cy) + Math.abs(hopY) + Math.abs(hopV) > 0.015;
-    if (moving && !reduceMotion) raf = requestAnimationFrame(step);
+  function syncStageClasses() {
+    stage.classList.toggle("is-hood-up", state.hoodUp);
+    stage.classList.toggle("is-hack-idle", state.hackIdle);
   }
 
-  function wake() {
-    if (!raf && !reduceMotion) raf = requestAnimationFrame(step);
-  }
+  function setHood(up, { fromModeEvent = false } = {}) {
+    const next = Boolean(up);
+    const changed = next !== state.hoodUp;
+    state.hoodUp = next;
+    state.hackIdle = next;
+    syncStageClasses();
 
-  function boop(customMsg = null) {
-    sound.play("boop");
-    stage.classList.remove("is-dizzy");
-    stage.classList.add("is-happy");
-    clearTimeout(happyTimer);
-    happyTimer = setTimeout(() => stage.classList.remove("is-happy"), 1150);
-
-    if (!reduceMotion) {
-      hopV = -9.5;
-      wake();
+    if (changed && !reduceMotion) {
+      // Hands reach up to grab the hood hem!
+      hoodPullReach = 1;
+      hopV = next ? -6.5 : -5.5;
+      clearTimeout(hoodReachTimer);
+      hoodReachTimer = setTimeout(() => {
+        hoodPullReach = 0;
+      }, 420);
     }
-    wave.pulse(0.5, 0.48);
-    showBadge(customMsg || AVATAR_LINES[boopIdx++ % AVATAR_LINES.length]);
-  }
 
-  const controlScope = stage.closest(".avatar-col") || stage;
-
-  function toggleShades() {
-    const on = !stage.classList.contains("has-shades");
-    stage.classList.toggle("has-shades", on);
-    controlScope
-      .querySelectorAll('[data-avatar-act="shades"]')
-      .forEach((b) => b.setAttribute("aria-pressed", String(on)));
-    sound.play(on ? "shades" : "click");
-    if (!reduceMotion) {
-      hopV = -5.2;
-      wake();
+    if (changed) {
+      showBadge(
+        next
+          ? "Hood up · Safelight Darkroom engaged."
+          : "Hood down · Aluminium Lab restored."
+      );
     }
-    showBadge(on ? "Ship mode: shades on." : "Back to bright eyes.");
+
+    if (!fromModeEvent && (getMode() === "hack") !== next) {
+      toggleMode({ animate: true });
+    }
   }
 
-  function triggerWave() {
+  function triggerWave(customMsg) {
     stage.classList.add("is-waving", "is-happy");
     sound.play("wave");
-    if (!reduceMotion) {
-      hopV = -6.5;
-      wake();
-    }
-    wave.pulse(0.68, 0.42);
-    showBadge("Hi! I'm SA Mubin.");
+    if (!reduceMotion) hopV = -6.0;
+    showBadge(
+      customMsg ||
+        (state.hoodUp
+          ? "Hey! Welcome to the Safelight Darkroom."
+          : "Hey! I'm SA Mubin — click my hoodie to switch rooms.")
+    );
     clearTimeout(waveTimer);
     waveTimer = setTimeout(() => {
       stage.classList.remove("is-waving", "is-happy");
-    }, 1850);
+    }, 1800);
   }
 
-  actorBtn.addEventListener("click", () => boop());
+  function triggerBoop(customMsg) {
+    sound.play("boop");
+    stage.classList.add("is-happy");
+    if (!reduceMotion) hopV = -8.5;
+    const pool = state.hoodUp ? HACK_LINES : DEV_LINES;
+    showBadge(customMsg || pool[boopIdx++ % pool.length]);
+    clearTimeout(happyTimer);
+    happyTimer = setTimeout(() => {
+      stage.classList.remove("is-happy");
+    }, 1200);
+  }
 
-  controlScope.querySelectorAll("[data-avatar-act]").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const act = btn.dataset.avatarAct;
-      if (act === "boop") boop();
-      else if (act === "shades") toggleShades();
-      else if (act === "wave") triggerWave();
+  function triggerCelebrate(customMsg) {
+    stage.classList.add("is-waving", "is-happy");
+    if (!reduceMotion) hopV = -12;
+    typeEnergy = 1.4;
+    showBadge(customMsg || "Cipher verified: Sakib Alam Mubin (SA Mubin)!", 3400);
+    clearTimeout(waveTimer);
+    waveTimer = setTimeout(() => {
+      stage.classList.remove("is-waving", "is-happy");
+    }, 2200);
+  }
+
+  function pulseTyping(boost = 0.85) {
+    typeEnergy = Math.min(1.5, Math.max(typeEnergy, boost));
+  }
+
+  // 60fps articulated animation loop (pauses when off-screen or reduced-motion)
+  let visible = true;
+  let raf = 0;
+
+  function tick() {
+    raf = 0;
+    if (!visible || reduceMotion) return;
+
+    const nx = state.lookX / 100;
+    const ny = state.lookY / 100;
+    curX += (nx - curX) * 0.12;
+    curY += (ny - curY) * 0.12;
+
+    // Spring hop solver
+    hopV = (hopV - hopY * 0.19) * 0.82;
+    hopY += hopV;
+
+    // Breathing + typing oscillators
+    breathPhase += 0.035;
+    const speed = state.hackIdle ? 0.24 : 0.17;
+    typePhase += speed * (0.55 + typeEnergy);
+    typeEnergy = Math.max(state.typing ? 0.32 : 0, typeEnergy * 0.96);
+
+    const breathY = Math.sin(breathPhase) * 1.8;
+
+    if (root) {
+      root.style.transform = `translate3d(0, ${hopY.toFixed(2)}px, 0)`;
+    }
+    if (torso) {
+      torso.style.transform = `translate3d(${(curX * 4.2).toFixed(2)}px, ${(breathY + curY * 2.2).toFixed(2)}px, 0)`;
+    }
+    if (head) {
+      const rot = (curX * 5.6).toFixed(2);
+      head.style.transform = `translate3d(${(curX * 10.5).toFixed(2)}px, ${(breathY * 0.7 + curY * 7.5).toFixed(2)}px, 0) rotate(${rot}deg)`;
+    }
+    if (face) {
+      face.style.transform = `translate3d(${(curX * 5.8).toFixed(2)}px, ${(curY * 4.6).toFixed(2)}px, 0)`;
+    }
+    if (hairFront) {
+      hairFront.style.transform = `translate3d(${(curX * 2.8).toFixed(2)}px, ${(curY * 2.0).toFixed(2)}px, 0)`;
+    }
+    irises.forEach((iris) => {
+      iris.setAttribute(
+        "transform",
+        `translate(${(curX * 4.2).toFixed(2)} ${(curY * 3.1).toFixed(2)})`
+      );
     });
-  });
 
-  // Pointer tracking across window for smooth 3D head & eye follow
+    // Articulated hands: either reaching up to pull the hood OR typing on the laptop
+    if (hoodPullReach > 0.02) {
+      if (armL) armL.style.transform = `translate3d(14px, -92px, 0) rotate(22deg)`;
+      if (armR) armR.style.transform = `translate3d(-14px, -92px, 0) rotate(-22deg)`;
+    } else {
+      const lStroke = Math.sin(typePhase) * 4.5 * typeEnergy;
+      const rStroke = Math.cos(typePhase * 1.15) * 4.5 * typeEnergy;
+      if (armL) {
+        armL.style.transform = `translate3d(${(curX * 2).toFixed(2)}px, ${(breathY + lStroke).toFixed(2)}px, 0)`;
+      }
+      if (armR) {
+        armR.style.transform = `translate3d(${(curX * 2).toFixed(2)}px, ${(breathY + rStroke).toFixed(2)}px, 0)`;
+      }
+      if (handL) {
+        handL.setAttribute("transform", `translate(158 ${(298 + lStroke * 0.9).toFixed(1)})`);
+      }
+      if (handR) {
+        handR.setAttribute("transform", `translate(262 ${(298 + rStroke * 0.9).toFixed(1)})`);
+      }
+    }
+
+    if (laptop) {
+      laptop.style.transform = `translate3d(${(curX * 1.8).toFixed(2)}px, ${(breathY * 0.4).toFixed(2)}px, 0)`;
+    }
+
+    raf = requestAnimationFrame(tick);
+  }
+
+  function startLoop() {
+    if (!raf && visible && !reduceMotion) raf = requestAnimationFrame(tick);
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      visible = entries[0]?.isIntersecting ?? true;
+      if (visible) startLoop();
+    },
+    { threshold: 0.05 }
+  );
+  io.observe(stage);
+
+  // Cursor look-at tracking
   addEventListener(
     "pointermove",
     (e) => {
       if (reduceMotion || e.pointerType === "touch") return;
       const r = stage.getBoundingClientRect();
-      if (r.bottom < -100 || r.top > innerHeight + 100) return;
+      if (r.bottom < -80 || r.top > innerHeight + 80) return;
+      const cx = r.left + r.width * 0.5;
+      const cy = r.top + r.height * 0.42;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      state.lookX = Math.max(-100, Math.min(100, (dx / 280) * 100));
+      state.lookY = Math.max(-100, Math.min(100, (dy / 230) * 100));
 
-      const centerX = r.left + r.width * 0.5;
-      const centerY = r.top + r.height * 0.44;
-      const dx = e.clientX - centerX;
-      const dy = e.clientY - centerY;
-      tx = Math.max(-1, Math.min(1, dx / 280));
-      ty = Math.max(-1, Math.min(1, dy / 240));
-
-      // Proximity smile widening
       const dist = Math.hypot(dx, dy);
       if (mouthCalm) {
-        const smileDepth = dist < 240 ? 143 + (1 - dist / 240) * 4.5 : 143;
-        mouthCalm.setAttribute("d", `M152 136 Q160 ${smileDepth.toFixed(1)} 168 136`);
+        const depth = dist < 240 ? 154 + (1 - dist / 240) * 4.5 : 154;
+        mouthCalm.setAttribute("d", `M197 147 Q210 ${depth.toFixed(1)} 223 147`);
       }
-
-      // Update wave focal origin when cursor is near stage
-      if (dist < 520) {
-        const nx = (e.clientX - r.left) / Math.max(1, r.width);
-        const ny = (e.clientY - r.top) / Math.max(1, r.height);
-        wave.setFocus(nx * 0.65 + 0.1, ny * 0.65 + 0.15);
-      }
-
-      // Rapid circular cursor spin around head -> dizzy easter egg
-      if (dist > 28 && dist < 240 && !stage.classList.contains("is-dizzy")) {
-        const ang = Math.atan2(dy, dx);
-        if (lastAngle !== null) {
-          let delta = ang - lastAngle;
-          if (delta > Math.PI) delta -= Math.PI * 2;
-          if (delta < -Math.PI) delta += Math.PI * 2;
-          spinAccum = spinAccum * 0.96 + Math.abs(delta);
-          if (spinAccum > 13.5) {
-            spinAccum = 0;
-            stage.classList.add("is-dizzy");
-            sound.play("boing");
-            hopV = -8;
-            showBadge("Whoa! 60fps spin cycle!", 2400);
-            clearTimeout(dizzyTimer);
-            dizzyTimer = setTimeout(() => stage.classList.remove("is-dizzy"), 2300);
-          }
-        }
-        lastAngle = ang;
-      }
-      wake();
+      startLoop();
     },
     { passive: true }
   );
+
+  // Interactive hit zones
+  if (hoodHit) {
+    hoodHit.addEventListener("click", (e) => {
+      e.stopPropagation();
+      setHood(!state.hoodUp);
+    });
+  }
+  if (faceHit) {
+    faceHit.addEventListener("click", (e) => {
+      e.stopPropagation();
+      triggerBoop();
+    });
+  }
+
+  // Dock buttons scoped to .avatar-col or stage
+  const scope = stage.closest(".avatar-col") || stage.parentElement || document;
+  scope.querySelectorAll("[data-avatar-act]").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const act = btn.dataset.avatarAct;
+      if (act === "hood") setHood(!state.hoodUp);
+      else if (act === "wave") triggerWave();
+      else if (act === "boop") triggerBoop();
+      else if (act === "type") {
+        pulseTyping(1.45);
+        sound.play("type");
+        showBadge(
+          state.hoodUp
+            ? "Running recon scripts & payload checks…"
+            : "Shipping full-stack TypeScript & AI agents…"
+        );
+      }
+    });
+  });
 
   // Natural idle blinking
   if (!reduceMotion) {
     const scheduleBlink = () => {
       setTimeout(() => {
-        if (
-          !stage.classList.contains("is-happy") &&
-          !stage.classList.contains("is-dizzy") &&
-          !stage.classList.contains("has-shades")
-        ) {
+        if (!stage.classList.contains("is-happy")) {
           stage.classList.add("is-blinking");
-          setTimeout(() => stage.classList.remove("is-blinking"), 150);
+          setTimeout(() => stage.classList.remove("is-blinking"), 145);
         }
         scheduleBlink();
-      }, 2800 + Math.random() * 2800);
+      }, 2800 + Math.random() * 2600);
     };
     scheduleBlink();
   }
 
-  // Pulse wave subtly when mechanical keys are pressed nearby
-  sound.onWave(({ energy }) => {
-    if (!reduceMotion && energy >= 0.85) wave.pulse();
+  // Sync with global mode changes
+  onModeChange(({ toHack }) => {
+    setHood(toHack, { fromModeEvent: true });
   });
 
-  stage._boop = boop;
-  stage._wave = triggerWave;
-}
+  syncStageClasses();
+  startLoop();
 
-const PEEK_LINES = [
-  "Thanks for scrolling all the way down!",
-  "Caught me hanging around the footer!",
-  "Zero frameworks harmed on this page.",
-  "Say hi anytime — hello@samubin.com",
-];
-
-function initPeeker() {
-  document.querySelectorAll("[data-peeker]").forEach((btn) => {
-    const prefix = `pk${++uidSeq}`;
-    const art = btn.querySelector("[data-peeker-art]") || btn;
-    art.innerHTML = peekerSvg(prefix);
-
-    const note = btn.parentElement?.querySelector("[data-peeker-note]");
-    const pupils = [...btn.querySelectorAll(".pk-pupil")];
-    const REST_Y = -41;
-    const OPEN_Y = -4;
-    let y = REST_Y;
-    let targetY = REST_Y;
-    let vy = 0;
-    let raf = 0;
-    let pinned = false;
-    let lineIdx = 0;
-
-    function render() {
-      raf = 0;
-      const f = (targetY - y) * 0.16;
-      vy = (vy + f) * 0.78;
-      y += vy;
-      art.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0)`;
-      if (Math.abs(targetY - y) + Math.abs(vy) > 0.04 && !reduceMotion) {
-        raf = requestAnimationFrame(render);
-      } else {
-        y = targetY;
-        art.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0)`;
-      }
-    }
-
-    function setOpen(open, fromClick = false) {
-      btn.classList.toggle("is-peeking", open);
-      targetY = open ? OPEN_Y : REST_Y;
-      if (fromClick && !reduceMotion) vy += 5.5;
-      if (reduceMotion) {
-        y = targetY;
-        art.style.transform = `translate3d(0, ${y}px, 0)`;
-      } else if (!raf) {
-        raf = requestAnimationFrame(render);
-      }
-    }
-
-    art.style.transform = `translate3d(0, ${REST_Y}px, 0)`;
-
-    btn.addEventListener("pointerenter", () => {
-      if (!pinned) setOpen(true, false);
-    });
-    btn.addEventListener("pointerleave", () => {
-      if (!pinned) setOpen(false, false);
-    });
-    btn.addEventListener("focus", () => setOpen(true, false));
-    btn.addEventListener("blur", () => {
-      pinned = false;
-      setOpen(false, false);
-    });
-    btn.addEventListener("click", () => {
-      pinned = !pinned || !btn.classList.contains("is-peeking");
-      setOpen(pinned, true);
-      if (pinned) {
-        sound.play("wave");
-        if (note) {
-          note.textContent = PEEK_LINES[lineIdx++ % PEEK_LINES.length];
-          note.classList.add("is-on");
-          clearTimeout(note._t);
-          note._t = setTimeout(() => note.classList.remove("is-on"), 3200);
-        }
-      } else {
-        sound.play("click");
-        note?.classList.remove("is-on");
-      }
-    });
-
-    addEventListener(
-      "pointermove",
-      (e) => {
-        if (reduceMotion || e.pointerType === "touch") return;
-        const r = btn.getBoundingClientRect();
-        if (r.top > innerHeight + 60 || r.bottom < -60) return;
-        const dx = Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / 220));
-        const dy = Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / 180));
-        // Character SVG is rotated 180deg inside, so invert dx/dy for natural eye contact!
-        pupils.forEach((p) => {
-          p.setAttribute("cx", (-dx * 2.8).toFixed(2));
-          p.setAttribute("cy", (-dy * 2.4).toFixed(2));
-        });
-      },
-      { passive: true }
-    );
-  });
-}
-
-export function boopPrimaryAvatar(msg) {
-  const stage = document.querySelector("[data-avatar]");
-  if (stage?._boop) {
-    stage.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
-    setTimeout(() => stage._boop(msg), 180);
-    return true;
+  // Gentle greeting wave shortly after first paint on Home
+  if (!reduceMotion && stage.dataset.avatarGreet !== "false") {
+    setTimeout(() => {
+      stage.classList.add("is-waving", "is-happy");
+      setTimeout(() => stage.classList.remove("is-waving", "is-happy"), 1500);
+    }, 450);
   }
-  sound.play("boop");
-  return false;
+
+  const api = {
+    lookAt(x, y) {
+      state.lookX = Math.max(-100, Math.min(100, x));
+      state.lookY = Math.max(-100, Math.min(100, y));
+    },
+    setHood,
+    wave: triggerWave,
+    boop: triggerBoop,
+    celebrate: triggerCelebrate,
+    pulseTyping,
+  };
+
+  stage._avatar = api;
+  instances.add(api);
+  return api;
+}
+
+export function notifyAvatarKeystroke() {
+  instances.forEach((av) => av.pulseTyping(1.15));
+}
+
+export function celebrateAvatars(msg) {
+  instances.forEach((av) => av.celebrate(msg));
 }
 
 export function initAvatars() {
-  document.querySelectorAll("[data-avatar]").forEach(mountAvatarStage);
-  initPeeker();
+  document.querySelectorAll("[data-avatar]").forEach(mountAvatar);
 }

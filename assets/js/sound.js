@@ -1,4 +1,4 @@
-// Synthesized mechanical switch & UI sound kit (Web Audio API, zero audio files).
+// Synthesized mechanical switch & darkroom acoustics (Web Audio API, zero external audio files).
 // Honours user gesture gating and persists both mute state and switch profile.
 
 const STORE_MUTE = "sam.sound";
@@ -9,12 +9,15 @@ const PENTA = [261.63, 293.66, 329.63, 392.0, 440.0, 523.25];
 let ctx = null;
 let master = null;
 let noiseBuf = null;
-let enabled = localStorage.getItem(STORE_MUTE) !== "off";
-let profile = PROFILES.includes(localStorage.getItem(STORE_PROFILE))
-  ? localStorage.getItem(STORE_PROFILE)
-  : "thock";
-let noteIdx = 0;
+let enabled = true;
+let profile = "thock";
+try {
+  enabled = localStorage.getItem(STORE_MUTE) !== "off";
+  const savedProf = localStorage.getItem(STORE_PROFILE);
+  if (PROFILES.includes(savedProf)) profile = savedProf;
+} catch {}
 
+let noteIdx = 0;
 const muteListeners = new Set();
 const profileListeners = new Set();
 const waveListeners = new Set();
@@ -100,82 +103,73 @@ const switchUp = {
     burst({ freq: 2950 * r, q: 1.5, dur: 0.014, gain: 0.11 });
   },
   clicky(r) {
-    burst({ freq: 4300 * r, q: 2.8, dur: 0.012, gain: 0.16 });
+    burst({ freq: 4400 * r, q: 2.8, dur: 0.011, gain: 0.16 });
   },
-  synth() {
-    tone({ freq: 1046.5, dur: 0.028, gain: 0.045, type: "sine" });
+  synth(r) {
+    burst({ freq: 3200 * r, q: 2.0, dur: 0.01, gain: 0.08 });
   },
 };
 
-const recipes = {
+const voices = {
   down(r) {
     (switchDown[profile] || switchDown.thock)(r);
-    emitWave(0.85, profile);
+    emitWave(0.95, profile);
   },
   up(r) {
     (switchUp[profile] || switchUp.thock)(r);
   },
   click(r) {
-    burst({ freq: 2800 * r, q: 2.2, dur: 0.018, gain: 0.24 });
+    burst({ freq: 2800 * r, q: 2.2, dur: 0.014, gain: 0.2 });
     tone({ freq: 520 * r, to: 300, dur: 0.028, gain: 0.06, type: "square" });
     emitWave(0.45, profile);
+  },
+  type(r) {
+    burst({ freq: 1800 * r, q: 1.4, dur: 0.018, gain: 0.14 });
+    tone({ freq: 210 * r, to: 110, dur: 0.04, gain: 0.12, type: "triangle" });
   },
   switch() {
     burst({ freq: 1400, q: 2.8, dur: 0.028, gain: 0.34 });
     burst({ freq: 3200, q: 2.0, dur: 0.02, gain: 0.2, when: 0.038 });
     emitWave(0.65, profile);
   },
+  // Heavy lab breaker clack + safelight warm relay hum for the Lights-Out morph
+  breaker(toHack = true) {
+    burst({ freq: 980, q: 1.8, dur: 0.032, gain: 0.42 });
+    tone({ freq: toHack ? 190 : 130, to: toHack ? 68 : 240, dur: 0.09, gain: 0.36, type: "triangle" });
+    burst({ freq: 2650, q: 2.4, dur: 0.022, gain: 0.26, when: 0.055 });
+    if (toHack) {
+      // Safelight filament warm-up hum
+      tone({ freq: 110, to: 120, dur: 0.28, gain: 0.11, type: "sine", when: 0.12 });
+      tone({ freq: 440, to: 330, dur: 0.18, gain: 0.08, type: "triangle", when: 0.16 });
+    } else {
+      // Lab daylight ballast chime
+      tone({ freq: 440, to: 660, dur: 0.16, gain: 0.12, type: "triangle", when: 0.1 });
+      tone({ freq: 660, to: 880, dur: 0.18, gain: 0.1, type: "sine", when: 0.16 });
+    }
+    emitWave(1.0, "breaker");
+  },
+  flip(r) {
+    burst({ freq: 2100 * r, q: 1.9, dur: 0.016, gain: 0.15 });
+    tone({ freq: 260 * r, to: 140, dur: 0.035, gain: 0.1, type: "triangle" });
+  },
   boop(r) {
     tone({ freq: 330 * r, to: 760 * r, dur: 0.095, gain: 0.22, type: "sine" });
     tone({ freq: 988 * r, to: 1318 * r, dur: 0.08, gain: 0.11, type: "triangle", when: 0.055 });
     emitWave(1.0, "boop");
-  },
-  shades() {
-    [329.63, 415.3, 493.88, 659.25].forEach((f, i) =>
-      tone({ freq: f, dur: 0.15, gain: 0.11, type: "triangle", when: i * 0.042 })
-    );
-    emitWave(0.9, "shades");
   },
   wave(r) {
     tone({ freq: 523.25 * r, to: 659.25 * r, dur: 0.085, gain: 0.15, type: "sine" });
     tone({ freq: 659.25 * r, to: 880 * r, dur: 0.11, gain: 0.14, type: "sine", when: 0.085 });
     emitWave(0.8, "wave");
   },
-  pop(r) {
-    tone({ freq: 440 * r, to: 960 * r, dur: 0.045, gain: 0.2, type: "sine" });
-    emitWave(0.6, "pop");
-  },
-  boing(r) {
-    tone({ freq: 190 * r, to: 520 * r, dur: 0.11, gain: 0.18, type: "sine" });
-    tone({ freq: 340 * r, to: 640 * r, dur: 0.13, gain: 0.13, type: "triangle", when: 0.08 });
-    emitWave(0.95, "boing");
-  },
-  slide() {
-    tone({ freq: 860, to: 185, dur: 0.26, gain: 0.16, type: "sine" });
-    tone({ freq: 195, to: 145, dur: 0.12, gain: 0.1, type: "triangle", when: 0.24 });
-    emitWave(0.75, "slide");
-  },
-  taDa() {
-    [523.25, 659.25, 783.99, 1046.5].forEach((f, i) =>
-      tone({ freq: f, dur: i === 3 ? 0.24 : 0.11, gain: 0.14, type: "triangle", when: i * 0.065 })
-    );
-    emitWave(1.0, "taDa");
-  },
-  chirp(r) {
-    tone({ freq: 1850 * r, to: 3100, dur: 0.055, gain: 0.08 });
-    tone({ freq: 2350 * r, to: 3600, dur: 0.048, gain: 0.06, when: 0.068 });
-  },
   auth() {
-    [587.33, 783.99, 1174.66].forEach((f, i) =>
-      tone({ freq: f, dur: 0.14, gain: 0.12, type: "triangle", when: i * 0.078 })
+    [523.25, 659.25, 783.99, 1046.5].forEach((f, i) =>
+      tone({ freq: f, dur: i === 3 ? 0.24 : 0.12, gain: 0.14, type: "triangle", when: i * 0.07 })
     );
-    emitWave(0.9, "auth");
-  },
-  deny() {
-    tone({ freq: 240, to: 150, dur: 0.16, gain: 0.08, type: "square" });
+    emitWave(1.0, "auth");
   },
   whoosh() {
-    burst({ freq: 920, q: 0.65, dur: 0.2, gain: 0.13, type: "lowpass" });
+    burst({ freq: 920, q: 0.65, dur: 0.2, gain: 0.14, type: "lowpass" });
   },
 };
 
@@ -189,44 +183,42 @@ export const sound = {
   get profiles() {
     return PROFILES;
   },
-  set(v) {
-    enabled = !!v;
-    localStorage.setItem(STORE_MUTE, enabled ? "on" : "off");
+  play(kind = "down", arg) {
+    if (!enabled) return;
+    if (!ensure()) return;
+    const r = 0.94 + Math.random() * 0.12;
+    if (kind === "breaker") voices.breaker(arg);
+    else (voices[kind] || voices.down)(r);
+  },
+  toggle(force) {
+    enabled = typeof force === "boolean" ? force : !enabled;
+    try {
+      localStorage.setItem(STORE_MUTE, enabled ? "on" : "off");
+    } catch {}
+    if (enabled && ensure()) voices.switch();
     muteListeners.forEach((fn) => fn(enabled));
-    if (enabled) this.play("switch");
+    return enabled;
   },
-  toggle() {
-    this.set(!enabled);
-  },
-  setProfile(next, { silent = false } = {}) {
+  setProfile(next) {
     if (!PROFILES.includes(next)) return profile;
     profile = next;
-    localStorage.setItem(STORE_PROFILE, profile);
+    try {
+      localStorage.setItem(STORE_PROFILE, profile);
+    } catch {}
+    if (enabled && ensure()) voices.down(1);
     profileListeners.forEach((fn) => fn(profile));
-    if (!silent) this.play("down");
     return profile;
-  },
-  cycleProfile() {
-    const idx = (PROFILES.indexOf(profile) + 1) % PROFILES.length;
-    return this.setProfile(PROFILES[idx]);
   },
   onChange(fn) {
     muteListeners.add(fn);
+    return () => muteListeners.delete(fn);
   },
   onProfileChange(fn) {
     profileListeners.add(fn);
+    return () => profileListeners.delete(fn);
   },
   onWave(fn) {
     waveListeners.add(fn);
-  },
-  play(name, scale = null) {
-    if (!recipes[name]) return;
-    if (!enabled) {
-      emitWave(0.5, name);
-      return;
-    }
-    if (!ensure()) return;
-    const r = scale ?? 0.94 + Math.random() * 0.12;
-    recipes[name](r);
+    return () => waveListeners.delete(fn);
   },
 };

@@ -1,88 +1,110 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" data-mode="dev">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404 — Route Not Found | Sakib Alam Mubin (SA Mubin)</title>
-  <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#111215">
-  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="/assets/css/site.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    (() => {
+      const h = location.hash.replace("#", "").toLowerCase();
+      let m = h === "hack" || h === "hacker" ? "hack" : h === "dev" ? "dev" : null;
+      if (!m) { try { m = localStorage.getItem("sam.mode"); } catch {} }
+      document.documentElement.setAttribute("data-mode", m === "hack" ? "hack" : "dev");
+    })();
+  </script>
+  <title>404 · Unmapped Route — Sakib Alam Mubin (SA Mubin)</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@80..120,600..850&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/site.css" />
 </head>
-<body>
-  <a class="skip" href="#main">Skip to main content</a>
+<body data-page="404">
+  <a class="skip-link" href="#main">Skip to main content</a>
 
   <header class="site-header">
-    <div class="wrap">
-      <a class="brand" href="/" aria-label="Sakib Alam Mubin — Home">
-        <span class="brand-cap" aria-hidden="true">SA</span>
-        <span class="brand-word">SA Mubin</span>
+    <div class="wrap header-inner">
+      <a class="brand" href="/" aria-label="Sakib Alam Mubin home">
+        <span class="brand-led" aria-hidden="true"></span>
+        <span>SA Mubin</span>
       </a>
-      <nav class="nav" aria-label="Primary">
-        <a href="/">Home</a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/">Workbench</a>
         <a href="/work/">Work</a>
         <a href="/about/">About</a>
         <a href="/contact/">Contact</a>
       </nav>
-      <div class="tools">
-        <button class="tool tool--cmd" type="button" data-palette aria-label="Open command palette (Ctrl+K)">⌘K</button>
-        <button class="tool" type="button" data-sound-toggle aria-pressed="true" aria-label="Mute sound">
-          <svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.8 5.8a9 9 0 0 1 0 12.4"/>
-          </svg>
-          <svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M22 9l-6 6"/><path d="M16 9l6 6"/>
-          </svg>
+
+      <div class="header-tools">
+        <button class="mode-switch" type="button" data-mode-toggle aria-pressed="false" title="Pull hoodie up / down (Shortcut: H)">
+          <span data-mode-label>Hoodie Down · Dev</span>
+          <span class="mode-kbd">H</span>
         </button>
       </div>
     </div>
   </header>
 
   <main id="main">
-    <section class="page-head page-head--borderless">
+    <section class="section">
       <div class="wrap">
-        <h1>404 — Route Not Found</h1>
-        <p class="lede">
-          That URL doesn’t match any route on Sakib Alam Mubin’s site, or an old page moved to clean directory URLs.
+        <h1 data-show="dev" data-scramble>404 — Route Not Mounted on Bus</h1>
+        <h1 data-show="hack" data-scramble>404 — Directory Enumeration Blocked</h1>
+
+        <p class="hero-lead" data-show="dev">
+          The requested endpoint does not exist in <strong>Sakib Alam Mubin</strong>’s workbench routing table. Return to the main chassis or inspect the 36-switch Loadout matrix.
         </p>
-        <div class="keys" style="margin-top: 2.25rem;">
-          <a class="key key--accent" href="/">Back to Home</a>
-          <a class="key" href="/work/">Explore Work</a>
-          <button class="key key--slate" type="button" data-palette>Open Palette (⌘K)</button>
+        <p class="hero-lead" data-show="hack">
+          Nice probe—but this path resolves to an empty sector. Sweep your safelight torch below or jump straight into the live XSS &amp; LFI exploitation simulators.
+        </p>
+
+        <div class="keys">
+          <a class="key key--accent" href="/">
+            <span>Return to Main Chassis</span>
+            <span class="kbd">↵</span>
+          </a>
+          <a class="key" href="/work/">
+            <span>Work &amp; Security Labs</span>
+            <span class="kbd">→</span>
+          </a>
+          <button class="key" type="button" data-mode-toggle>
+            <span>Flip Hoodie Mode</span>
+            <span class="kbd">H</span>
+          </button>
         </div>
+
+        <p class="darkroom-note" data-darkroom-note>
+          SAFELIGHT TRACE // Looking for live targets? Launch /interactive-xss-simulator/ or /LFI-Simulator/ from the Operations page.
+        </p>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer site-footer--plain">
+  <footer class="site-footer">
+    <div class="footer-seam">
+      <svg class="footer-seam-wave" viewBox="0 0 1440 76" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,0 L1440,0 L1440,26 C1120,76 820,76 720,56 C620,76 320,76 0,26 Z" />
+      </svg>
+      <button class="peeker" type="button" data-peeker aria-label="Peek at Sakib Alam Mubin hanging upside down">
+        <span class="peeker-art" data-peeker-art></span>
+      </button>
+      <span class="peeker-note" data-peeker-note>He's still watching</span>
+    </div>
+
     <div class="wrap">
-      <div>
-        <div class="footer-name">Sakib Alam Mubin</div>
-        <p class="footer-role">Full-Stack Software Developer · SA Mubin</p>
+      <div class="footer-grid">
+        <div>
+          <p class="footer-name">Sakib Alam Mubin · SA Mubin</p>
+        </div>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="/">Home</a>
+          <a href="/work/">Work &amp; Labs</a>
+          <a href="/about/">About</a>
+          <a href="/contact/">Contact</a>
+        </nav>
       </div>
-      <div class="footer-links">
-        <a href="/">Home</a>
-        <a href="/work/">Work</a>
-        <a href="/about/">About</a>
-        <a href="/contact/">Contact</a>
-      </div>
-      <p class="copy">&copy; 2026 Sakib Alam Mubin (SA Mubin).</p>
     </div>
   </footer>
-
-  <dialog class="palette" id="palette" aria-label="Command palette">
-    <div class="palette-form">
-      <span>samubin$</span>
-      <input type="text" placeholder="Type a command (whoami, work, boop, switch, hire)…" aria-label="Command input" autocomplete="off" spellcheck="false">
-    </div>
-    <div class="palette-out" aria-live="polite"></div>
-    <ul class="palette-list" role="listbox" aria-label="Commands"></ul>
-    <div class="palette-foot">
-      <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
-      <span><kbd>Enter</kbd> run</span>
-      <span><kbd>Esc</kbd> close</span>
-    </div>
-  </dialog>
 
   <script type="module" src="/assets/js/app.js"></script>
 </body>

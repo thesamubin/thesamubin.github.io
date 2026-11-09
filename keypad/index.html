@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keypad — Sakib Alam Mubin</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#111215">
+  <style>
+    @font-face {
+      font-family: "Archivo";
+      src: url("../assets/fonts/archivo-var-latin.woff2") format("woff2");
+      font-weight: 100 900;
+      font-stretch: 62% 125%;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "JetBrains Mono";
+      src: url("../assets/fonts/jetbrains-mono-var-latin.woff2") format("woff2");
+      font-weight: 400 700;
+      font-display: swap;
+    }
+
+    :root {
+      --ground: #111215;
+      --ink: #ece8df;
+      --ink-3: #8a8780;
+      --bone: #e6e0d2;
+      --bone-side: #b9b19e;
+      --bone-ink: #1a1a1c;
+      --slate: #3d414a;
+      --slate-side: #262930;
+      --signal: #ff5a1f;
+      --signal-side: #b8380c;
+      --signal-ink: #1a0d06;
+      --auth: #4ade80;
+      --line: #2b2e35;
+      --font: "Archivo", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+      --ease-out: cubic-bezier(.16, 1, .3, 1);
+      --ease-smooth: cubic-bezier(.22, 1, .36, 1);
+      color-scheme: dark;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: radial-gradient(75% 65% at 50% 38%, #181a20 0%, var(--ground) 72%);
+      color: var(--ink);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      user-select: none;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--signal);
+      outline-offset: 3px;
+      border-radius: 6px;
+    }
+
+    /* Full-viewport hanging stage */
+    .rig {
+      position: relative;
+      width: 100vw;
+      height: 100svh;
+      touch-action: none;
+    }
+
+    .rig-cable {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    /* Sound toggle tucked into top-right */
+    .sound-btn {
+      position: fixed;
+      top: 1.15rem;
+      right: 1.15rem;
+      z-index: 20;
+      display: inline-grid;
+      place-items: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      padding: 0 0 3px;
+      border: 0;
+      border-radius: 9px;
+      cursor: pointer;
+      color: var(--ink);
+      background: linear-gradient(180deg, #4a4f59, var(--slate) 70%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12),
+        inset 0 -3px 0 var(--slate-side),
+        0 4px 10px -2px rgba(0,0,0,.65);
+      transition: transform 80ms var(--ease-out), box-shadow 80ms;
+    }
+    .sound-btn:active {
+      transform: translateY(2px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06), inset 0 -1px 0 var(--slate-side), 0 1px 2px rgba(0,0,0,.5);
+    }
+    .sound-btn svg { width: 1.1rem; height: 1.1rem; }
+    .sound-btn[aria-pressed="false"] .ico-on,
+    .sound-btn[aria-pressed="true"] .ico-off { display: none; }
+
+    /* Hardware security keypad */
+    .pad {
+      --u: clamp(58px, 7.2vw, 76px);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: calc(var(--u) * 4 + 10px * 3 + 38px);
+      padding: 24px 19px 19px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, #3a3e46, #24272d 55%, #1c1e23);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.18),
+        inset 0 -2px 0 rgba(0,0,0,.5),
+        0 34px 56px -18px rgba(0,0,0,.88),
+        0 12px 20px -8px rgba(0,0,0,.65);
+      transform-origin: 50% 0;
+      will-change: transform;
+      cursor: grab;
+      touch-action: none;
+    }
+    .pad.is-dragging { cursor: grabbing; }
+
+    .pad-port {
+      position: absolute;
+      left: 50%;
+      top: -9px;
+      width: 36px;
+      height: 14px;
+      translate: -50% 0;
+      border-radius: 5px 5px 3px 3px;
+      background: linear-gradient(180deg, #c9c9c9, #8d8f93);
+      box-shadow: inset 0 -2px 0 rgba(0,0,0,.25);
+    }
+
+    .pad-led {
+      position: absolute;
+      left: 21px;
+      top: 10px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #3a2a22;
+      box-shadow: inset 0 1px 1px rgba(0,0,0,.6);
+      transition: background .15s;
+    }
+    .pad-led.is-on {
+      background: radial-gradient(circle at 38% 35%, #ffd2bd, var(--signal) 68%);
+      box-shadow: 0 1px 2px rgba(0,0,0,.6);
+    }
+    .pad-led.is-auth {
+      background: radial-gradient(circle at 38% 35%, #d9ffe7, var(--auth) 68%);
+      box-shadow: 0 1px 2px rgba(0,0,0,.6);
+    }
+
+    .pad-grid {
+      display: grid;
+      grid-template-columns: repeat(4, var(--u));
+      gap: 10px;
+    }
+
+    .cap {
+      --cap: var(--bone);
+      --cap-top: #f1ece2;
+      --cap-side: var(--bone-side);
+      --cap-ink: var(--bone-ink);
+      position: relative;
+      width: var(--u);
+      height: var(--u);
+      border: 0;
+      border-radius: 11px;
+      padding: 0 0 6px;
+      display: grid;
+      place-items: center;
+      font-family: var(--font);
+      font-weight: 750;
+      font-stretch: 115%;
+      font-size: calc(var(--u) * .4);
+      line-height: 1;
+      color: var(--cap-ink);
+      background:
+        radial-gradient(70% 55% at 50% 38%, var(--cap-top), transparent 75%),
+        linear-gradient(180deg, var(--cap-top), var(--cap) 75%);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.6),
+        inset 0 -6px 0 var(--cap-side),
+        inset 5px 0 6px -5px rgba(0,0,0,.18),
+        inset -5px 0 6px -5px rgba(0,0,0,.18),
+        0 5px 8px -3px rgba(0,0,0,.7);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 70ms var(--ease-out), box-shadow 70ms var(--ease-out);
+    }
+    .cap.is-down {
+      transform: translateY(4px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.45),
+        inset 0 -2px 0 var(--cap-side),
+        inset 5px 0 6px -5px rgba(0,0,0,.18),
+        inset -5px 0 6px -5px rgba(0,0,0,.18),
+        0 1px 2px rgba(0,0,0,.7);
+    }
+    .cap--accent {
+      --cap: var(--signal);
+      --cap-top: #ff8550;
+      --cap-side: var(--signal-side);
+      --cap-ink: var(--signal-ink);
+    }
+    .cap svg { width: 42%; height: 42%; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <button class="sound-btn" type="button" id="soundToggle" aria-pressed="true" aria-label="Mute sound">
+    <svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M11 5L6 9H3v6h3l5 4V5z"/>
+      <path d="M15.5 8.5a5 5 0 0 1 0 7"/>
+      <path d="M18.8 5.8a9 9 0 0 1 0 12.4"/>
+    </svg>
+    <svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M11 5L6 9H3v6h3l5 4V5z"/>
+      <path d="M22 9l-6 6"/>
+      <path d="M16 9l6 6"/>
+    </svg>
+  </button>
+
+  <main class="rig" data-rig>
+    <svg class="rig-cable" aria-hidden="true">
+      <path class="cable-shadow" fill="none" stroke="rgba(0,0,0,0.58)" stroke-width="11" stroke-linecap="round"/>
+      <path class="cable-body" fill="none" stroke="#2c3038" stroke-width="8" stroke-linecap="round"/>
+      <path class="cable-spec" fill="none" stroke="rgba(255,255,255,0.16)" stroke-width="2" stroke-dasharray="3 5" stroke-linecap="round"/>
+    </svg>
+
+    <div class="pad" role="group" aria-label="Interactive keypad">
+      <div class="pad-port" aria-hidden="true"></div>
+      <div class="pad-led" aria-hidden="true"></div>
+      <div class="pad-grid">
+        <button class="cap" type="button" data-key="s" aria-label="Key S">S</button>
+        <button class="cap" type="button" data-key="a" aria-label="Key A">A</button>
+        <button class="cap" type="button" data-key="m" aria-label="Key M">M</button>
+        <button class="cap" type="button" data-key="u" aria-label="Key U">U</button>
+        <button class="cap" type="button" data-key="b" aria-label="Key B">B</button>
+        <button class="cap" type="button" data-key="i" aria-label="Key I">I</button>
+        <button class="cap" type="button" data-key="n" aria-label="Key N">N</button>
+        <button class="cap cap--accent" type="button" data-key="lock" aria-label="Lock key">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="4" y="11" width="16" height="10" rx="2.5"/>
+            <path d="M8 11V7a4 4 0 0 1 8 0v4"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      /* --- Self-contained Web Audio synthesizer --- */
+      const STORE = "sam.sound";
+      let ctx = null, master = null, noiseBuf = null;
+      let soundOn = true;
+      try { soundOn = localStorage.getItem(STORE) !== "off"; } catch {}
+
+      function ensureAudio() {
+        if (!ctx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (!AC) return null;
+          ctx = new AC();
+          master = ctx.createGain();
+          master.gain.value = 0.55;
+          master.connect(ctx.destination);
+        }
+        if (ctx.state === "suspended") ctx.resume();
+        return ctx;
+      }
+
+      function getNoise() {
+        if (noiseBuf) return noiseBuf;
+        const len = Math.floor(ctx.sampleRate * 0.25);
+        noiseBuf = ctx.createBuffer(1, len, ctx.sampleRate);
+        const d = noiseBuf.getChannelData(0);
+        for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+        return noiseBuf;
+      }
+
+      function burst({ freq = 2000, q = 1, dur = 0.04, gain = 0.4, type = "bandpass", when = 0 }) {
+        const t = ctx.currentTime + when;
+        const src = ctx.createBufferSource();
+        src.buffer = getNoise();
+        const f = ctx.createBiquadFilter();
+        f.type = type;
+        f.frequency.value = freq;
+        f.Q.value = q;
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(gain, t);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        src.connect(f).connect(g).connect(master);
+        src.start(t, Math.random() * 0.1);
+        src.stop(t + dur + 0.03);
+      }
+
+      function tone({ freq = 200, to = null, dur = 0.06, gain = 0.25, type = "sine", when = 0 }) {
+        const t = ctx.currentTime + when;
+        const o = ctx.createOscillator();
+        o.type = type;
+        o.frequency.setValueAtTime(freq, t);
+        if (to) o.frequency.exponentialRampToValueAtTime(to, t + dur);
+        const g = ctx.createGain();
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(gain, t + 0.004);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        o.connect(g).connect(master);
+        o.start(t);
+        o.stop(t + dur + 0.03);
+      }
+
+      function play(kind) {
+        if (!soundOn || !ensureAudio()) return;
+        const r = 0.92 + Math.random() * 0.16;
+        if (kind === "down") {
+          burst({ freq: 1900 * r, q: 0.9, dur: 0.028, gain: 0.32 });
+          tone({ freq: 160 * r, to: 85, dur: 0.07, gain: 0.32, type: "triangle" });
+        } else if (kind === "up") {
+          burst({ freq: 3600 * r, q: 1.6, dur: 0.016, gain: 0.12 });
+        } else if (kind === "switch") {
+          burst({ freq: 1300, q: 3, dur: 0.03, gain: 0.38 });
+          burst({ freq: 3100, q: 2, dur: 0.02, gain: 0.22, when: 0.04 });
+        } else if (kind === "auth") {
+          [660, 880, 1320].forEach((f, i) => tone({ freq: f, dur: 0.14, gain: 0.12, when: i * 0.085 }));
+        } else if (kind === "whoosh") {
+          burst({ freq: 900, q: 0.6, dur: 0.22, gain: 0.14, type: "lowpass" });
+        }
+      }
+
+      const soundBtn = document.getElementById("soundToggle");
+      function syncSoundBtn() {
+        soundBtn.setAttribute("aria-pressed", String(soundOn));
+        soundBtn.setAttribute("aria-label", soundOn ? "Mute sound" : "Turn sound on");
+      }
+      syncSoundBtn();
+      soundBtn.addEventListener("click", () => {
+        soundOn = !soundOn;
+        try { localStorage.setItem(STORE, soundOn ? "on" : "off"); } catch {}
+        syncSoundBtn();
+        if (soundOn) play("switch");
+      });
+
+      /* --- Hanging keypad + spring-cable physics --- */
+      const rig = document.querySelector("[data-rig]");
+      const pad = rig.querySelector(".pad");
+      const led = rig.querySelector(".pad-led");
+      const pathShadow = rig.querySelector(".cable-shadow");
+      const pathBody = rig.querySelector(".cable-body");
+      const pathSpec = rig.querySelector(".cable-spec");
+      const caps = [...rig.querySelectorAll(".cap")];
+
+      let ax = 0, restY = 180;
+      let x = 0, y = 180, vx = 0, vy = 0, ang = 0, vang = 0;
+      let raf = 0, dragging = false, dragMoved = false, pointerId = null;
+      let grabDx = 0, grabDy = 0, startX = 0, startY = 0, pressedCap = null;
+      let ledTimer = 0, buffer = "";
+
+      function measure(resetPos = false) {
+        const r = rig.getBoundingClientRect();
+        ax = r.width * 0.5;
+        restY = Math.max(110, Math.min(260, (r.height - pad.offsetHeight) * 0.44));
+        if (resetPos) {
+          x = ax + (reduceMotion ? 0 : 22);
+          y = restY - (reduceMotion ? 0 : 16);
+          ang = reduceMotion ? 0 : 0.07;
+        }
+        draw();
+      }
+
+      function draw() {
+        const left = x - pad.offsetWidth / 2;
+        const deg = (ang * 180) / Math.PI;
+        pad.style.transform = `translate3d(${left.toFixed(2)}px, ${y.toFixed(2)}px, 0) rotate(${deg.toFixed(2)}deg)`;
+
+        const portX = x + Math.sin(ang) * 6;
+        const portY = y - Math.cos(ang) * 6;
+        const sag = Math.max(42, (portY + 12) * 0.52);
+        const c1x = ax;
+        const c1y = -12 + sag;
+        const c2x = portX - Math.sin(ang) * sag * 0.7;
+        const c2y = portY - Math.cos(ang) * sag * 0.7;
+        const d = `M ${ax.toFixed(1)} -14 C ${c1x.toFixed(1)} ${c1y.toFixed(1)}, ${c2x.toFixed(1)} ${c2y.toFixed(1)}, ${portX.toFixed(1)} ${portY.toFixed(1)}`;
+        pathShadow.setAttribute("d", d);
+        pathBody.setAttribute("d", d);
+        pathSpec.setAttribute("d", d);
+      }
+
+      function step() {
+        raf = 0;
+        if (!dragging) {
+          vx = (vx + (ax - x) * 0.085) * 0.86;
+          vy = (vy + (restY - y) * 0.095) * 0.86;
+          x += vx;
+          y += vy;
+
+          const targetAng = Math.max(-0.4, Math.min(0.4, (x - ax) * 0.0024 + vx * 0.012));
+          vang = (vang + (targetAng - ang) * 0.14) * 0.84;
+          ang += vang;
+        }
+        draw();
+        const energy = Math.abs(vx) + Math.abs(vy) + Math.abs(vang) + Math.abs(ax - x) * 0.02 + Math.abs(restY - y) * 0.02;
+        if (dragging || energy > 0.015) {
+          raf = requestAnimationFrame(step);
+        } else {
+          x = ax; y = restY; ang = 0;
+          draw();
+        }
+      }
+
+      function wake() {
+        if (!raf && !reduceMotion) raf = requestAnimationFrame(step);
+        else if (reduceMotion) { x = ax; y = restY; ang = 0; draw(); }
+      }
+
+      function flashLed(cls, ms) {
+        clearTimeout(ledTimer);
+        led.classList.remove("is-on", "is-auth");
+        led.classList.add(cls);
+        ledTimer = setTimeout(() => led.classList.remove("is-on", "is-auth"), ms);
+      }
+
+      function triggerCap(cap, autoRelease = false) {
+        if (!cap) return;
+        const key = (cap.dataset.key || "").toLowerCase();
+        const idx = caps.indexOf(cap);
+        const col = idx >= 0 ? idx % 4 : 1.5;
+
+        cap.classList.add("is-down");
+        play("down");
+        if (!reduceMotion) {
+          vy += 2.8;
+          vx += (col - 1.5) * 0.8;
+          vang += (col - 1.5) * 0.024;
+          wake();
+        }
+
+        if (key === "lock") {
+          flashLed("is-auth", 1600);
+          play("whoosh");
+          setTimeout(() => play("auth"), 110);
+        } else {
+          flashLed("is-on", 200);
+          buffer = (buffer + key).slice(-12);
+          if (buffer.endsWith("samubin") || buffer.endsWith("mubin")) {
+            buffer = "";
+            flashLed("is-auth", 3200);
+            setTimeout(() => play("auth"), 70);
+          }
+        }
+
+        if (autoRelease) {
+          setTimeout(() => {
+            cap.classList.remove("is-down");
+            play("up");
+          }, 130);
+        }
+      }
+
+      pad.addEventListener("pointerdown", (e) => {
+        if (e.button && e.button !== 0) return;
+        const cap = e.target.closest(".cap");
+        pointerId = e.pointerId;
+        startX = e.clientX;
+        startY = e.clientY;
+        dragMoved = false;
+        const r = rig.getBoundingClientRect();
+        grabDx = e.clientX - r.left - x;
+        grabDy = e.clientY - r.top - y;
+
+        if (cap) {
+          pressedCap = cap;
+          triggerCap(cap, false);
+        } else if (!reduceMotion) {
+          dragging = true;
+          pad.classList.add("is-dragging");
+          pad.setPointerCapture(pointerId);
+          wake();
+        }
+      });
+
+      addEventListener("pointermove", (e) => {
+        if (pointerId === null || e.pointerId !== pointerId) return;
+        const moved = Math.hypot(e.clientX - startX, e.clientY - startY);
+        if (!dragging && !reduceMotion && moved > 9) {
+          dragging = true;
+          dragMoved = true;
+          if (pressedCap) {
+            pressedCap.classList.remove("is-down");
+            pressedCap = null;
+          }
+          pad.classList.add("is-dragging");
+          try { pad.setPointerCapture(pointerId); } catch {}
+          wake();
+        }
+        if (!dragging) return;
+        const r = rig.getBoundingClientRect();
+        const nx = e.clientX - r.left - grabDx;
+        const ny = e.clientY - r.top - grabDy;
+        const dx = nx - ax;
+        const dy = Math.max(30, ny) - restY;
+        const dist = Math.hypot(dx, dy);
+        const maxR = Math.min(220, r.width * 0.36);
+        const scale = dist > maxR ? maxR / dist : 1;
+        const tx = ax + dx * scale;
+        const ty = restY + dy * scale;
+        vx = (tx - x) * 0.45;
+        vy = (ty - y) * 0.45;
+        x = tx;
+        y = ty;
+        ang = Math.max(-0.48, Math.min(0.48, (x - ax) * 0.0028 + vx * 0.01));
+        draw();
+      });
+
+      function endPointer(e) {
+        if (pointerId === null || (e.pointerId !== undefined && e.pointerId !== pointerId)) return;
+        if (pressedCap) {
+          pressedCap.classList.remove("is-down");
+          play("up");
+          pressedCap = null;
+        }
+        if (dragging) {
+          dragging = false;
+          pad.classList.remove("is-dragging");
+          wake();
+        }
+        pointerId = null;
+      }
+      addEventListener("pointerup", endPointer);
+      addEventListener("pointercancel", endPointer);
+
+      caps.forEach((cap) => {
+        cap.addEventListener("click", (e) => {
+          if (dragMoved) { e.preventDefault(); return; }
+          if (e.detail === 0) triggerCap(cap, true);
+        });
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
+        const k = e.key === "Enter" ? "lock" : e.key.toLowerCase();
+        const match = caps.find((c) => c.dataset.key === k);
+        if (match) triggerCap(match, true);
+      });
+
+      addEventListener("resize", () => measure(false), { passive: true });
+      measure(true);
+      wake();
+    })();
+  </script>
+</body>
+</html>
+

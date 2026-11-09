@@ -1,114 +1,117 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" data-mode="dev">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sakib Alam Mubin (SA Mubin) — Full-Stack Software Developer</title>
-  <meta name="description" content="Portfolio of Sakib Alam Mubin (SA Mubin), a Full-Stack Software Developer building fast, tactile web interfaces, clean backend architectures, and developer tools.">
-  <meta name="author" content="Sakib Alam Mubin">
-  <meta name="robots" content="index, follow, max-image-preview:large">
-  <meta name="theme-color" content="#111215">
-  <link rel="canonical" href="https://thesamubin.github.io/">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    (() => {
+      const h = location.hash.replace("#", "").toLowerCase();
+      let m = h === "hack" || h === "hacker" ? "hack" : h === "dev" ? "dev" : null;
+      if (!m) { try { m = localStorage.getItem("sam.mode"); } catch {} }
+      document.documentElement.setAttribute("data-mode", m === "hack" ? "hack" : "dev");
+    })();
+  </script>
+  <title>Sakib Alam Mubin (SA Mubin) — Full-Stack AI Engineer &amp; Ethical Hacker</title>
+  <meta name="description" content="Dual-mode portfolio of Sakib Alam Mubin (SA Mubin) — Full-Stack AI Engineer &amp; Developer by default, Cybersecurity Specialist &amp; Ethical Hacker when the hoodie goes up." />
+  <meta name="author" content="Sakib Alam Mubin" />
+  <meta name="keywords" content="Sakib Alam Mubin, SA Mubin, samubin, thesamubin, Full-Stack AI Engineer, Cybersecurity Specialist, Ethical Hacker, Web Application Security" />
+  <link rel="canonical" href="https://thesamubin.github.io/" />
 
-  <meta property="og:type" content="profile">
-  <meta property="og:site_name" content="Sakib Alam Mubin">
-  <meta property="og:url" content="https://thesamubin.github.io/">
-  <meta property="og:title" content="Sakib Alam Mubin (SA Mubin) — Full-Stack Software Developer">
-  <meta property="og:description" content="Interactive developer studio of Sakib Alam Mubin (SA Mubin): full-stack web applications, frontend physics, and resilient systems.">
-  <meta property="og:image" content="https://thesamubin.github.io/assets/img/og-card.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Sakib Alam Mubin (SA Mubin) — Full-Stack Software Developer">
-  <meta property="profile:username" content="thesamubin">
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Sakib Alam Mubin — SA Mubin" />
+  <meta property="og:title" content="Sakib Alam Mubin (SA Mubin) — Dual-Mode Engineering &amp; Security Portfolio" />
+  <meta property="og:description" content="Pull the hoodie up or press [H] to flip between Full-Stack AI Engineering and Offensive/Defensive Cybersecurity." />
+  <meta property="og:url" content="https://thesamubin.github.io/" />
+  <meta property="og:image" content="https://thesamubin.github.io/assets/img/og-card.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sakib Alam Mubin (SA Mubin) — Full-Stack AI &amp; Ethical Hacker" />
+  <meta name="twitter:description" content="Interactive dual-mode workbench of Sakib Alam Mubin (SA Mubin)." />
+  <meta name="twitter:image" content="https://thesamubin.github.io/assets/img/og-card.svg" />
+  <meta name="theme-color" content="#E4E2DD" />
 
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Sakib Alam Mubin (SA Mubin) — Full-Stack Software Developer">
-  <meta name="twitter:description" content="Full-Stack Software Developer crafting interactive web experiences and clean backend systems.">
-  <meta name="twitter:image" content="https://thesamubin.github.io/assets/img/og-card.png">
-
-  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-  <link rel="manifest" href="site.webmanifest">
-  <link rel="preload" href="assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/site.css">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@80..120,600..850&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/site.css" />
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "WebSite",
-        "@id": "https://thesamubin.github.io/#website",
-        "url": "https://thesamubin.github.io/",
-        "name": "Sakib Alam Mubin",
-        "alternateName": ["SA Mubin"],
-        "inLanguage": "en",
-        "publisher": { "@id": "https://thesamubin.github.io/#person" }
-      },
-      {
         "@type": "Person",
         "@id": "https://thesamubin.github.io/#person",
         "name": "Sakib Alam Mubin",
-        "alternateName": ["SA Mubin"],
-        "identifier": ["thesamubin", "samubin"],
+        "alternateName": ["SA Mubin", "S. A. Mubin", "samubin", "thesamubin"],
         "url": "https://thesamubin.github.io/",
-        "image": "https://thesamubin.github.io/assets/img/og-card.png",
+        "jobTitle": "Full-Stack AI Engineer & Cybersecurity Specialist",
         "email": "mailto:hello@samubin.com",
-        "jobTitle": ["Full-Stack Software Developer", "Frontend Engineer"],
-        "knowsAbout": [
-          "Full-Stack Web Development",
-          "JavaScript",
-          "TypeScript",
-          "Interactive UI Engineering",
-          "Backend API Architecture",
-          "Web Application Security"
-        ],
         "sameAs": [
-          "https://github.com/thesamubin"
+          "https://github.com/thesamubin",
+          "https://www.linkedin.com/in/samubin/",
+          "https://x.com/thesamubin",
+          "https://www.youtube.com/@thesamubin",
+          "https://www.facebook.com/thesamubin",
+          "https://www.instagram.com/thesamubin/"
         ]
       },
       {
-        "@type": "ProfilePage",
-        "@id": "https://thesamubin.github.io/#profilepage",
+        "@type": "WebSite",
+        "@id": "https://thesamubin.github.io/#website",
         "url": "https://thesamubin.github.io/",
-        "name": "Sakib Alam Mubin (SA Mubin) — Developer Portfolio",
-        "isPartOf": { "@id": "https://thesamubin.github.io/#website" },
-        "about": { "@id": "https://thesamubin.github.io/#person" },
-        "mainEntity": { "@id": "https://thesamubin.github.io/#person" }
+        "name": "Sakib Alam Mubin (SA Mubin)",
+        "publisher": { "@id": "https://thesamubin.github.io/#person" }
       }
     ]
   }
   </script>
 </head>
-<body>
-  <a class="skip" href="#main">Skip to main content</a>
+<body data-page="home">
+  <a class="skip-link" href="#main">Skip to main content</a>
 
   <header class="site-header">
-    <div class="wrap">
-      <a class="brand" href="./" aria-label="Sakib Alam Mubin — Home">
-        <span class="brand-cap" aria-hidden="true">SA</span>
-        <span class="brand-word">SA Mubin</span>
+    <div class="wrap header-inner">
+      <a class="brand" href="/" aria-label="Sakib Alam Mubin home">
+        <span class="brand-led" aria-hidden="true"></span>
+        <span>SA Mubin</span>
       </a>
 
-      <nav class="nav" aria-label="Primary">
-        <a href="./" aria-current="page">Home</a>
-        <a href="work/">Work</a>
-        <a href="about/">About</a>
-        <a href="contact/">Contact</a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/" aria-current="page">
+          <span data-show="dev">Workbench</span>
+          <span data-show="hack">Darkroom</span>
+        </a>
+        <a href="/work/">
+          <span data-show="dev">Work</span>
+          <span data-show="hack">Operations</span>
+        </a>
+        <a href="/about/">
+          <span data-show="dev">About</span>
+          <span data-show="hack">Dossier</span>
+        </a>
+        <a href="/contact/">
+          <span data-show="dev">Contact</span>
+          <span data-show="hack">Channel</span>
+        </a>
       </nav>
 
-      <div class="tools">
-        <button class="tool tool--cmd" type="button" data-palette aria-label="Open command palette (Ctrl+K)">⌘K</button>
-        <button class="tool" type="button" data-sound-toggle aria-pressed="true" aria-label="Mute sound">
-          <svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M11 5L6 9H3v6h3l5 4V5z"/>
-            <path d="M15.5 8.5a5 5 0 0 1 0 7"/>
-            <path d="M18.8 5.8a9 9 0 0 1 0 12.4"/>
-          </svg>
-          <svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M11 5L6 9H3v6h3l5 4V5z"/>
-            <path d="M22 9l-6 6"/>
-            <path d="M16 9l6 6"/>
+      <div class="header-tools">
+        <div class="switch-seg" role="group" aria-label="Mechanical switch acoustic profile">
+          <button type="button" data-switch-profile="thock" aria-pressed="true" title="Linear POM Thock">Thock</button>
+          <button type="button" data-switch-profile="clicky" aria-pressed="false" title="Tactile Box Jade Click">Clicky</button>
+          <button type="button" data-switch-profile="synth" aria-pressed="false" title="Sub-bass Cyber Synth">Synth</button>
+        </div>
+
+        <button class="mode-switch" type="button" data-mode-toggle aria-pressed="false" title="Pull hoodie up / down (Shortcut: H)">
+          <span data-mode-label>Hoodie Down · Dev</span>
+          <span class="mode-kbd">H</span>
+        </button>
+
+        <button class="tool" type="button" data-sound-toggle aria-pressed="true" aria-label="Mute keyboard and UI sound" title="Toggle mechanical audio">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
           </svg>
         </button>
       </div>
@@ -117,291 +120,350 @@
 
   <main id="main">
     <section class="hero">
-      <div class="wrap">
+      <div class="wrap hero-grid">
         <div class="hero-copy">
-          <h1 class="hero-name">
-            <span class="line">Sakib Alam</span> <span class="line accent">Mubin</span>
+          <h1 class="hero-name" data-scramble>
+            <span class="line">Sakib Alam</span>
+            <span class="line accent">Mubin</span>
           </h1>
-          <p class="hero-role">
-            <strong>Full-Stack Software Developer</strong> crafting tactile, responsive web interfaces, clean backend APIs, and resilient software from first commit to production.
+
+          <p class="hero-role" data-show="dev" data-scramble>
+            Full-Stack AI Engineer &amp; Systems Developer
           </p>
-          <div class="keys">
-            <a class="key key--accent" href="work/">
-              <span>Explore Work</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>
-              </svg>
+          <p class="hero-role" data-show="hack" data-scramble>
+            Cybersecurity Specialist · Ethical Hacker &amp; Security Instructor
+          </p>
+
+          <p class="hero-lead" data-show="dev" data-scramble>
+            Known across the web as <strong>SA Mubin</strong>. I architect LLM-native workflows, resilient distributed backends, and tactile browser interfaces where every latency budget and state transition is engineered with instrument-grade precision.
+          </p>
+          <p class="hero-lead" data-show="hack" data-scramble>
+            Operating as <strong>SA Mubin</strong>. I dissect web applications, build live browser exploitation labs for XSS and LFI, audit authentication boundaries, and train engineers to think like an adversary before shipping to production.
+          </p>
+
+          <div class="keys" data-show="dev">
+            <a class="key key--accent" href="#loadout">
+              <span>Inspect Stack Board</span>
+              <span class="kbd">01</span>
             </a>
-            <a class="key" href="contact/">Get in Touch</a>
+            <a class="key" href="/work/">
+              <span>Engineering Work</span>
+              <span class="kbd">→</span>
+            </a>
+            <button class="key" type="button" data-mode-toggle>
+              <span>Pull Hoodie Up</span>
+              <span class="kbd">H</span>
+            </button>
           </div>
+
+          <div class="keys" data-show="hack">
+            <a class="key key--accent" href="#loadout">
+              <span>Inspect Red/Blue Arsenal</span>
+              <span class="kbd">01</span>
+            </a>
+            <a class="key" href="/work/#labs">
+              <span>Live Exploit Simulators</span>
+              <span class="kbd">↗</span>
+            </a>
+            <button class="key" type="button" data-mode-toggle>
+              <span>Drop Hoodie · Dev Lab</span>
+              <span class="kbd">H</span>
+            </button>
+          </div>
+
+          <p class="darkroom-note" data-darkroom-note>
+            SAFELIGHT TRACE // Type "samubin" anywhere on your keyboard to run live page cipher decryption.
+          </p>
         </div>
 
         <div class="avatar-col">
           <div class="avatar-stage" data-avatar>
-            <canvas class="avatar-wave" aria-hidden="true"></canvas>
-            <span class="avatar-badge" data-avatar-badge role="status" aria-live="polite"></span>
-            <button class="avatar-hit" type="button" data-avatar-hit aria-label="Interact with SA Mubin's avatar">
-              <span class="avatar-mount" data-avatar-mount></span>
-            </button>
+            <span class="avatar-badge" data-avatar-badge>DEV · WORKBENCH</span>
+            <div class="avatar-mount" data-avatar-mount></div>
+            <div class="avatar-hits">
+              <button class="av-hit-hood" type="button" data-avatar-hood aria-label="Pull avatar hoodie to toggle Developer and Ethical Hacker mode" title="Click hood to flip mode (H)"></button>
+              <button class="av-hit-face" type="button" data-avatar-face aria-label="Boop Sakib Alam Mubin avatar" title="Click face to interact"></button>
+            </div>
           </div>
 
-          <div class="avatar-dock" role="group" aria-label="Avatar expressions">
-            <button class="key key--sm" type="button" data-avatar-act="boop">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M12 3v3m0 12v3M3 12h3m12 0h3m-2.6-6.4l-2.1 2.1M7.7 16.3l-2.1 2.1m0-12.8l2.1 2.1m8.6 8.6l2.1 2.1"/>
-              </svg>
+          <div class="avatar-dock" role="toolbar" aria-label="Avatar interactions">
+            <button class="dock-btn dock-btn--hood" type="button" data-avatar-act="hood">
+              <span data-show="dev">Pull Hoodie Up</span>
+              <span data-show="hack">Drop Hoodie Down</span>
+              <span class="kbd">H</span>
+            </button>
+            <button class="dock-btn" type="button" data-avatar-act="wave">
+              <span>Wave Hi</span>
+            </button>
+            <button class="dock-btn" type="button" data-avatar-act="boop">
               <span>Boop</span>
             </button>
-            <button class="key key--slate key--sm" type="button" data-avatar-act="shades" aria-pressed="false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="2.5" y="9" width="7.5" height="5.5" rx="1.5"/>
-                <rect x="14" y="9" width="7.5" height="5.5" rx="1.5"/>
-                <path d="M10 11h4"/>
-              </svg>
-              <span>Shades</span>
-            </button>
-            <button class="key key--slate key--sm" type="button" data-avatar-act="wave">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M7 11V5a1.5 1.5 0 0 1 3 0v5m0-3V4a1.5 1.5 0 0 1 3 0v6m0-2V5.5a1.5 1.5 0 0 1 3 0V13a6 6 0 0 1-6 6h-1a6 6 0 0 1-5.2-3l-1.6-2.8a1.5 1.5 0 0 1 2.5-1.6L7 13V11z"/>
-              </svg>
-              <span>Say Hi</span>
+            <button class="dock-btn" type="button" data-avatar-act="type">
+              <span>Type Burst</span>
             </button>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section field-bone" aria-labelledby="craft-heading">
-      <div class="wrap">
-        <div class="section-head">
-          <h2 id="craft-heading">Interfaces with pulse. Backends built to last.</h2>
-          <p>Great software feels effortless on the surface because the state model, API contracts, and edge cases underneath were engineered with care.</p>
-        </div>
+    <section class="keypad-drop" aria-label="Suspended hardware macro pad">
+      <div class="wrap keypad-drop-inner">
+        <div class="rig" data-rig title="Drag to swing · Press S-A-M-U-B-I-N on your keyboard">
+          <svg class="rig-cable" aria-hidden="true">
+            <path class="cable-shadow" d="" />
+            <path class="cable-body" d="" />
+            <path class="cable-spec" d="" />
+          </svg>
 
-        <div class="studio-split">
-          <div data-craft-tabs>
-            <div class="seg seg--bone" role="group" aria-label="Engineering focus">
-              <button type="button" data-craft-tab="frontend" aria-pressed="true">Frontend &amp; Motion</button>
-              <button type="button" data-craft-tab="backend" aria-pressed="false">Backend &amp; APIs</button>
-              <button type="button" data-craft-tab="reliability" aria-pressed="false">Reliability &amp; DX</button>
-            </div>
+          <div class="pad" role="group" aria-label="S A M U B I N mechanical macro keypad">
+            <div class="pad-port" aria-hidden="true"></div>
+            <span class="pad-led is-on" aria-hidden="true"></span>
 
-            <div class="craft-panel" data-craft-panel="frontend">
-              <h3>Fast, tactile interfaces that respect the browser.</h3>
-              <p>Sakib Alam Mubin builds interactive UIs with crisp typography, 60fps physics, keyboard-first workflows, and zero unnecessary bundle weight.</p>
-              <ul class="tag-list" aria-label="Frontend capabilities">
-                <li>JavaScript &amp; TypeScript</li>
-                <li>React &amp; Next.js</li>
-                <li>Modern CSS &amp; Layout</li>
-                <li>Canvas &amp; SVG Motion</li>
-                <li>Web Audio Micro-Interactions</li>
-                <li>WCAG AA Accessibility</li>
-              </ul>
-            </div>
-
-            <div class="craft-panel" data-craft-panel="backend" hidden>
-              <h3>Predictable APIs, clean schemas, calm deployments.</h3>
-              <p>Designing typed REST and RPC services, relational data models, caching strategies, and background jobs that stay fast when real traffic arrives.</p>
-              <ul class="tag-list" aria-label="Backend capabilities">
-                <li>Node.js &amp; Edge Runtimes</li>
-                <li>REST &amp; Typed Schemas</li>
-                <li>PostgreSQL &amp; Data Modeling</li>
-                <li>Caching &amp; Rate Limiting</li>
-                <li>Auth &amp; Session Design</li>
-              </ul>
-            </div>
-
-            <div class="craft-panel" data-craft-panel="reliability" hidden>
-              <h3>Hardened boundaries baked into everyday code.</h3>
-              <p>Combining full-stack product delivery with practical security engineering so input validation, safe defaults, and automated checks ship from day one.</p>
-              <ul class="tag-list" aria-label="Reliability capabilities">
-                <li>CI/CD Automation</li>
-                <li>Zero-Dependency Performance</li>
-                <li>Strict CSP &amp; HTTP Policy</li>
-                <li>Safe Input Boundaries</li>
-                <li>Developer Teaching Labs</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="macropad-shell" data-macropad>
-            <div class="macropad-top">
-              <span class="lbl">Switch acoustics</span>
-              <div class="seg" role="group" aria-label="Mechanical switch sound profile">
-                <button type="button" data-switch-profile="thock" aria-pressed="true">Thock</button>
-                <button type="button" data-switch-profile="clicky" aria-pressed="false">Clicky</button>
-                <button type="button" data-switch-profile="synth" aria-pressed="false">Synth</button>
-              </div>
-            </div>
-
-            <div class="macropad" role="group" aria-label="Desk macropad — click keys or type SAMUBIN on your keyboard">
-              <div class="macropad-screen">
-                <span data-pad-oled>SAM-PAD // TYPE SAMUBIN</span>
-                <span class="pad-led" aria-hidden="true"></span>
-              </div>
-              <div class="pad-grid">
-                <button class="cap" type="button" data-key="s" aria-label="Key S">S</button>
-                <button class="cap" type="button" data-key="a" aria-label="Key A">A</button>
-                <button class="cap" type="button" data-key="m" aria-label="Key M">M</button>
-                <button class="cap" type="button" data-key="u" aria-label="Key U">U</button>
-                <button class="cap" type="button" data-key="b" aria-label="Key B">B</button>
-                <button class="cap" type="button" data-key="i" aria-label="Key I">I</button>
-                <button class="cap" type="button" data-key="n" aria-label="Key N">N</button>
-                <button class="cap cap--accent" type="button" data-key="spark" aria-label="Play synth chord">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z"/>
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <div class="macropad-foot">
-              <span data-switch-spec>Lubed PBT linear · 172 Hz housing thock</span>
-              <span>Try typing <kbd>S</kbd><kbd>A</kbd><kbd>M</kbd><kbd>U</kbd><kbd>B</kbd><kbd>I</kbd><kbd>N</kbd></span>
+            <div class="pad-grid">
+              <button class="cap" type="button" data-key="s">S</button>
+              <button class="cap" type="button" data-key="a">A</button>
+              <button class="cap" type="button" data-key="m">M</button>
+              <button class="cap" type="button" data-key="u">U</button>
+              <button class="cap" type="button" data-key="b">B</button>
+              <button class="cap" type="button" data-key="i">I</button>
+              <button class="cap" type="button" data-key="n">N</button>
+              <button class="cap cap--accent" type="button" data-key="lock" aria-label="Trigger samubin cipher" title="Trigger samubin cipher">⇄</button>
             </div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <section class="section" aria-labelledby="motion-heading">
-      <div class="wrap">
-        <div class="section-head">
-          <h2 id="motion-heading">Motion tuned by math, not guesswork.</h2>
-          <p>Fixed-duration curves feel robotic when interrupted. Drag the keycap puck or tune stiffness and damping below to feel how SA Mubin builds spring-driven UI components.</p>
-        </div>
-
-        <div class="spring-grid">
-          <div class="feature-stack">
-            <article class="work-card">
-              <h3>Zero-Build Interactive Studio</h3>
-              <p>This entire portfolio runs on vanilla ES Modules, custom SVG/Canvas animation loops, and synthesized Web Audio switches with zero runtime dependencies.</p>
-              <div class="keys">
-                <a class="key key--accent key--sm" href="work/">
-                  <span>Inspect Engineering Work</span>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>
-                  </svg>
-                </a>
-              </div>
-            </article>
-
-            <article class="work-card">
-              <h3>Open Source &amp; Developer Labs</h3>
-              <p>Explore open-source codebases on GitHub alongside interactive browser sandboxes created by Sakib Alam Mubin for hands-on developer learning.</p>
-              <div class="keys">
-                <a class="key key--slate key--sm" href="https://github.com/thesamubin" target="_blank" rel="me noopener">GitHub (@thesamubin)</a>
-                <a class="key key--sm" href="about/">About SA Mubin</a>
-              </div>
-            </article>
-          </div>
-
-          <div class="spring-card" data-spring-lab>
-            <div class="spring-head">
-              <span class="live">hooke’s law spring solver</span>
-              <span data-spring-meta>Underdamped · ζ = 0.48 · settles in ~640 ms</span>
-            </div>
-
-            <div class="spring-body">
-              <div class="spring-controls">
-                <div class="bench-row">
-                  <button class="chip" type="button" data-spring-preset="240,22" aria-pressed="false">Snappy UI</button>
-                  <button class="chip" type="button" data-spring-preset="210,14" aria-pressed="true">Playful Pop</button>
-                  <button class="chip" type="button" data-spring-preset="125,26" aria-pressed="false">Heavy Desk</button>
-                </div>
-                <button class="key key--accent key--sm" type="button" data-spring-pluck>Pluck Spring</button>
-              </div>
-
-              <div class="spring-track" data-spring-track>
-                <div class="spring-anchor" aria-hidden="true"></div>
-                <svg class="spring-svg" viewBox="0 0 480 64" preserveAspectRatio="none" aria-hidden="true">
-                  <path data-spring-coil fill="none" stroke="#b8b4ac" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <button class="spring-puck" type="button" data-spring-puck aria-label="Drag and release the spring puck">SA</button>
-              </div>
-
-              <div class="spring-sliders">
-                <div class="slider-field">
-                  <label for="spring-k">Stiffness (k) <span data-k-val>210</span></label>
-                  <input id="spring-k" type="range" min="80" max="380" step="5" value="210" data-spring-k>
-                </div>
-                <div class="slider-field">
-                  <label for="spring-c">Damping (c) <span data-c-val>14</span></label>
-                  <input id="spring-c" type="range" min="6" max="34" step="1" value="14" data-spring-c>
-                </div>
-              </div>
-
-              <canvas class="spring-chart" data-spring-chart aria-label="Spring oscillation curve over time"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section field-bone" aria-labelledby="cta-heading">
-      <div class="wrap cta">
-        <div>
-          <h2 id="cta-heading">Have a product worth building right?</h2>
-          <p class="lede" style="margin-top: 1.25rem;">
-            Available for full-stack software engineering, interactive frontend architecture, and technical collaborations.
+        <div class="keypad-copy">
+          <h2 data-show="dev" data-scramble>Tactile Hardware Telemetry</h2>
+          <h2 data-show="hack" data-scramble>Hardware Sequence Interceptor</h2>
+          <p data-show="dev">
+            Grab and swing the suspended macro pad, press the PBT keycaps, or type <code>samubin</code> directly on your physical keyboard. Every keystroke synthesizes mechanical switch acoustics in real time.
+          </p>
+          <p data-show="hack">
+            Keystrokes route through the zero-sample Web Audio synth engine. Complete the <code>s-a-m-u-b-i-n</code> seven-key handshake to trigger live DOM hex-cipher decryption across the page.
           </p>
         </div>
-        <div class="keys">
-          <a class="key key--accent" href="contact/">
-            <span>Contact Sakib Alam Mubin</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>
-            </svg>
+      </div>
+    </section>
+
+    <section class="section" id="loadout" data-loadout>
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2 data-loadout-title data-scramble>Engineering Loadout</h2>
+            <p class="section-sub" data-loadout-sub>
+              Press any keycap—or type its first letter—to inspect the stack on the OLED readout. Pull the hoodie up to flip every switch into the Security Arsenal.
+            </p>
+          </div>
+
+          <div class="tier-legend" aria-label="Proficiency tier legend">
+            <span class="tier-item"><span class="tier-swatch tier-swatch--daily"></span>Daily Driver</span>
+            <span class="tier-item"><span class="tier-swatch tier-swatch--prof"></span>Proficient</span>
+            <span class="tier-item"><span class="tier-swatch tier-swatch--fam"></span>Familiar</span>
+          </div>
+        </div>
+
+        <div class="kb-shell">
+          <div class="kb-oled" role="status" aria-live="polite">
+            <div class="oled-main">
+              <span class="oled-dot" aria-hidden="true"></span>
+              <span class="oled-tag" data-loadout-tag>LOADOUT // LAB</span>
+              <span class="oled-text" data-loadout-oled>Hover or press any keycap to inspect runtime telemetry.</span>
+            </div>
+          </div>
+
+          <div class="kb-plate" data-loadout-board></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="selected-work">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2 data-show="dev" data-scramble>Selected Engineering Systems</h2>
+            <h2 data-show="hack" data-scramble>Offensive &amp; Defensive Operations</h2>
+            <p class="section-sub" data-show="dev">
+              Production AI pipelines, full-stack web architectures, and zero-dependency interactive browser instruments built by <strong>Sakib Alam Mubin</strong>.
+            </p>
+            <p class="section-sub" data-show="hack">
+              Live browser exploitation sandboxes, payload telemetries, and vulnerability research modules engineered by <strong>SA Mubin</strong>.
+            </p>
+          </div>
+
+          <a class="key" href="/work/">
+            <span data-show="dev">Full Archive (06)</span>
+            <span data-show="hack">All Operations (06)</span>
+            <span class="kbd">→</span>
           </a>
         </div>
+
+        <div class="index-enclosure" data-show="dev">
+          <article class="index-row">
+            <div>
+              <h3>01 · Agentic RAG &amp; Function-Calling Orchestrator</h3>
+              <div class="index-meta">
+                <span class="tag">LangGraph</span>
+                <span class="tag">FastAPI</span>
+                <span class="tag">pgvector</span>
+                <span class="tag">TypeScript</span>
+              </div>
+            </div>
+            <p class="index-desc">
+              Deterministic tool-routing pipeline combining hybrid vector retrieval, strict JSON schema validation, and streaming token telemetry.
+            </p>
+            <div>
+              <a class="key" href="/work/#rag-orchestrator">
+                <span>Architecture</span>
+                <span class="kbd">→</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="index-row">
+            <div>
+              <h3>02 · High-Concurrency Next.js &amp; Go Edge Platform</h3>
+              <div class="index-meta">
+                <span class="tag">Next.js</span>
+                <span class="tag">Go</span>
+                <span class="tag">PostgreSQL</span>
+                <span class="tag">Docker</span>
+              </div>
+            </div>
+            <p class="index-desc">
+              Multi-tenant full-stack system with Go worker queues, Redis streams, strict RBAC session boundaries, and sub-50ms edge responses.
+            </p>
+            <div>
+              <a class="key" href="/work/#edge-platform">
+                <span>Case Study</span>
+                <span class="kbd">→</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="index-row">
+            <div>
+              <h3>03 · Tactile Hardware-Physics Web Engine</h3>
+              <div class="index-meta">
+                <span class="tag">Vanilla JS</span>
+                <span class="tag">Web Audio API</span>
+                <span class="tag">SVG Kinematics</span>
+              </div>
+            </div>
+            <p class="index-desc">
+              Zero-dependency 60fps spring-damper physics rig, procedural switch synthesizer, and split-flap mechanical matrix driving this portfolio.
+            </p>
+            <div>
+              <a class="key" href="/keypad/">
+                <span>Standalone Rig</span>
+                <span class="kbd">↗</span>
+              </a>
+            </div>
+          </article>
+        </div>
+
+        <div class="index-enclosure" data-show="hack">
+          <article class="index-row">
+            <div>
+              <h3>01 · Interactive XSS Exploitation &amp; Sanitization Simulator</h3>
+              <div class="index-meta">
+                <span class="tag">Reflected / DOM XSS</span>
+                <span class="tag">CSP Defense</span>
+                <span class="tag">Live Sandbox</span>
+              </div>
+            </div>
+            <p class="index-desc">
+              Client-side security training sandbox visualizing reflected, stored, and DOM-based Cross-Site Scripting vectors alongside context-aware remediation.
+            </p>
+            <div>
+              <a class="key key--accent" href="https://thesamubin.github.io/interactive-xss-simulator/" target="_blank" rel="noopener">
+                <span>Launch XSS Lab</span>
+                <span class="kbd">↗</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="index-row">
+            <div>
+              <h3>02 · Local File Inclusion (LFI) &amp; Path Traversal Simulator</h3>
+              <div class="index-meta">
+                <span class="tag">Path Traversal</span>
+                <span class="tag">Stream Wrappers</span>
+                <span class="tag">Live Sandbox</span>
+              </div>
+            </div>
+            <p class="index-desc">
+              Interactive exploitation lab demonstrating directory traversal sequences, null-byte injection, PHP wrappers, and strict allowlist defenses.
+            </p>
+            <div>
+              <a class="key key--accent" href="https://thesamubin.github.io/LFI-Simulator/" target="_blank" rel="noopener">
+                <span>Launch LFI Lab</span>
+                <span class="kbd">↗</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="index-row">
+            <div>
+              <h3>03 · Web Application Recon &amp; Auth Boundary Hardening</h3>
+              <div class="index-meta">
+                <span class="tag">Burp Suite</span>
+                <span class="tag">OWASP Top 10</span>
+                <span class="tag">OAuth / JWT</span>
+              </div>
+            </div>
+            <p class="index-desc">
+              Attack-surface mapping workflow chaining subdomain enumeration, JWT/session inspection, IDOR fuzzing, and engineering remediation playbooks.
+            </p>
+            <div>
+              <a class="key" href="/work/#labs">
+                <span>Read Dossier</span>
+                <span class="kbd">→</span>
+              </a>
+            </div>
+          </article>
+        </div>
+
+        <p class="darkroom-note" data-darkroom-note>
+          FIELD NOTE // Both the XSS Simulator and LFI Simulator execute 100% client-side inside an isolated browser sandbox for ethical security training.
+        </p>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="footer-seam">
-      <svg class="footer-seam-wave" viewBox="0 0 1440 84" preserveAspectRatio="none" aria-hidden="true">
-        <path fill="#e6e0d2" d="M0,0 L1440,0 L1440,56 C1210,72 980,68 855,34 C795,18 758,10 720,10 C682,10 645,18 585,34 C460,68 230,72 0,56 Z"/>
+      <svg class="footer-seam-wave" viewBox="0 0 1440 76" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,0 L1440,0 L1440,26 C1120,76 820,76 720,56 C620,76 320,76 0,26 Z" />
       </svg>
-      <button class="peeker" type="button" data-peeker aria-label="Peek at upside-down SA Mubin">
+      <button class="peeker" type="button" data-peeker aria-label="Peek at Sakib Alam Mubin hanging upside down">
         <span class="peeker-art" data-peeker-art></span>
       </button>
-      <span class="peeker-note" data-peeker-note role="status" aria-live="polite"></span>
+      <span class="peeker-note" data-peeker-note>He's still watching</span>
     </div>
 
     <div class="wrap">
-      <div>
-        <div class="footer-name">Sakib Alam Mubin</div>
-        <p class="footer-role">Full-Stack Software Developer · SA Mubin</p>
-      </div>
+      <div class="footer-grid">
+        <div>
+          <p class="footer-name">Sakib Alam Mubin · SA Mubin</p>
+          <p data-show="dev">Full-Stack AI Engineer &amp; Systems Developer · Dhaka, Bangladesh</p>
+          <p data-show="hack">Cybersecurity Specialist · Ethical Hacker &amp; Security Instructor</p>
+        </div>
 
-      <div class="footer-links">
-        <a href="./">Home</a>
-        <a href="work/">Work</a>
-        <a href="about/">About</a>
-        <a href="contact/">Contact</a>
-        <a href="https://github.com/thesamubin" target="_blank" rel="me noopener">GitHub (@thesamubin)</a>
-        <a href="mailto:hello@samubin.com">hello@samubin.com</a>
+        <nav class="footer-links" aria-label="Footer navigation and social profiles">
+          <a href="/work/">Work &amp; Labs</a>
+          <a href="/about/">About</a>
+          <a href="/contact/">Contact</a>
+          <a href="/avatar/">Avatar Rig</a>
+          <a href="/keypad/">Keypad Rig</a>
+          <a href="https://github.com/thesamubin" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.linkedin.com/in/samubin/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://x.com/thesamubin" target="_blank" rel="noopener">X</a>
+          <a href="https://www.youtube.com/@thesamubin" target="_blank" rel="noopener">YouTube</a>
+        </nav>
       </div>
-
-      <p class="copy">&copy; 2026 Sakib Alam Mubin (SA Mubin). Hand-crafted with HTML, CSS, Canvas &amp; Web Audio.</p>
     </div>
   </footer>
 
-  <dialog class="palette" id="palette" aria-label="Command palette">
-    <div class="palette-form">
-      <span>samubin$</span>
-      <input type="text" placeholder="Type a command (whoami, work, boop, switch, hire)…" aria-label="Command input" autocomplete="off" spellcheck="false">
-    </div>
-    <div class="palette-out" aria-live="polite"></div>
-    <ul class="palette-list" role="listbox" aria-label="Commands"></ul>
-    <div class="palette-foot">
-      <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
-      <span><kbd>Enter</kbd> run</span>
-      <span><kbd>Esc</kbd> close</span>
-    </div>
-  </dialog>
-
-  <script type="module" src="assets/js/app.js"></script>
+  <script type="module" src="/assets/js/app.js"></script>
 </body>
 </html>

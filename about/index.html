@@ -1,86 +1,78 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" data-mode="dev">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About Sakib Alam Mubin (SA Mubin) — Full-Stack Software Developer</title>
-  <meta name="description" content="About Sakib Alam Mubin (SA Mubin): Full-Stack Software Developer focused on interactive frontend engineering, clean backend architecture, and resilient web systems.">
-  <meta name="author" content="Sakib Alam Mubin">
-  <meta name="robots" content="index, follow, max-image-preview:large">
-  <meta name="theme-color" content="#111215">
-  <link rel="canonical" href="https://thesamubin.github.io/about/">
-
-  <meta property="og:type" content="profile">
-  <meta property="og:site_name" content="Sakib Alam Mubin">
-  <meta property="og:url" content="https://thesamubin.github.io/about/">
-  <meta property="og:title" content="About Sakib Alam Mubin (SA Mubin) — Full-Stack Software Developer">
-  <meta property="og:description" content="How Sakib Alam Mubin (SA Mubin) builds tactile web interfaces, scalable backend APIs, and practical developer learning tools.">
-  <meta property="og:image" content="https://thesamubin.github.io/assets/img/og-card.png">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="About Sakib Alam Mubin (SA Mubin) — Full-Stack Software Developer">
-  <meta name="twitter:description" content="Full-Stack Software Developer crafting interactive web software and clean backend systems.">
-  <meta name="twitter:image" content="https://thesamubin.github.io/assets/img/og-card.png">
-
-  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
-  <link rel="manifest" href="../site.webmanifest">
-  <link rel="preload" href="../assets/fonts/archivo-var-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="../assets/css/site.css">
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "ProfilePage",
-        "@id": "https://thesamubin.github.io/about/#profilepage",
-        "url": "https://thesamubin.github.io/about/",
-        "name": "About Sakib Alam Mubin (SA Mubin)",
-        "isPartOf": { "@id": "https://thesamubin.github.io/#website" },
-        "about": { "@id": "https://thesamubin.github.io/#person" },
-        "mainEntity": { "@id": "https://thesamubin.github.io/#person" }
-      },
-      {
-        "@type": "Person",
-        "@id": "https://thesamubin.github.io/#person",
-        "name": "Sakib Alam Mubin",
-        "alternateName": ["SA Mubin"],
-        "identifier": ["thesamubin", "samubin"],
-        "url": "https://thesamubin.github.io/",
-        "email": "mailto:hello@samubin.com",
-        "jobTitle": ["Full-Stack Software Developer", "Frontend Engineer"],
-        "sameAs": ["https://github.com/thesamubin"]
-      }
-    ]
-  }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    (() => {
+      const h = location.hash.replace("#", "").toLowerCase();
+      let m = h === "hack" || h === "hacker" ? "hack" : h === "dev" ? "dev" : null;
+      if (!m) { try { m = localStorage.getItem("sam.mode"); } catch {} }
+      document.documentElement.setAttribute("data-mode", m === "hack" ? "hack" : "dev");
+    })();
   </script>
+  <title>About &amp; Dossier — Sakib Alam Mubin (SA Mubin)</title>
+  <meta name="description" content="Biography, engineering philosophy, and cybersecurity background of Sakib Alam Mubin (SA Mubin) — Full-Stack AI Engineer and Ethical Hacker." />
+  <link rel="canonical" href="https://thesamubin.github.io/about/" />
+
+  <meta property="og:type" content="profile" />
+  <meta property="og:title" content="About Sakib Alam Mubin (SA Mubin) — Engineer &amp; Ethical Hacker" />
+  <meta property="og:description" content="Two disciplines, one engineering mindset: building intelligent full-stack systems and securing them against real-world adversaries." />
+  <meta property="og:url" content="https://thesamubin.github.io/about/" />
+  <meta property="og:image" content="https://thesamubin.github.io/assets/img/og-card.svg" />
+  <meta name="theme-color" content="#E4E2DD" />
+
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@80..120,600..850&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/site.css" />
 </head>
-<body>
-  <a class="skip" href="#main">Skip to main content</a>
+<body data-page="about">
+  <a class="skip-link" href="#main">Skip to main content</a>
 
   <header class="site-header">
-    <div class="wrap">
-      <a class="brand" href="../" aria-label="Sakib Alam Mubin — Home">
-        <span class="brand-cap" aria-hidden="true">SA</span>
-        <span class="brand-word">SA Mubin</span>
+    <div class="wrap header-inner">
+      <a class="brand" href="/" aria-label="Sakib Alam Mubin home">
+        <span class="brand-led" aria-hidden="true"></span>
+        <span>SA Mubin</span>
       </a>
 
-      <nav class="nav" aria-label="Primary">
-        <a href="../">Home</a>
-        <a href="../work/">Work</a>
-        <a href="./" aria-current="page">About</a>
-        <a href="../contact/">Contact</a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/">
+          <span data-show="dev">Workbench</span>
+          <span data-show="hack">Darkroom</span>
+        </a>
+        <a href="/work/">
+          <span data-show="dev">Work</span>
+          <span data-show="hack">Operations</span>
+        </a>
+        <a href="/about/" aria-current="page">
+          <span data-show="dev">About</span>
+          <span data-show="hack">Dossier</span>
+        </a>
+        <a href="/contact/">
+          <span data-show="dev">Contact</span>
+          <span data-show="hack">Channel</span>
+        </a>
       </nav>
 
-      <div class="tools">
-        <button class="tool tool--cmd" type="button" data-palette aria-label="Open command palette (Ctrl+K)">⌘K</button>
-        <button class="tool" type="button" data-sound-toggle aria-pressed="true" aria-label="Mute sound">
-          <svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.8 5.8a9 9 0 0 1 0 12.4"/>
-          </svg>
-          <svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M22 9l-6 6"/><path d="M16 9l6 6"/>
+      <div class="header-tools">
+        <div class="switch-seg" role="group" aria-label="Mechanical switch acoustic profile">
+          <button type="button" data-switch-profile="thock" aria-pressed="true" title="Linear POM Thock">Thock</button>
+          <button type="button" data-switch-profile="clicky" aria-pressed="false" title="Tactile Box Jade Click">Clicky</button>
+          <button type="button" data-switch-profile="synth" aria-pressed="false" title="Sub-bass Cyber Synth">Synth</button>
+        </div>
+
+        <button class="mode-switch" type="button" data-mode-toggle aria-pressed="false" title="Pull hoodie up / down (Shortcut: H)">
+          <span data-mode-label>Hoodie Down · Dev</span>
+          <span class="mode-kbd">H</span>
+        </button>
+
+        <button class="tool" type="button" data-sound-toggle aria-pressed="true" aria-label="Mute keyboard and UI sound" title="Toggle mechanical audio">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
           </svg>
         </button>
       </div>
@@ -88,111 +80,115 @@
   </header>
 
   <main id="main">
-    <section class="page-head">
-      <div class="wrap about-hero-grid">
-        <div>
-          <h1>Sakib Alam Mubin</h1>
-          <p class="lede">
-            Full-Stack Software Developer building fast, joyful web interfaces and dependable backend systems, with a sharp eye for clean boundaries and edge cases.
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <h1 data-show="dev" data-scramble>Architecting Intelligence, Engineered for Resilience</h1>
+          <h1 data-show="hack" data-scramble>Adversarial Mindset, Defensive Precision</h1>
+
+          <p class="hero-lead" data-show="dev">
+            I’m <strong>Sakib Alam Mubin</strong>—known across engineering communities as <strong>SA Mubin</strong> (<code>@thesamubin</code> / <code>@samubin</code>). Based in Dhaka, Bangladesh, I build full-stack AI systems, modern web platforms, and tactile developer tools from first principles.
+          </p>
+          <p class="hero-lead" data-show="hack">
+            I’m <strong>Sakib Alam Mubin</strong> (<strong>SA Mubin</strong>)—a Cybersecurity Specialist, Ethical Hacker, and security instructor. Because I build full-stack and AI systems daily, I know exactly where architectural assumptions fracture under adversarial pressure.
+          </p>
+
+          <div class="keys">
+            <button class="key key--accent" type="button" data-mode-toggle>
+              <span data-show="dev">Pull Hoodie Up · Read Security Dossier</span>
+              <span data-show="hack">Drop Hoodie Down · Read Builder Bio</span>
+              <span class="kbd">H</span>
+            </button>
+            <a class="key" href="/contact/">
+              <span>Direct Channel</span>
+              <span class="kbd">→</span>
+            </a>
+          </div>
+
+          <p class="darkroom-note" data-darkroom-note>
+            IDENTITY VERIFICATION // Primary canonical name: Sakib Alam Mubin (SA Mubin). Handles: @thesamubin · @samubin.
           </p>
         </div>
 
         <div class="avatar-col">
-          <div class="avatar-stage avatar-stage--compact" data-avatar="compact">
-            <canvas class="avatar-wave" aria-hidden="true"></canvas>
-            <span class="avatar-badge" data-avatar-badge role="status" aria-live="polite"></span>
-            <button class="avatar-hit" type="button" data-avatar-hit aria-label="Interact with SA Mubin's avatar portrait">
-              <span class="avatar-mount" data-avatar-mount></span>
-            </button>
+          <div class="avatar-stage" data-avatar data-avatar-greet="false">
+            <span class="avatar-badge" data-avatar-badge>SA MUBIN</span>
+            <div class="avatar-mount" data-avatar-mount></div>
+            <div class="avatar-hits">
+              <button class="av-hit-hood" type="button" data-avatar-hood aria-label="Toggle avatar hoodie mode" title="Click hood to flip mode (H)"></button>
+              <button class="av-hit-face" type="button" data-avatar-face aria-label="Interact with Sakib Alam Mubin avatar"></button>
+            </div>
           </div>
-          <div class="avatar-dock" role="group" aria-label="Portrait expressions">
-            <button class="key key--sm" type="button" data-avatar-act="boop">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M12 3v3m0 12v3M3 12h3m12 0h3m-2.6-6.4l-2.1 2.1M7.7 16.3l-2.1 2.1m0-12.8l2.1 2.1m8.6 8.6l2.1 2.1"/>
-              </svg>
-              <span>Boop</span>
+
+          <div class="avatar-dock" role="toolbar" aria-label="Avatar controls">
+            <button class="dock-btn dock-btn--hood" type="button" data-avatar-act="hood">
+              <span data-show="dev">Hoodie Up</span>
+              <span data-show="hack">Hoodie Down</span>
+              <span class="kbd">H</span>
             </button>
-            <button class="key key--slate key--sm" type="button" data-avatar-act="shades" aria-pressed="false">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="2.5" y="9" width="7.5" height="5.5" rx="1.5"/>
-                <rect x="14" y="9" width="7.5" height="5.5" rx="1.5"/>
-                <path d="M10 11h4"/>
-              </svg>
-              <span>Shades</span>
-            </button>
-            <button class="key key--slate key--sm" type="button" data-avatar-act="wave">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M7 11V5a1.5 1.5 0 0 1 3 0v5m0-3V4a1.5 1.5 0 0 1 3 0v6m0-2V5.5a1.5 1.5 0 0 1 3 0V13a6 6 0 0 1-6 6h-1a6 6 0 0 1-5.2-3l-1.6-2.8a1.5 1.5 0 0 1 2.5-1.6L7 13V11z"/>
-              </svg>
-              <span>Say Hi</span>
-            </button>
+            <button class="dock-btn" type="button" data-avatar-act="wave"><span>Wave</span></button>
+            <button class="dock-btn" type="button" data-avatar-act="boop"><span>Boop</span></button>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section field-bone" aria-label="Engineering story">
+    <section class="section">
       <div class="wrap">
-        <div class="split">
-          <h2>Craft over boilerplate</h2>
-          <div class="prose">
-            <p>The best web software feels immediate under your fingers. Controls respond in single-digit milliseconds, layouts adapt cleanly from wide monitors down to pocket screens, and nothing flickers or shifts while fonts arrive.</p>
-            <p>As <strong>Sakib Alam Mubin (SA Mubin)</strong>, I love working across the entire web stack: shaping expressive frontend interfaces with modern JavaScript, TypeScript, CSS, Canvas, and React/Next.js while keeping runtime complexity lean and intentional.</p>
-          </div>
-        </div>
+        <div class="split-enclosure">
+          <div class="split-pane">
+            <h2 class="card-title" data-show="dev" data-scramble>Why Dual-Mode Engineering Matters</h2>
+            <h2 class="card-title" data-show="hack" data-scramble>Why Builders Make Better Breakers</h2>
 
-        <div class="split">
-          <h2>Backends that stay calm</h2>
-          <div class="prose">
-            <p>Great UI craft needs an equally disciplined backend underneath. I design typed APIs, relational schemas, caching rules, and deployment pipelines where failure modes are explicit rather than left to luck.</p>
-            <p>Because I also study and teach web security fundamentals, safe data parsing, least-privilege auth, and strict browser policies come baked naturally into everyday feature work instead of slowing launches down at the end.</p>
-          </div>
-        </div>
+            <p data-show="dev">
+              Modern software no longer lives in isolated tiers. Shipping an AI-native product means orchestrating LLM tool calls, vector indices, streaming APIs, and responsive browser state—all while keeping latency low and failure modes predictable.
+            </p>
+            <p data-show="dev">
+              Every project I ship is treated like a physical instrument: clean state boundaries, zero unnecessary runtime bloat, and interfaces that respond immediately to human input.
+            </p>
 
-        <div class="split">
-          <h2>Learning in public</h2>
-          <div class="prose">
-            <p>Complex engineering concepts click fastest when people can poke a live model. Alongside building full-stack applications, I create open-source interactive sandboxes and teach workshops that turn dry specifications into hands-on muscle memory.</p>
+            <p data-show="hack">
+              Most vulnerabilities aren’t exotic zero-days; they emerge in the seams between layers—an unvalidated path parameter, an overly permissive OAuth callback, or an unsanitized DOM sink inside a fast-moving frontend.
+            </p>
+            <p data-show="hack">
+              By pairing offensive web pentesting with hands-on full-stack engineering, I don’t just hand over a list of CVEs—I build interactive simulators and write the exact patch that closes the vector.
+            </p>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <section class="section" aria-label="Profile details">
-      <div class="wrap">
-        <div class="split">
-          <h2>At a glance</h2>
-          <div>
-            <dl class="idcard">
-              <dt>Full name</dt>
-              <dd>Sakib Alam Mubin</dd>
-              <dt>Short name</dt>
-              <dd>SA Mubin</dd>
-              <dt>Primary role</dt>
-              <dd>Full-Stack Software Developer</dd>
-              <dt>Core stack</dt>
-              <dd>JavaScript · TypeScript · React / Next.js · Node.js · SQL</dd>
-              <dt>Supporting craft</dt>
-              <dd>Interactive Motion · Web Audio · Application Security</dd>
-              <dt>Social handles</dt>
-              <dd>@thesamubin · @samubin</dd>
-            </dl>
+          <div class="split-pane">
+            <h2 class="card-title" data-scramble>Operational Timeline &amp; Milestones</h2>
+            <ul class="trace-list">
+              <li class="trace-item">
+                <div class="trace-head">
+                  <span>Full-Stack AI &amp; Systems Engineering</span>
+                  <span class="trace-meta">ACTIVE // PRESENT</span>
+                </div>
+                <p class="index-desc">
+                  Designing agentic LLM workflows, FastAPI/Go backends, and high-craft Next.js &amp; TypeScript applications.
+                </p>
+              </li>
+
+              <li class="trace-item">
+                <div class="trace-head">
+                  <span>Cybersecurity Specialist &amp; Instructor</span>
+                  <span class="trace-meta">RED / BLUE OPS</span>
+                </div>
+                <p class="index-desc">
+                  Authoring interactive browser exploitation labs (XSS Simulator, LFI Simulator) and teaching practical web application security &amp; ethical hacking.
+                </p>
+              </li>
+
+              <li class="trace-item">
+                <div class="trace-head">
+                  <span>Education, Certifications &amp; Publications</span>
+                  <span class="trace-meta">DOSSIER SLOT // UPDATING</span>
+                </div>
+                <p class="index-desc">
+                  Structured slot reserved for formal academic degrees, security certifications, and long-form technical advisories by <strong>Sakib Alam Mubin</strong>.
+                </p>
+              </li>
+            </ul>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section field-bone" aria-labelledby="about-cta">
-      <div class="wrap cta">
-        <div>
-          <h2 id="about-cta">Explore the work or say hello.</h2>
-          <p class="lede" style="margin-top: 1.25rem;">
-            Try the interactive benches on the Work page, or reach out directly to discuss an engineering role or project.
-          </p>
-        </div>
-        <div class="keys">
-          <a class="key key--accent" href="../work/">Explore Work</a>
-          <a class="key key--slate" href="../contact/">Get in Touch</a>
         </div>
       </div>
     </section>
@@ -200,48 +196,36 @@
 
   <footer class="site-footer">
     <div class="footer-seam">
-      <svg class="footer-seam-wave" viewBox="0 0 1440 84" preserveAspectRatio="none" aria-hidden="true">
-        <path fill="#e6e0d2" d="M0,0 L1440,0 L1440,56 C1210,72 980,68 855,34 C795,18 758,10 720,10 C682,10 645,18 585,34 C460,68 230,72 0,56 Z"/>
+      <svg class="footer-seam-wave" viewBox="0 0 1440 76" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,0 L1440,0 L1440,26 C1120,76 820,76 720,56 C620,76 320,76 0,26 Z" />
       </svg>
-      <button class="peeker" type="button" data-peeker aria-label="Peek at upside-down SA Mubin">
+      <button class="peeker" type="button" data-peeker aria-label="Peek at Sakib Alam Mubin hanging upside down">
         <span class="peeker-art" data-peeker-art></span>
       </button>
-      <span class="peeker-note" data-peeker-note role="status" aria-live="polite"></span>
+      <span class="peeker-note" data-peeker-note>He's still watching</span>
     </div>
 
     <div class="wrap">
-      <div>
-        <div class="footer-name">Sakib Alam Mubin</div>
-        <p class="footer-role">Full-Stack Software Developer · SA Mubin</p>
-      </div>
+      <div class="footer-grid">
+        <div>
+          <p class="footer-name">Sakib Alam Mubin · SA Mubin</p>
+          <p data-show="dev">Full-Stack AI Engineer &amp; Systems Developer · Dhaka, Bangladesh</p>
+          <p data-show="hack">Cybersecurity Specialist · Ethical Hacker &amp; Security Instructor</p>
+        </div>
 
-      <div class="footer-links">
-        <a href="../">Home</a>
-        <a href="../work/">Work</a>
-        <a href="./">About</a>
-        <a href="../contact/">Contact</a>
-        <a href="https://github.com/thesamubin" target="_blank" rel="me noopener">GitHub (@thesamubin)</a>
-        <a href="mailto:hello@samubin.com">hello@samubin.com</a>
+        <nav class="footer-links" aria-label="Footer navigation and social profiles">
+          <a href="/">Home</a>
+          <a href="/work/">Work &amp; Labs</a>
+          <a href="/about/">About</a>
+          <a href="/contact/">Contact</a>
+          <a href="https://github.com/thesamubin" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.linkedin.com/in/samubin/" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://x.com/thesamubin" target="_blank" rel="noopener">X</a>
+        </nav>
       </div>
-
-      <p class="copy">&copy; 2026 Sakib Alam Mubin (SA Mubin). Hand-crafted with HTML, CSS, Canvas &amp; Web Audio.</p>
     </div>
   </footer>
 
-  <dialog class="palette" id="palette" aria-label="Command palette">
-    <div class="palette-form">
-      <span>samubin$</span>
-      <input type="text" placeholder="Type a command (whoami, work, boop, switch, hire)…" aria-label="Command input" autocomplete="off" spellcheck="false">
-    </div>
-    <div class="palette-out" aria-live="polite"></div>
-    <ul class="palette-list" role="listbox" aria-label="Commands"></ul>
-    <div class="palette-foot">
-      <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
-      <span><kbd>Enter</kbd> run</span>
-      <span><kbd>Esc</kbd> close</span>
-    </div>
-  </dialog>
-
-  <script type="module" src="../assets/js/app.js"></script>
+  <script type="module" src="/assets/js/app.js"></script>
 </body>
 </html>
