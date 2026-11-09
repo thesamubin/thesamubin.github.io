@@ -255,9 +255,34 @@
             <path class="cable-spec" data-cable-r d="" />
           </svg>
 
-          <!-- Realistic 3D Sculpted Mechanical Keyboard with Integrated Top Stack Extension -->
+          <!-- Realistic 3D Sculpted Mechanical Keyboard with One-Piece Molded Plastic Top Extension -->
           <div class="kb-shell" data-kb-chassis title="Drag or pull hard to unplug left cable · Hover any keycap for tech name!">
-            <!-- Slightly Extended Top Bezel Module with Short, Clean Stack Switcher Buttons -->
+            <!-- Unified One-Piece Molded Plastic Chassis SVG (Seamless Fillets & Continuous Border) -->
+            <svg class="kb-case-svg" data-kb-case-svg aria-hidden="true">
+              <defs>
+                <linearGradient id="kbCaseGradDev" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#f4f2ed" />
+                  <stop offset="22%" stop-color="#efece4" />
+                  <stop offset="76%" stop-color="#dcd8cf" />
+                  <stop offset="100%" stop-color="#bfb9ad" />
+                </linearGradient>
+                <linearGradient id="kbCaseGradHack" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#2e171a" />
+                  <stop offset="24%" stop-color="#261215" />
+                  <stop offset="78%" stop-color="#180b0d" />
+                  <stop offset="100%" stop-color="#100708" />
+                </linearGradient>
+                <clipPath id="kbCaseClip">
+                  <path data-kb-case-clip d="" />
+                </clipPath>
+              </defs>
+              <path class="kb-case-lip" data-kb-case-lip d="" />
+              <path class="kb-case-body" data-kb-case-body d="" />
+              <path class="kb-case-spec" data-kb-case-spec clip-path="url(#kbCaseClip)" d="" />
+              <path class="kb-case-border" data-kb-case-border d="" />
+            </svg>
+
+            <!-- Recessed Upper Slot for Short, Clean Stack Switcher Buttons (Molded into the Same Plastic) -->
             <div class="kb-top-extension">
               <div class="kb-top-tabs" data-stack-pills role="tablist" aria-label="Technology Stack Categories"></div>
             </div>

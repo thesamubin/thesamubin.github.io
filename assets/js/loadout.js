@@ -143,6 +143,12 @@ export async function initLoadout() {
 
   const rig = section.querySelector("[data-hanging-kb]");
   const chassis = section.querySelector("[data-kb-chassis]");
+  const caseSvg = section.querySelector("[data-kb-case-svg]");
+  const caseLipPath = section.querySelector("[data-kb-case-lip]");
+  const caseBodyPath = section.querySelector("[data-kb-case-body]");
+  const caseClipPath = section.querySelector("[data-kb-case-clip]");
+  const caseSpecPath = section.querySelector("[data-kb-case-spec]");
+  const caseBorderPath = section.querySelector("[data-kb-case-border]");
   const cableSvg = section.querySelector("[data-kb-cables]");
   const mountL = section.querySelector("[data-mount-l]");
   const mountR = section.querySelector("[data-mount-r]");
@@ -196,6 +202,91 @@ export async function initLoadout() {
   function setReadout(badgeText, detailText) {
     if (readoutTag && badgeText) readoutTag.textContent = badgeText;
     if (readoutText && detailText) readoutText.textContent = detailText;
+  }
+
+  // Draws the unified one-piece molded plastic keyboard body + smooth S-curve fillets around the top button slot
+  function updateCaseSvg() {
+    if (!chassis || !caseSvg || !pillsWrap) return;
+    const W = chassis.offsetWidth;
+    const H = chassis.offsetHeight;
+    if (W <= 0 || H <= 0) return;
+
+    const tabsW = pillsWrap.offsetWidth || 320;
+    const tabsH = pillsWrap.offsetHeight || 34;
+
+    const bezel = 7; // Exact 7px continuous plastic border matching the main keyboard rim
+    const cornerR = 15;
+    const topR = 12;
+
+    const hx1 = W * 0.5 - tabsW * 0.5 - bezel;
+    const hx2 = W * 0.5 + tabsW * 0.5 + bezel;
+    const hy1 = -tabsH - bezel;
+
+    // Smooth concave S-curve fillet dimensions at the two shoulder junctions
+    const filletH = Math.min(22, Math.max(10, -hy1 - topR - 1));
+    const maxFilletW = Math.max(10, hx1 - (W * 0.14 + 18));
+    const filletW = Math.min(28, maxFilletW);
+
+    const topPad = Math.ceil(-hy1 + 14);
+    const totalH = H + topPad + 8;
+    caseSvg.style.top = `${-topPad}px`;
+    caseSvg.style.height = `${totalH}px`;
+    caseSvg.setAttribute("viewBox", `0 ${-topPad} ${W} ${totalH}`);
+
+    const buildClosedCase = (botY) => {
+      const f = (n) => n.toFixed(2);
+      return [
+        `M ${f(cornerR)} 0`,
+        `L ${f(hx1 - filletW)} 0`,
+        // Left smooth concave cubic Bezier fillet (zero-seam S-shoulder)
+        `C ${f(hx1 - filletW * 0.36)} 0, ${f(hx1)} ${f(-filletH * 0.36)}, ${f(hx1)} ${f(-filletH)}`,
+        `L ${f(hx1)} ${f(hy1 + topR)}`,
+        `Q ${f(hx1)} ${f(hy1)}, ${f(hx1 + topR)} ${f(hy1)}`,
+        `L ${f(hx2 - topR)} ${f(hy1)}`,
+        `Q ${f(hx2)} ${f(hy1)}, ${f(hx2)} ${f(hy1 + topR)}`,
+        `L ${f(hx2)} ${f(-filletH)}`,
+        // Right smooth concave cubic Bezier fillet (zero-seam S-shoulder)
+        `C ${f(hx2)} ${f(-filletH * 0.36)}, ${f(hx2 + filletW * 0.36)} 0, ${f(hx2 + filletW)} 0`,
+        `L ${f(W - cornerR)} 0`,
+        `Q ${f(W)} 0, ${f(W)} ${f(cornerR)}`,
+        `L ${f(W)} ${f(botY - cornerR)}`,
+        `Q ${f(W)} ${f(botY)}, ${f(W - cornerR)} ${f(botY)}`,
+        `L ${f(cornerR)} ${f(botY)}`,
+        `Q 0 ${f(botY)}, 0 ${f(botY - cornerR)}`,
+        `L 0 ${f(cornerR)}`,
+        `Q 0 0, ${f(cornerR)} 0`,
+        "Z",
+      ].join(" ");
+    };
+
+    const buildTopSpec = () => {
+      const s = 1.2;
+      const f = (n) => n.toFixed(2);
+      return [
+        `M ${f(s)} ${f(cornerR)}`,
+        `Q ${f(s)} ${f(s)}, ${f(cornerR)} ${f(s)}`,
+        `L ${f(hx1 - filletW)} ${f(s)}`,
+        `C ${f(hx1 - filletW * 0.36)} ${f(s)}, ${f(hx1 + s)} ${f(-filletH * 0.36 + s)}, ${f(hx1 + s)} ${f(-filletH)}`,
+        `L ${f(hx1 + s)} ${f(hy1 + topR)}`,
+        `Q ${f(hx1 + s)} ${f(hy1 + s)}, ${f(hx1 + topR)} ${f(hy1 + s)}`,
+        `L ${f(hx2 - topR)} ${f(hy1 + s)}`,
+        `Q ${f(hx2 - s)} ${f(hy1 + s)}, ${f(hx2 - s)} ${f(hy1 + topR)}`,
+        `L ${f(hx2 - s)} ${f(-filletH)}`,
+        `C ${f(hx2 - s)} ${f(-filletH * 0.36 + s)}, ${f(hx2 + filletW * 0.36)} ${f(s)}, ${f(hx2 + filletW)} ${f(s)}`,
+        `L ${f(W - cornerR)} ${f(s)}`,
+        `Q ${f(W - s)} ${f(s)}, ${f(W - s)} ${f(cornerR)}`,
+      ].join(" ");
+    };
+
+    const fullPath = buildClosedCase(H);
+    const bodyPath = buildClosedCase(H - 4);
+    const specPath = buildTopSpec();
+
+    if (caseLipPath) caseLipPath.setAttribute("d", fullPath);
+    if (caseBodyPath) caseBodyPath.setAttribute("d", bodyPath);
+    if (caseClipPath) caseClipPath.setAttribute("d", bodyPath);
+    if (caseSpecPath) caseSpecPath.setAttribute("d", specPath);
+    if (caseBorderPath) caseBorderPath.setAttribute("d", fullPath);
   }
 
   function drawHanging() {
@@ -450,7 +541,28 @@ export async function initLoadout() {
     };
     addEventListener("pointerup", endDrag);
     addEventListener("pointercancel", endDrag);
-    addEventListener("resize", drawHanging, { passive: true });
+    addEventListener(
+      "resize",
+      () => {
+        updateCaseSvg();
+        drawHanging();
+      },
+      { passive: true }
+    );
+    if (typeof ResizeObserver !== "undefined") {
+      const ro = new ResizeObserver(() => {
+        updateCaseSvg();
+        drawHanging();
+      });
+      ro.observe(chassis);
+      if (pillsWrap) ro.observe(pillsWrap);
+    }
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => {
+        updateCaseSvg();
+        drawHanging();
+      });
+    }
   }
 
   function createTechCap(item, layerMod, isHack, colRatio, isCreamKey = false) {
@@ -776,7 +888,10 @@ export async function initLoadout() {
       setReadout(`${currentLayer.mod} // ${firstTool.short}`, `${firstTool.name} · ${tierName} — ${firstTool.detail}`);
     }
 
-    requestAnimationFrame(drawHanging);
+    requestAnimationFrame(() => {
+      updateCaseSvg();
+      drawHanging();
+    });
   }
 
   // Physical keyboard integration
