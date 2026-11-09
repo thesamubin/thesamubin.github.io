@@ -713,6 +713,16 @@ export async function initLoadout() {
     }
   }
 
+  function pulseKeyDown(cap, duration = 135) {
+    if (!cap) return;
+    if (cap._downTimer) clearTimeout(cap._downTimer);
+    cap.classList.add("is-down");
+    cap._downTimer = setTimeout(() => {
+      cap.classList.remove("is-down");
+      cap._downTimer = null;
+    }, duration);
+  }
+
   function createTechCap(item, layerMod, isHack, colRatio, isCreamKey = false) {
     const detailText = item.detail || "";
     const shortLabel = shortHoverName(item);
@@ -724,7 +734,6 @@ export async function initLoadout() {
     cap.dataset.itemId = item.id;
     cap.dataset.letter = item.name[0].toLowerCase();
     cap.dataset.tip = shortLabel;
-    cap.setAttribute("aria-pressed", "false");
     cap.setAttribute("aria-label", `${item.name} — ${tierName} — ${detailText}`);
     cap.innerHTML = `
       <span class="kb-cap-dish">
@@ -737,10 +746,10 @@ export async function initLoadout() {
     cap._colRatio = colRatio;
 
     const inspect = (fromClick = false) => {
-      board.querySelectorAll(".kb-cap[aria-pressed='true']").forEach((el) => {
-        el.setAttribute("aria-pressed", "false");
+      board.querySelectorAll(".kb-cap--icon[data-inspected='true']").forEach((el) => {
+        delete el.dataset.inspected;
       });
-      cap.setAttribute("aria-pressed", "true");
+      cap.dataset.inspected = "true";
       const it = cap._item || item;
       const lm = cap._layerMod || layerMod;
       const tn = it.tier === "daily" ? "Daily Driver" : it.tier === "proficient" ? "Proficient" : "Familiar";
@@ -748,6 +757,7 @@ export async function initLoadout() {
       if (fromClick) {
         sound.play("down");
         setTimeout(() => sound.play("up"), 70);
+        pulseKeyDown(cap);
         impulseKeyboard(cap._colRatio ?? colRatio, 2.8);
       }
     };
@@ -781,8 +791,7 @@ export async function initLoadout() {
     cap.addEventListener("click", () => {
       sound.play("down");
       setTimeout(() => sound.play("up"), 75);
-      cap.classList.add("is-down");
-      setTimeout(() => cap.classList.remove("is-down"), 140);
+      pulseKeyDown(cap);
       impulseKeyboard(colRatio, 3.4);
 
       if (item.key === "lock") {
@@ -1010,6 +1019,7 @@ export async function initLoadout() {
       modBtn.addEventListener("click", () => {
         sound.play("down");
         setTimeout(() => sound.play("up"), 75);
+        pulseKeyDown(modBtn);
         impulseKeyboard(-0.85, 3.4);
         if (activeLayerIdx !== idx) {
           renderBoard(getMode(), { flipping: true, layerIndex: idx });
@@ -1046,7 +1056,6 @@ export async function initLoadout() {
     // Row 4: Bottom Modifier & Spacebar Row (Spacebar ONLY says "Space")
     const bottomRow = document.createElement("div");
     bottomRow.className = "kb-bottom-row";
-    bottomRow.className = "kb-bottom-row";
 
     // 1. Fn Key (Cream)
     const fnKey = document.createElement("button");
@@ -1057,6 +1066,7 @@ export async function initLoadout() {
     fnKey.addEventListener("click", () => {
       sound.play("down");
       setTimeout(() => sound.play("up"), 70);
+      pulseKeyDown(fnKey);
       impulseKeyboard(-0.8, 3.0);
       renderBoard(getMode(), { flipping: true, layerIndex: (activeLayerIdx + 1) % layers.length });
     });
@@ -1070,6 +1080,7 @@ export async function initLoadout() {
     winKey.addEventListener("click", () => {
       sound.play("down");
       setTimeout(() => sound.play("up"), 70);
+      pulseKeyDown(winKey);
       impulseKeyboard(-0.55, 2.8);
     });
 
@@ -1080,6 +1091,7 @@ export async function initLoadout() {
     altKey.dataset.tip = isLeftHeld ? "Unplug Cable" : "Plug Cable";
     altKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Alt</span></span>`;
     altKey.addEventListener("click", () => {
+      pulseKeyDown(altKey);
       if (isLeftHeld) {
         releaseLeftHand();
       } else {
@@ -1100,10 +1112,11 @@ export async function initLoadout() {
     spaceKey.addEventListener("click", () => {
       sound.play("down");
       setTimeout(() => sound.play("up"), 75);
+      pulseKeyDown(spaceKey);
       impulseKeyboard(0, 3.6);
       const icons = [...matrixEl.querySelectorAll(".kb-cap--icon")];
       if (!icons.length) return;
-      const curIdx = icons.findIndex((el) => el.getAttribute("aria-pressed") === "true");
+      const curIdx = icons.findIndex((el) => el.dataset.inspected === "true");
       const next = icons[(curIdx + 1) % icons.length];
       next?.click();
     });
@@ -1116,6 +1129,7 @@ export async function initLoadout() {
     backKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">SAMUBIN</span></span>`;
     backKey.addEventListener("click", () => {
       sound.play("auth");
+      pulseKeyDown(backKey);
       impulseKeyboard(0.45, 3.4);
       triggerSamubinCipher();
     });
@@ -1129,6 +1143,7 @@ export async function initLoadout() {
     modeKey.addEventListener("click", () => {
       sound.play("down");
       setTimeout(() => sound.play("up"), 75);
+      pulseKeyDown(modeKey);
       impulseKeyboard(0.85, 3.4);
       toggleMode({ animate: true });
     });
@@ -1145,7 +1160,7 @@ export async function initLoadout() {
 
     const firstCap = matrixEl.querySelector(".kb-cap--icon");
     if (firstCap && firstTool) {
-      firstCap.setAttribute("aria-pressed", "true");
+      firstCap.dataset.inspected = "true";
       const tierName =
         firstTool.tier === "daily" ? "Daily Driver" : firstTool.tier === "proficient" ? "Proficient" : "Familiar";
       setReadout(`${currentLayer.mod} // ${firstTool.short}`, `${firstTool.name} · ${tierName} — ${firstTool.detail}`);
