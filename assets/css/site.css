@@ -1136,39 +1136,6 @@ html[data-mode="hack"] .cap--accent {
   max-width: 62ch;
 }
 
-/* Tier Legend in Loadout Header */
-.tier-legend {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.85rem;
-  font-family: var(--mono);
-  font-size: 0.8125rem;
-  color: var(--ink-2);
-}
-
-.tier-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.tier-swatch {
-  width: 12px;
-  height: 12px;
-  border-radius: 3px;
-  border: 1px solid var(--line-strong);
-}
-.tier-swatch--daily {
-  background: var(--cap-daily-bg);
-}
-.tier-swatch--prof {
-  background: var(--cap-prof-bg);
-}
-.tier-swatch--fam {
-  background: var(--cap-fam-bg);
-}
-
 /* Recessed Upper Slot for Stack Layer Buttons (Molded Inside the Unified One-Piece Plastic Case) */
 .kb-top-extension {
   position: absolute;
