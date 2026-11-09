@@ -1169,10 +1169,12 @@ html[data-mode="hack"] .cap--accent {
   background: var(--cap-fam-bg);
 }
 
-/* Custom Hanging Keyboard Rig & Chassis Enclosure */
+/* Custom Hanging Keyboard Rig & Chassis Enclosure (Compact 60% 3-Row Form Factor) */
 .hanging-kb-rig {
   position: relative;
-  padding-top: 48px;
+  max-width: 780px;
+  margin-inline: auto;
+  padding-top: 44px;
 }
 
 .kb-cables {
@@ -1180,7 +1182,7 @@ html[data-mode="hack"] .cap--accent {
   top: 0;
   left: 0;
   width: 100%;
-  height: 96px;
+  height: 92px;
   overflow: visible;
   pointer-events: none;
   z-index: 1;
@@ -1234,13 +1236,13 @@ html[data-mode="hack"] .cap--accent {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0.9rem 1.35rem;
+  padding: 0.85rem 1.25rem;
   border-radius: 21px 21px 0 0;
   background: var(--oled-bg);
   color: var(--oled-ink);
   border-bottom: 1px solid var(--line);
   font-family: var(--mono);
-  font-size: 0.84rem;
+  font-size: 0.82rem;
   font-variant-numeric: tabular-nums;
 }
 
@@ -1271,39 +1273,34 @@ html[data-mode="hack"] .cap--accent {
   color: var(--oled-ink);
 }
 
-/* Recessed Switch Plate */
+/* Recessed Switch Plate: 2-Column Layout (3 Merged Stack Buttons on Left + 3-Row Key Matrix on Right) */
 .kb-plate {
-  padding: 20px;
+  padding: 18px;
   border-radius: 0 0 21px 21px;
   background: var(--plate);
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
+  display: grid;
+  grid-template-columns: 164px minmax(0, 1fr);
+  gap: 0.85rem;
+  align-items: stretch;
   perspective: 1100px;
 }
 
-.kb-row {
+.kb-layer-bank {
   display: grid;
-  grid-template-columns: 116px minmax(0, 1fr);
+  grid-template-rows: repeat(3, 1fr);
   gap: 0.65rem;
-  align-items: stretch;
+}
+
+.kb-matrix {
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  gap: 0.65rem;
   transform-style: preserve-3d;
-  transition: opacity 220ms var(--ease-out), transform 420ms var(--ease-out);
 }
 
-.kb-row--samubin {
-  padding-block: 0.25rem;
-  border-top: 1px dashed var(--line-strong);
-  border-bottom: 1px dashed var(--line-strong);
-}
-
-.kb-row.is-dimmed {
-  opacity: 0.32;
-}
-
-/* Split-flap X-axis flip wave during mode morph */
-.kb-row.is-flipping {
-  animation: kb-flap 480ms var(--ease-out);
+/* Split-flap X-axis flip wave during mode or layer morph */
+.kb-caps.is-flipping {
+  animation: kb-flap 460ms var(--ease-out);
 }
 
 @keyframes kb-flap {
@@ -1318,7 +1315,7 @@ html[data-mode="hack"] .cap--accent {
   }
 }
 
-/* Left-hand Modifier Key ([LANG], [FRAME], etc.) */
+/* Left-hand Merged Stack Selector Keys (01 · CORE, 02 · AI & DATA, 03 · SYSTEMS) */
 .kb-mod {
   appearance: none;
   border: 0;
@@ -1328,8 +1325,8 @@ html[data-mode="hack"] .cap--accent {
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 0.55rem 0.75rem 0.78rem;
-  border-radius: 10px;
+  padding: 0.62rem 0.82rem 0.82rem;
+  border-radius: 12px;
   text-align: left;
   color: var(--cap-prof-ink);
   background: linear-gradient(180deg, var(--cap-prof-top), var(--cap-prof-bg));
@@ -1340,13 +1337,14 @@ html[data-mode="hack"] .cap--accent {
   transition: transform 75ms var(--ease-out), box-shadow 75ms;
 }
 
-.kb-mod--sam {
-  background: linear-gradient(180deg, #272a30, #181a1f);
-  color: #f2f4f7;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    inset 0 -5px 0 #0c0d10,
-    0 3px 6px rgba(0, 0, 0, 0.4);
+.kb-mod-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.kb-mod:hover {
+  transform: translateY(-1px);
 }
 
 .kb-mod:active,
@@ -1359,30 +1357,51 @@ html[data-mode="hack"] .cap--accent {
     inset 0 -2px 0 var(--accent-side);
 }
 
+html[data-mode="hack"] .kb-mod:active,
+html[data-mode="hack"] .kb-mod[aria-pressed="true"] {
+  background: linear-gradient(180deg, #f24a40, var(--accent));
+}
+
 .kb-mod-led {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--accent);
+  flex-shrink: 0;
+}
+
+.kb-mod[aria-pressed="true"] .kb-mod-led {
+  background: #ffffff;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.85);
 }
 
 .kb-mod-code {
   font-family: var(--mono);
   font-weight: 700;
-  font-size: 0.82rem;
-  letter-spacing: 0.03em;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
 }
 
 .kb-mod-sub {
-  font-size: 0.75rem;
-  opacity: 0.82;
+  font-size: 0.78rem;
+  font-weight: 600;
+  opacity: 0.9;
 }
 
-/* Technology Icon-Only Keycap Grid per Row */
+/* Technology Icon-Only Keycap Grid & Embedded S-A-M-U-B-I-N Row */
 .kb-caps {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
-  gap: 0.55rem;
+  gap: 0.6rem;
+  transform-style: preserve-3d;
+}
+
+.kb-caps--tech {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.kb-caps--sam {
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 0.5rem;
 }
 
 .kb-cap {
@@ -1394,17 +1413,17 @@ html[data-mode="hack"] .cap--accent {
   appearance: none;
   border: 0;
   cursor: pointer;
-  min-height: 58px;
+  min-height: 68px;
   display: grid;
   place-items: center;
-  padding: 0.45rem 0.5rem 0.72rem;
-  border-radius: 11px;
+  padding: 0.45rem 0.45rem 0.75rem;
+  border-radius: 12px;
   color: var(--c-ink);
   background: linear-gradient(180deg, var(--c-top), var(--c-bg) 80%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
     inset 0 -5px 0 var(--c-side),
-    0 3px 7px -1px rgba(0, 0, 0, 0.34);
+    0 4px 8px -1px rgba(0, 0, 0, 0.36);
   transition: transform 75ms var(--ease-out), box-shadow 75ms, filter 120ms;
 }
 
@@ -1422,12 +1441,13 @@ html[data-mode="hack"] .cap--accent {
   --c-ink: var(--cap-fam-ink);
 }
 
-/* Embedded S - A - M - U - B - I - N Keycaps */
+/* Embedded S - A - M - U - B - I - N Keycaps (Present in Every Stack Layer) */
 .kb-cap--sam {
   --c-top: #ff7e4d;
   --c-bg: var(--accent);
   --c-side: var(--accent-side);
   --c-ink: var(--accent-ink);
+  min-height: 62px;
 }
 
 html[data-mode="hack"] .kb-cap--sam {
@@ -1448,7 +1468,7 @@ html[data-mode="hack"] .kb-cap--sam {
   font-family: var(--font);
   font-weight: 850;
   font-stretch: 118%;
-  font-size: 1.32rem;
+  font-size: 1.38rem;
   letter-spacing: -0.02em;
   line-height: 1;
 }
@@ -1467,9 +1487,10 @@ html[data-mode="hack"] .kb-cap--sam {
     0 0 0 2px var(--accent);
 }
 
+/* Oversized, High-Clarity Recognizable Tech Icons (38px × 38px) */
 .kb-cap-ico {
-  width: 1.7rem;
-  height: 1.7rem;
+  width: 2.35rem;
+  height: 2.35rem;
   flex-shrink: 0;
 }
 
@@ -1502,15 +1523,17 @@ html[data-mode="hack"] .kb-cap--sam {
 }
 
 @media (max-width: 720px) {
-  .kb-row {
+  .kb-plate {
     grid-template-columns: 1fr;
   }
-  .kb-mod {
-    flex-direction: row;
-    align-items: center;
-    padding: 0.5rem 0.75rem 0.68rem;
+  .kb-layer-bank {
+    grid-template-rows: none;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  .kb-caps {
+  .kb-caps--tech {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .kb-caps--sam {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
@@ -1840,6 +1863,7 @@ html[data-mode="hack"] .ledger-period {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.65rem;
   padding: 12px 14px;
   border-radius: 10px;
   background: var(--surface);
@@ -1850,6 +1874,23 @@ html[data-mode="hack"] .ledger-period {
   font-weight: 600;
   color: var(--ink);
   transition: border-color 150ms, transform 120ms;
+}
+
+.patch-key-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.patch-ico {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex-shrink: 0;
+  color: var(--accent-text);
+}
+
+html[data-mode="hack"] .patch-ico {
+  color: var(--accent);
 }
 
 .patch-key:hover {

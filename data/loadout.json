@@ -1,158 +1,146 @@
 {
   "dev": {
     "title": "Engineering Loadout",
-    "subtitle": "Press any keycap—or type its first letter—to inspect the stack on the OLED readout. Pull the hoodie up to flip every switch into the Security Arsenal.",
-    "defaultOled": "LOADOUT // READY — TypeScript · Daily Driver · Full-stack web, typed APIs & AI agent pipelines",
-    "rows": [
+    "subtitle": "Compact 3-layer mechanical switchboard: click any merged stack button on the left to flip the keys, press any oversized icon switch, or type S-A-M-U-B-I-N in every layer.",
+    "defaultOled": "LOADOUT // CORE — TypeScript · Daily Driver · End-to-end typed web, APIs & AI agent pipelines",
+    "layers": [
       {
-        "mod": "LANG",
-        "label": "Languages",
-        "caps": [
-          { "id": "ts", "name": "TypeScript", "short": "TS", "tier": "daily", "years": "Daily driver", "detail": "Strict end-to-end types across React, Next.js, Node, and agent SDKs" },
-          { "id": "js", "name": "JavaScript", "short": "JS", "tier": "daily", "years": "Daily driver", "detail": "ES2024+, Web Audio synthesis, Canvas 2D physics, zero-dependency DOM craft" },
-          { "id": "py", "name": "Python", "short": "PY", "tier": "daily", "years": "Daily driver", "detail": "FastAPI services, PyTorch/LangChain pipelines, and security automation" },
-          { "id": "go", "name": "Go", "short": "GO", "tier": "proficient", "years": "Proficient", "detail": "High-concurrency CLI tooling, network services, and fast worker daemons" },
-          { "id": "cpp", "name": "C++", "short": "C++", "tier": "proficient", "years": "Proficient", "detail": "Algorithms, systems fundamentals, and memory-aware performance code" },
-          { "id": "c", "name": "C", "short": "C", "tier": "proficient", "years": "Proficient", "detail": "Low-level memory layout, pointers, POSIX sockets, and binary inspection" },
-          { "id": "sql", "name": "SQL", "short": "SQL", "tier": "daily", "years": "Daily driver", "detail": "Schema design, query plans, indexing, and parameterized query safety" },
-          { "id": "bash", "name": "Bash", "short": "SH", "tier": "daily", "years": "Daily driver", "detail": "Linux automation, CI/CD pipelines, and reproducible environment scripts" }
+        "id": "core",
+        "code": "01 · CORE",
+        "mod": "CORE",
+        "label": "Lang & Frameworks",
+        "topRow": [
+          { "id": "ts", "name": "TypeScript", "short": "TS", "tier": "daily", "detail": "Strict end-to-end types across React, Next.js, Node, and agent SDKs" },
+          { "id": "js", "name": "JavaScript", "short": "JS", "tier": "daily", "detail": "ES2024+, Web Audio synthesis, Canvas 2D physics, zero-dependency DOM craft" },
+          { "id": "py", "name": "Python", "short": "PY", "tier": "daily", "detail": "FastAPI services, PyTorch/LangChain pipelines, and security automation" },
+          { "id": "go", "name": "Go", "short": "GO", "tier": "proficient", "detail": "High-concurrency CLI tooling, network services, and fast worker daemons" },
+          { "id": "cpp", "name": "C++", "short": "C++", "tier": "proficient", "detail": "Algorithms, systems fundamentals, and memory-aware performance code" },
+          { "id": "c", "name": "C", "short": "C", "tier": "proficient", "detail": "Low-level memory layout, pointers, POSIX sockets, and binary inspection" }
+        ],
+        "bottomRow": [
+          { "id": "react", "name": "React", "short": "RCT", "tier": "daily", "detail": "Interactive product interfaces, custom hooks, and accessible design systems" },
+          { "id": "next", "name": "Next.js", "short": "NXT", "tier": "daily", "detail": "App Router, server actions, edge middleware, and hybrid SSR/SSG architectures" },
+          { "id": "node", "name": "Node.js", "short": "NDE", "tier": "daily", "detail": "REST/WebSocket servers, stream processing, and authentication gateways" },
+          { "id": "express", "name": "Express", "short": "EXP", "tier": "daily", "detail": "Hardened API middleware, rate-limiting, and session security architecture" },
+          { "id": "fastapi", "name": "FastAPI", "short": "FAPI", "tier": "daily", "detail": "Async Python inference endpoints with Pydantic validation and OpenAPI specs" },
+          { "id": "tailwind", "name": "Tailwind CSS", "short": "TW", "tier": "daily", "detail": "Token-driven utility systems paired with custom CSS variable choreography" }
         ]
       },
       {
-        "mod": "FRAME",
-        "label": "Frameworks",
-        "caps": [
-          { "id": "react", "name": "React", "short": "RCT", "tier": "daily", "years": "Daily driver", "detail": "Interactive product interfaces, custom hooks, and accessible design systems" },
-          { "id": "next", "name": "Next.js", "short": "NXT", "tier": "daily", "years": "Daily driver", "detail": "App Router, server actions, edge middleware, and hybrid SSR/SSG architectures" },
-          { "id": "node", "name": "Node.js", "short": "NDE", "tier": "daily", "years": "Daily driver", "detail": "REST/WebSocket servers, stream processing, and authentication gateways" },
-          { "id": "express", "name": "Express", "short": "EXP", "tier": "daily", "years": "Daily driver", "detail": "Hardened API middleware, rate-limiting, and session security architecture" },
-          { "id": "fastapi", "name": "FastAPI", "short": "FAPI", "tier": "daily", "years": "Daily driver", "detail": "Async Python inference endpoints with Pydantic validation and OpenAPI specs" },
-          { "id": "tailwind", "name": "Tailwind CSS", "short": "TW", "tier": "daily", "years": "Daily driver", "detail": "Token-driven utility systems paired with custom CSS variable choreography" }
+        "id": "ai-data",
+        "code": "02 · AI & DATA",
+        "mod": "AI & DATA",
+        "label": "AI/ML & Databases",
+        "topRow": [
+          { "id": "pytorch", "name": "PyTorch", "short": "PT", "tier": "proficient", "detail": "Model fine-tuning, tensor pipelines, and custom evaluation workflows" },
+          { "id": "tf", "name": "TensorFlow", "short": "TF", "tier": "familiar", "detail": "Neural network prototyping and browser/edge model deployment" },
+          { "id": "langchain", "name": "LangChain", "short": "LC", "tier": "daily", "detail": "Tool-calling agents, structured output chains, and retrieval orchestration" },
+          { "id": "hf", "name": "Hugging Face", "short": "HF", "tier": "proficient", "detail": "Transformers, embeddings, open-weight model hosting, and dataset curation" },
+          { "id": "openai", "name": "LLM APIs", "short": "LLM", "tier": "daily", "detail": "Streaming inference, function calling, prompt hardening, and eval harnesses" },
+          { "id": "rag", "name": "Vector & RAG", "short": "RAG", "tier": "daily", "detail": "Hybrid semantic + BM25 search, chunking strategies, and citation grounding" }
+        ],
+        "bottomRow": [
+          { "id": "pg", "name": "PostgreSQL", "short": "PG", "tier": "daily", "detail": "Relational modeling, pgvector embeddings, transactions, and row-level security" },
+          { "id": "mongo", "name": "MongoDB", "short": "MDB", "tier": "proficient", "detail": "Document schemas, aggregation pipelines, and NoSQL injection hardening" },
+          { "id": "redis", "name": "Redis", "short": "RDS", "tier": "daily", "detail": "Token-bucket rate limiters, pub/sub queues, and low-latency session stores" },
+          { "id": "prisma", "name": "Prisma", "short": "PRM", "tier": "daily", "detail": "Type-safe migrations, schema introspection, and query optimization" },
+          { "id": "sqlite", "name": "SQLite", "short": "SQLT", "tier": "proficient", "detail": "Embedded edge databases, local-first apps, and deterministic test fixtures" },
+          { "id": "sql", "name": "SQL", "short": "SQL", "tier": "daily", "detail": "Schema design, query plans, indexing, and parameterized query safety" }
         ]
       },
       {
-        "mod": "AI/ML",
-        "label": "AI & ML",
-        "caps": [
-          { "id": "pytorch", "name": "PyTorch", "short": "PT", "tier": "proficient", "years": "Proficient", "detail": "Model fine-tuning, tensor pipelines, and custom evaluation workflows" },
-          { "id": "tf", "name": "TensorFlow", "short": "TF", "tier": "familiar", "years": "Familiar", "detail": "Neural network prototyping and browser/edge model deployment" },
-          { "id": "langchain", "name": "LangChain", "short": "LC", "tier": "daily", "years": "Daily driver", "detail": "Tool-calling agents, structured output chains, and retrieval orchestration" },
-          { "id": "hf", "name": "Hugging Face", "short": "HF", "tier": "proficient", "years": "Proficient", "detail": "Transformers, embeddings, open-weight model hosting, and dataset curation" },
-          { "id": "openai", "name": "LLM APIs", "short": "LLM", "tier": "daily", "years": "Daily driver", "detail": "Streaming inference, function calling, prompt hardening, and eval harnesses" },
-          { "id": "rag", "name": "Vector & RAG", "short": "RAG", "tier": "daily", "years": "Daily driver", "detail": "Hybrid semantic + BM25 search, chunking strategies, and citation grounding" }
-        ]
-      },
-      {
-        "mod": "DATA",
-        "label": "Data Stores",
-        "caps": [
-          { "id": "pg", "name": "PostgreSQL", "short": "PG", "tier": "daily", "years": "Daily driver", "detail": "Relational modeling, pgvector embeddings, transactions, and row-level security" },
-          { "id": "mongo", "name": "MongoDB", "short": "MDB", "tier": "proficient", "years": "Proficient", "detail": "Document schemas, aggregation pipelines, and NoSQL injection hardening" },
-          { "id": "redis", "name": "Redis", "short": "RDS", "tier": "daily", "years": "Daily driver", "detail": "Token-bucket rate limiters, pub/sub queues, and low-latency session stores" },
-          { "id": "prisma", "name": "Prisma", "short": "PRM", "tier": "daily", "years": "Daily driver", "detail": "Type-safe migrations, schema introspection, and query optimization" },
-          { "id": "sqlite", "name": "SQLite", "short": "SQLT", "tier": "proficient", "years": "Proficient", "detail": "Embedded edge databases, local-first apps, and deterministic test fixtures" }
-        ]
-      },
-      {
-        "mod": "OS",
-        "label": "Operating Systems",
-        "caps": [
-          { "id": "linux", "name": "Linux", "short": "LNX", "tier": "daily", "years": "Daily driver", "detail": "Kernel namespaces, systemd hardening, permissions, and server administration" },
-          { "id": "ubuntu", "name": "Ubuntu", "short": "UBU", "tier": "daily", "years": "Daily driver", "detail": "Production cloud instances, container hosts, and automated provisioning" },
-          { "id": "arch", "name": "Arch Linux", "short": "ARCH", "tier": "proficient", "years": "Proficient", "detail": "Minimalist custom workstation builds and deep package/system control" },
-          { "id": "win", "name": "Windows", "short": "WIN", "tier": "daily", "years": "Daily driver", "detail": "Cross-platform development, PowerShell automation, and WSL2 integration" },
-          { "id": "wsl", "name": "WSL2", "short": "WSL", "tier": "daily", "years": "Daily driver", "detail": "Hybrid Linux kernel workflows alongside native desktop tooling" }
-        ]
-      },
-      {
-        "mod": "SHIP",
-        "label": "Infra & Delivery",
-        "caps": [
-          { "id": "git", "name": "Git", "short": "GIT", "tier": "daily", "years": "Daily driver", "detail": "Clean commit hygiene, worktrees, bisect debugging, and signed releases" },
-          { "id": "docker", "name": "Docker", "short": "DCK", "tier": "daily", "years": "Daily driver", "detail": "Multi-stage distroless builds, non-root containers, and compose stacks" },
-          { "id": "gha", "name": "GH Actions", "short": "GHA", "tier": "daily", "years": "Daily driver", "detail": "Automated CI/CD, static analysis gates, and zero-downtime deployments" },
-          { "id": "aws", "name": "AWS", "short": "AWS", "tier": "proficient", "years": "Proficient", "detail": "EC2, S3, IAM least-privilege policies, VPCs, and serverless compute" },
-          { "id": "cf", "name": "Cloudflare", "short": "CF", "tier": "daily", "years": "Daily driver", "detail": "Pages, Workers, WAF rules, DNS security, and strict response headers" },
-          { "id": "nginx", "name": "Nginx", "short": "NGX", "tier": "proficient", "years": "Proficient", "detail": "Reverse proxies, TLS termination, rate limiting, and CSP header hardening" }
+        "id": "systems",
+        "code": "03 · SYSTEMS",
+        "mod": "SYSTEMS",
+        "label": "OS, Cloud & DevOps",
+        "topRow": [
+          { "id": "linux", "name": "Linux", "short": "LNX", "tier": "daily", "detail": "Kernel namespaces, systemd hardening, permissions, and server administration" },
+          { "id": "ubuntu", "name": "Ubuntu", "short": "UBU", "tier": "daily", "detail": "Production cloud instances, container hosts, and automated provisioning" },
+          { "id": "arch", "name": "Arch Linux", "short": "ARCH", "tier": "proficient", "detail": "Minimalist custom workstation builds and deep package/system control" },
+          { "id": "win", "name": "Windows", "short": "WIN", "tier": "daily", "detail": "Cross-platform development, PowerShell automation, and WSL2 integration" },
+          { "id": "wsl", "name": "WSL2", "short": "WSL", "tier": "daily", "detail": "Hybrid Linux kernel workflows alongside native desktop tooling" },
+          { "id": "bash", "name": "Bash", "short": "SH", "tier": "daily", "detail": "Linux automation, CI/CD pipelines, and reproducible environment scripts" }
+        ],
+        "bottomRow": [
+          { "id": "git", "name": "Git", "short": "GIT", "tier": "daily", "detail": "Clean commit hygiene, worktrees, bisect debugging, and signed releases" },
+          { "id": "docker", "name": "Docker", "short": "DCK", "tier": "daily", "detail": "Multi-stage distroless builds, non-root containers, and compose stacks" },
+          { "id": "gha", "name": "GH Actions", "short": "GHA", "tier": "daily", "detail": "Automated CI/CD, static analysis gates, and zero-downtime deployments" },
+          { "id": "aws", "name": "AWS", "short": "AWS", "tier": "proficient", "detail": "EC2, S3, IAM least-privilege policies, VPCs, and serverless compute" },
+          { "id": "cf", "name": "Cloudflare", "short": "CF", "tier": "daily", "detail": "Pages, Workers, WAF rules, DNS security, and strict response headers" },
+          { "id": "nginx", "name": "Nginx", "short": "NGX", "tier": "proficient", "detail": "Reverse proxies, TLS termination, rate limiting, and CSP header hardening" }
         ]
       }
     ]
   },
   "hack": {
     "title": "Offensive & Defensive Arsenal",
-    "subtitle": "Every keycap flipped to its darkroom counterpart. Move your safelight torch across the board or press any switch to inspect its role in testing and teaching.",
-    "defaultOled": "ARSENAL // SAFELIGHT — Burp Suite · Daily Driver · Manual HTTP interception, auth bypass & AppSec auditing",
-    "rows": [
+    "subtitle": "Compact 3-layer security switchboard: switch between Recon/Web, Exploit/Network, and RE/Labs, inspect any tool under the safelight, or press S-A-M-U-B-I-N in every stack.",
+    "defaultOled": "ARSENAL // RECON & WEB — Burp Suite · Core Tool · Manual HTTP interception, auth bypass & AppSec auditing",
+    "layers": [
       {
-        "mod": "RECON",
-        "label": "Recon & OSINT",
-        "caps": [
-          { "id": "nmap", "name": "Nmap", "short": "NMP", "tier": "daily", "years": "Core tool", "detail": "Service fingerprinting, NSE script auditing, and attack-surface mapping" },
-          { "id": "amass", "name": "Amass", "short": "AMS", "tier": "proficient", "years": "Proficient", "detail": "ASN discovery, subdomain enumeration, and external perimeter graphing" },
-          { "id": "subfinder", "name": "Subfinder", "short": "SBF", "tier": "daily", "years": "Core tool", "detail": "Fast passive subdomain discovery across certificate and DNS datasets" },
-          { "id": "httpx", "name": "httpx", "short": "HTX", "tier": "daily", "years": "Core tool", "detail": "HTTP probing, status/header fingerprinting, and tech-stack classification" },
-          { "id": "shodan", "name": "Shodan", "short": "SHD", "tier": "proficient", "years": "Proficient", "detail": "Exposed service telemetry, banner analysis, and IoT/cloud asset auditing" },
-          { "id": "maltego", "name": "Maltego", "short": "MLT", "tier": "familiar", "years": "Familiar", "detail": "Entity relationship graphing and open-source intelligence correlation" },
-          { "id": "whois", "name": "Whois & RDAP", "short": "WHO", "tier": "daily", "years": "Core tool", "detail": "Domain registration lineage, netblock ownership, and abuse contact tracing" },
-          { "id": "dig", "name": "dig / DNS", "short": "DIG", "tier": "daily", "years": "Core tool", "detail": "Zone transfer checks, SPF/DMARC auditing, and DNSSEC verification" }
+        "id": "recon-web",
+        "code": "01 · RECON & WEB",
+        "mod": "RECON & WEB",
+        "label": "OSINT & Web AppSec",
+        "topRow": [
+          { "id": "nmap", "name": "Nmap", "short": "NMP", "tier": "daily", "detail": "Service fingerprinting, NSE script auditing, and attack-surface mapping" },
+          { "id": "amass", "name": "Amass", "short": "AMS", "tier": "proficient", "detail": "ASN discovery, subdomain enumeration, and external perimeter graphing" },
+          { "id": "subfinder", "name": "Subfinder", "short": "SBF", "tier": "daily", "detail": "Fast passive subdomain discovery across certificate and DNS datasets" },
+          { "id": "httpx", "name": "httpx", "short": "HTX", "tier": "daily", "detail": "HTTP probing, status/header fingerprinting, and tech-stack classification" },
+          { "id": "shodan", "name": "Shodan", "short": "SHD", "tier": "proficient", "detail": "Exposed service telemetry, banner analysis, and IoT/cloud asset auditing" },
+          { "id": "dig", "name": "dig / DNS", "short": "DIG", "tier": "daily", "detail": "Zone transfer checks, SPF/DMARC auditing, and DNSSEC verification" }
+        ],
+        "bottomRow": [
+          { "id": "burp", "name": "Burp Suite", "short": "BRP", "tier": "daily", "detail": "Repeater/Intruder workflows, IDOR/auth testing, and custom traffic extensions" },
+          { "id": "zap", "name": "OWASP ZAP", "short": "ZAP", "tier": "proficient", "detail": "Automated baseline scans, HUD interception, and CI security regression checks" },
+          { "id": "ffuf", "name": "ffuf", "short": "FFU", "tier": "daily", "detail": "High-speed directory, vhost, and parameter fuzzing with calibrated filters" },
+          { "id": "sqlmap", "name": "sqlmap", "short": "SQM", "tier": "proficient", "detail": "SQL injection verification, proof-of-concept validation, and remediation demos" },
+          { "id": "nuclei", "name": "Nuclei", "short": "NUC", "tier": "daily", "detail": "YAML template-driven vulnerability scanning and custom CVE detection rules" },
+          { "id": "xsstrike", "name": "DOM & XSS Lab", "short": "XSS", "tier": "daily", "detail": "Context-aware XSS sink analysis — powers the live Interactive XSS Simulator" }
         ]
       },
       {
-        "mod": "WEB",
-        "label": "Web AppSec",
-        "caps": [
-          { "id": "burp", "name": "Burp Suite", "short": "BRP", "tier": "daily", "years": "Core tool", "detail": "Repeater/Intruder workflows, IDOR/auth testing, and custom traffic extensions" },
-          { "id": "zap", "name": "OWASP ZAP", "short": "ZAP", "tier": "proficient", "years": "Proficient", "detail": "Automated baseline scans, HUD interception, and CI security regression checks" },
-          { "id": "ffuf", "name": "ffuf", "short": "FFU", "tier": "daily", "years": "Core tool", "detail": "High-speed directory, vhost, and parameter fuzzing with calibrated filters" },
-          { "id": "sqlmap", "name": "sqlmap", "short": "SQM", "tier": "proficient", "years": "Proficient", "detail": "SQL injection verification, proof-of-concept validation, and remediation demos" },
-          { "id": "nuclei", "name": "Nuclei", "short": "NUC", "tier": "daily", "years": "Core tool", "detail": "YAML template-driven vulnerability scanning and custom CVE detection rules" },
-          { "id": "xsstrike", "name": "DOM & XSS Lab", "short": "XSS", "tier": "daily", "years": "Author", "detail": "Context-aware XSS sink analysis — powers the live Interactive XSS Simulator" }
+        "id": "exploit-net",
+        "code": "02 · EXPLOIT & NET",
+        "mod": "EXPLOIT & NET",
+        "label": "Exploit & Network",
+        "topRow": [
+          { "id": "msf", "name": "Metasploit", "short": "MSF", "tier": "proficient", "detail": "Controlled lab exploitation, payload staging, and post-exploitation validation" },
+          { "id": "hydra", "name": "Hydra", "short": "HYD", "tier": "proficient", "detail": "Protocol authentication auditing and rate-limit / lockout verification" },
+          { "id": "john", "name": "John the Ripper", "short": "JTR", "tier": "proficient", "detail": "Password hash auditing, custom wordlist rules, and KDF strength demos" },
+          { "id": "hashcat", "name": "Hashcat", "short": "HCT", "tier": "proficient", "detail": "GPU-accelerated hash recovery and entropy testing for security workshops" },
+          { "id": "impacket", "name": "Impacket", "short": "IMP", "tier": "proficient", "detail": "Network protocol classes, SMB/Kerberos lab exercises, and packet crafting" },
+          { "id": "lfi", "name": "LFI & Path Lab", "short": "LFI", "tier": "daily", "detail": "Traversal & wrapper mechanics — powers the live LFI Simulator lab" }
+        ],
+        "bottomRow": [
+          { "id": "wireshark", "name": "Wireshark", "short": "WSH", "tier": "daily", "detail": "Deep packet inspection, TLS handshake analysis, and protocol debugging" },
+          { "id": "tcpdump", "name": "tcpdump", "short": "TCP", "tier": "daily", "detail": "Headless BPF packet capture on remote Linux interfaces and containers" },
+          { "id": "responder", "name": "Responder", "short": "RSP", "tier": "familiar", "detail": "LLMNR/NBT-NS poisoning demonstrations in isolated internal lab networks" },
+          { "id": "bettercap", "name": "Bettercap", "short": "BTC", "tier": "familiar", "detail": "MITM lab simulations, ARP spoofing mechanics, and HSTS teaching demos" },
+          { "id": "aircrack", "name": "Aircrack-ng", "short": "AIR", "tier": "familiar", "detail": "802.11 handshake capture analysis and wireless security fundamentals" },
+          { "id": "whois", "name": "Whois & RDAP", "short": "WHO", "tier": "daily", "detail": "Domain registration lineage, netblock ownership, and abuse contact tracing" }
         ]
       },
       {
-        "mod": "EXPL",
-        "label": "Auth & Exploitation",
-        "caps": [
-          { "id": "msf", "name": "Metasploit", "short": "MSF", "tier": "proficient", "years": "Proficient", "detail": "Controlled lab exploitation, payload staging, and post-exploitation validation" },
-          { "id": "hydra", "name": "Hydra", "short": "HYD", "tier": "proficient", "years": "Proficient", "detail": "Protocol authentication auditing and rate-limit / lockout verification" },
-          { "id": "john", "name": "John the Ripper", "short": "JTR", "tier": "proficient", "years": "Proficient", "detail": "Password hash auditing, custom wordlist rules, and KDF strength demos" },
-          { "id": "hashcat", "name": "Hashcat", "short": "HCT", "tier": "proficient", "years": "Proficient", "detail": "GPU-accelerated hash recovery and entropy testing for security workshops" },
-          { "id": "impacket", "name": "Impacket", "short": "IMP", "tier": "proficient", "years": "Proficient", "detail": "Network protocol classes, SMB/Kerberos lab exercises, and packet crafting" },
-          { "id": "lfi", "name": "LFI & Path Lab", "short": "LFI", "tier": "daily", "years": "Author", "detail": "Traversal & wrapper mechanics — powers the live LFI Simulator lab" }
-        ]
-      },
-      {
-        "mod": "NET",
-        "label": "Network & Packet",
-        "caps": [
-          { "id": "wireshark", "name": "Wireshark", "short": "WSH", "tier": "daily", "years": "Core tool", "detail": "Deep packet inspection, TLS handshake analysis, and protocol debugging" },
-          { "id": "tcpdump", "name": "tcpdump", "short": "TCP", "tier": "daily", "years": "Core tool", "detail": "Headless BPF packet capture on remote Linux interfaces and containers" },
-          { "id": "responder", "name": "Responder", "short": "RSP", "tier": "familiar", "years": "Familiar", "detail": "LLMNR/NBT-NS poisoning demonstrations in isolated internal lab networks" },
-          { "id": "bettercap", "name": "Bettercap", "short": "BTC", "tier": "familiar", "years": "Familiar", "detail": "MITM lab simulations, ARP spoofing mechanics, and HSTS teaching demos" },
-          { "id": "aircrack", "name": "Aircrack-ng", "short": "AIR", "tier": "familiar", "years": "Familiar", "detail": "802.11 handshake capture analysis and wireless security fundamentals" }
-        ]
-      },
-      {
-        "mod": "RE/FR",
-        "label": "Reverse & Forensics",
-        "caps": [
-          { "id": "ghidra", "name": "Ghidra", "short": "GHD", "tier": "proficient", "years": "Proficient", "detail": "ELF/PE decompilation, control-flow analysis, and binary CTF reversing" },
-          { "id": "radare2", "name": "radare2", "short": "R2", "tier": "familiar", "years": "Familiar", "detail": "CLI disassembly, binary patching, and quick string/symbol inspection" },
-          { "id": "gdb", "name": "GDB + pwndbg", "short": "GDB", "tier": "proficient", "years": "Proficient", "detail": "Register/stack inspection, breakpoint scripting, and memory corruption labs" },
-          { "id": "volatility", "name": "Volatility", "short": "VOL", "tier": "familiar", "years": "Familiar", "detail": "Memory dump forensics, process tree reconstruction, and artifact triage" },
-          { "id": "autopsy", "name": "Autopsy", "short": "AUT", "tier": "familiar", "years": "Familiar", "detail": "Disk image timeline analysis, deleted file carving, and incident labs" }
-        ]
-      },
-      {
-        "mod": "OPS",
-        "label": "Environments & Labs",
-        "caps": [
-          { "id": "kali", "name": "Kali Linux", "short": "KLI", "tier": "daily", "years": "Core OS", "detail": "Custom offensive VMs, isolated lab routing, and instructor workshop images" },
-          { "id": "parrot", "name": "Parrot Sec", "short": "PRT", "tier": "proficient", "years": "Proficient", "detail": "Lightweight security OS for portable assessment and teaching environments" },
-          { "id": "htb", "name": "HackTheBox", "short": "HTB", "tier": "daily", "years": "Active Labs", "detail": "Machine walkthroughs, Active Directory chains, and web exploitation practice" },
-          { "id": "thm", "name": "TryHackMe", "short": "THM", "tier": "daily", "years": "Active Labs", "detail": "Guided red/blue rooms and structured student training pathways" },
-          { "id": "h1", "name": "HackerOne", "short": "H1", "tier": "proficient", "years": "Methodology", "detail": "Vulnerability disclosure standards, CVSS scoring, and clear PoC reporting" },
-          { "id": "bugcrowd", "name": "Bugcrowd VRT", "short": "BC", "tier": "proficient", "years": "Methodology", "detail": "Taxonomy-driven triage, impact classification, and remediation verification" }
+        "id": "re-labs",
+        "code": "03 · RE & LABS",
+        "mod": "RE & LABS",
+        "label": "Reverse, Forensics & OS",
+        "topRow": [
+          { "id": "ghidra", "name": "Ghidra", "short": "GHD", "tier": "proficient", "detail": "ELF/PE decompilation, control-flow analysis, and binary CTF reversing" },
+          { "id": "radare2", "name": "radare2", "short": "R2", "tier": "familiar", "detail": "CLI disassembly, binary patching, and quick string/symbol inspection" },
+          { "id": "gdb", "name": "GDB + pwndbg", "short": "GDB", "tier": "proficient", "detail": "Register/stack inspection, breakpoint scripting, and memory corruption labs" },
+          { "id": "volatility", "name": "Volatility", "short": "VOL", "tier": "familiar", "detail": "Memory dump forensics, process tree reconstruction, and artifact triage" },
+          { "id": "autopsy", "name": "Autopsy", "short": "AUT", "tier": "familiar", "detail": "Disk image timeline analysis, deleted file carving, and incident labs" },
+          { "id": "maltego", "name": "Maltego", "short": "MLT", "tier": "familiar", "detail": "Entity relationship graphing and open-source intelligence correlation" }
+        ],
+        "bottomRow": [
+          { "id": "kali", "name": "Kali Linux", "short": "KLI", "tier": "daily", "detail": "Custom offensive VMs, isolated lab routing, and instructor workshop images" },
+          { "id": "parrot", "name": "Parrot Sec", "short": "PRT", "tier": "proficient", "detail": "Lightweight security OS for portable assessment and teaching environments" },
+          { "id": "htb", "name": "HackTheBox", "short": "HTB", "tier": "daily", "detail": "Machine walkthroughs, Active Directory chains, and web exploitation practice" },
+          { "id": "thm", "name": "TryHackMe", "short": "THM", "tier": "daily", "detail": "Guided red/blue rooms and structured student training pathways" },
+          { "id": "h1", "name": "HackerOne", "short": "H1", "tier": "proficient", "detail": "Vulnerability disclosure standards, CVSS scoring, and clear PoC reporting" },
+          { "id": "bugcrowd", "name": "Bugcrowd VRT", "short": "BC", "tier": "proficient", "detail": "Taxonomy-driven triage, impact classification, and remediation verification" }
         ]
       }
     ]
