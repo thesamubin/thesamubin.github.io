@@ -149,7 +149,6 @@ export async function initLoadout() {
   const usbTipL = section.querySelector("[data-usb-tip-l]");
   const usbTipR = section.querySelector("[data-usb-tip-r]");
   const freePlugL = section.querySelector("[data-free-plug-l]");
-  const regrabBtn = section.querySelector("[data-kb-regrab]");
   const board = section.querySelector("[data-loadout-board]");
   const pillsWrap = section.querySelector("[data-stack-pills]");
   const readoutTag = section.querySelector("[data-loadout-tag]");
@@ -257,10 +256,6 @@ export async function initLoadout() {
         `translate(${leftPortX.toFixed(1)}, ${leftPortY.toFixed(1)}) rotate(${plugAngle.toFixed(1)})`
       );
     }
-
-    if (regrabBtn) {
-      regrabBtn.style.left = `${leftAnchorX.toFixed(0)}px`;
-    }
   }
 
   function releaseLeftHand() {
@@ -268,7 +263,6 @@ export async function initLoadout() {
     isLeftHeld = false;
     yankEnergy = 0;
     rig?.classList.add("is-left-released");
-    if (regrabBtn) regrabBtn.hidden = false;
     sound.play("flip");
 
     // Initialize the unplugged left cable tip at the exact port position and recoil it upward!
@@ -289,15 +283,14 @@ export async function initLoadout() {
     isLeftHeld = true;
     yankEnergy = 0;
     rig?.classList.remove("is-left-released");
-    if (regrabBtn) regrabBtn.hidden = true;
     sound.play("auth");
     vy -= 4.2;
     vang += 0.038;
     if (!raf) raf = requestAnimationFrame(stepPhysics);
   }
 
-  if (regrabBtn) {
-    regrabBtn.addEventListener("click", () => {
+  if (freePlugL) {
+    freePlugL.addEventListener("click", () => {
       regrabLeftHand();
     });
   }

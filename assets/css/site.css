@@ -1317,11 +1317,14 @@ html[data-mode="hack"] .stack-pill[aria-selected="true"] {
 /* Unplugged Left USB-C Connector Tip at the end of the loose left cable */
 .free-usb-plug {
   opacity: 0;
+  pointer-events: none;
   transition: opacity 110ms var(--ease-out);
 }
 
 .hanging-kb-rig.is-left-released .free-usb-plug {
   opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .free-usb-boot {
@@ -1344,31 +1347,6 @@ html[data-mode="hack"] .stack-pill[aria-selected="true"] {
   fill: #d4af37;
   stroke: #382f10;
   stroke-width: 1px;
-}
-
-/* Re-plug button when left cable detaches */
-.kb-hand-btn {
-  position: absolute;
-  top: 52px;
-  left: 14%;
-  translate: -50% 0;
-  z-index: 12;
-  appearance: none;
-  border: 1px solid var(--accent);
-  background: var(--oled-bg);
-  color: var(--oled-ink);
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 0.26rem 0.62rem;
-  border-radius: 999px;
-  cursor: pointer;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
-  transition: transform 150ms var(--ease-out);
-}
-
-.kb-hand-btn:hover {
-  transform: scale(1.05);
 }
 
 /* Real 3D Miniature 40%/60% Mechanical Keyboard Case (Snug Molded Rim like Reference Photo) */
