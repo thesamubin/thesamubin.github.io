@@ -1,12 +1,8 @@
-// Compact 3-Layer Hanging Mechanical Keyboard ("Loadout / Arsenal" + embedded S-A-M-U-B-I-N keys in every stack).
-// Features:
-// - Suspended from dual braided top cables with 60fps Hooke's-law spring-damper swing & recoil physics
-// - 3 Merged Stack Selector Buttons on the left:
-//     Dev:  01 · CORE (Lang & Frameworks) | 02 · AI & DATA (AI/ML & DBs) | 03 · SYSTEMS (OS, Cloud & DevOps)
-//     Hack: 01 · RECON & WEB              | 02 · EXPLOIT & NET           | 03 · RE & LABS
-// - Clicking any merged button flips the 3-row switch matrix in-place to show ONLY that stack's 12 oversized tech icons
-// - S · A · M · U · B · I · N keys embedded right inside the center row of EVERY stack layer
-// - High-contrast, oversized (38px × 38px) recognizable vector silhouettes
+// Real Compact 60% Hanging Mechanical Keyboard:
+// - Left side held by the boy's hand + Right side plugged into a coiled USB-C Power Cable
+// - Pull/tug hard on the keyboard ("tanatani") and the left hand slips off! The keyboard drops and swings diagonally on the right power cable by real pendulum physics.
+// - Drag it back up near the hand (or click the hand) to re-grab it!
+// - Scrambled S-A-M-U-B-I-N keys woven across all 3 rows (Middle S -> Top A -> Bottom M -> Middle U -> Top B -> Bottom I -> Middle N) + 2u wide ENTER ↵ key in every stack layer.
 
 import { sound } from "./sound.js";
 import { getMode, onModeChange, toggleMode, reduceMotion } from "./mode.js";
@@ -14,15 +10,15 @@ import { triggerSamubinCipher } from "./keyboard.js";
 
 // Bold, high-contrast, immediately recognizable 24x24 vector silhouettes
 const ICONS = {
-  // --- CORE: Languages (Row 1) ---
+  // --- CORE: Languages ---
   ts: '<rect x="2.2" y="2.2" width="19.6" height="19.6" rx="3.2" fill="currentColor"/><path d="M6.4 10.2h6M9.4 10.2v8.2M18.4 11.6c-.7-.8-2.2-.9-3-.2-.7.6-.2 1.5 1.3 2 1.6.5 2.3 1.2 1.9 2.4-.4 1.1-2.2 1.5-3.6.4" fill="none" stroke="var(--c-bg, #fff)" stroke-width="2.15" stroke-linecap="round"/>',
   js: '<polygon points="12,1.8 21,6.9 21,17.1 12,22.2 3,17.1 3,6.9" fill="currentColor"/><path d="M10.4 8.8v6.2c0 1.4-1 2-2.2 1.3M17.2 10.4c-.7-.6-2-.6-2.4.2-.4.7.2 1.4 1.5 1.7 1.3.4 1.8 1 1.5 2.1-.3.9-1.8 1.1-2.9.2" fill="none" stroke="var(--c-bg, #fff)" stroke-width="2.05" stroke-linecap="round"/>',
-  py: '<path d="M11.8 2.2c-3.8 0-4.4 1.6-4.4 3.8v2.6h4.6v1.1H6.1c-2.4 0-3.9 1.5-3.9 4.4 0 2.9 1.5 4.4 3.9 4.4h1.7v-2.2c0-1.7 1.4-3 3.1-3h5c1.5 0 2.7-1.2 2.7-2.8V6c0-2.2-2.8-3.8-6.8-3.8zm.4 19.6c3.8 0 4.4-1.6 4.4-3.8v-2.6H12v-1.1h5.9c2.4 0 3.9-1.5 3.9-4.4 0-2.9-1.5-4.4-3.9-4.4h-1.7v2.2c0 1.7-1.4 3-3.1 3h-5c-1.5 0-2.7 1.2-2.7 2.8V18c0 2.2 2.8 3.8 6.8 3.8z" fill="currentColor"/><circle cx="9.8" cy="5.5" r="1.1" fill="var(--c-bg, #fff)"/><circle cx="14.2" cy="18.5" r="1.1" fill="var(--c-bg, #fff)"/>',
+  py: '<path d="M11.8 2.2c-3.8 0-4.4 1.6-4.4 3.8v2.6h4.6v1.1H6.1c-2.4 0-3.9 1.5-3.9 4.4 0-2.9 1.5 4.4 3.9 4.4h1.7v-2.2c0-1.7 1.4-3 3.1-3h5c1.5 0 2.7-1.2 2.7-2.8V6c0-2.2-2.8-3.8-6.8-3.8zm.4 19.6c3.8 0 4.4-1.6 4.4-3.8v-2.6H12v-1.1h5.9c2.4 0 3.9-1.5 3.9-4.4 0-2.9-1.5-4.4-3.9-4.4h-1.7v2.2c0 1.7-1.4 3-3.1 3h-5c-1.5 0-2.7 1.2-2.7 2.8V18c0 2.2 2.8 3.8 6.8 3.8z" fill="currentColor"/><circle cx="9.8" cy="5.5" r="1.1" fill="var(--c-bg, #fff)"/><circle cx="14.2" cy="18.5" r="1.1" fill="var(--c-bg, #fff)"/>',
   go: '<path d="M1.5 9.8h3.6M1 12.4h4.2M2.2 15h2.9" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/><path d="M12.2 9a3.8 3.8 0 1 0 0 6h2.2v-2.6h-1.8M18.6 8.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 1 0 0-6.4z" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>',
   cpp: '<polygon points="12,1.8 21,6.9 21,17.1 12,22.2 3,17.1 3,6.9" fill="currentColor"/><path d="M10.8 8.2a4.3 4.3 0 1 0 0 7.6M14.7 10.3v3.4M13 12h3.4M18.7 10.3v3.4M17 12h3.4" fill="none" stroke="var(--c-bg, #fff)" stroke-width="2.05" stroke-linecap="round"/>',
   c: '<circle cx="12" cy="12" r="9.5" fill="currentColor"/><path d="M15.8 7.8a5.2 5.2 0 1 0 0 8.4" fill="none" stroke="var(--c-bg, #fff)" stroke-width="3" stroke-linecap="round"/>',
 
-  // --- CORE: Frameworks (Row 3) ---
+  // --- CORE: Frameworks ---
   react: '<circle cx="12" cy="12" r="2.3" fill="currentColor"/><ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" stroke-width="1.95"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)" fill="none" stroke="currentColor" stroke-width="1.95"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)" fill="none" stroke="currentColor" stroke-width="1.95"/>',
   next: '<circle cx="12" cy="12" r="9.6" fill="currentColor"/><path d="M8.6 16.2V7.8l9.2 11.4M15.4 7.8v5.2" fill="none" stroke="var(--c-bg, #fff)" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"/>',
   node: '<polygon points="12,1.8 20.8,6.8 20.8,17.2 12,22.2 3.2,17.2 3.2,6.8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M9.6 9v5.6c0 1.1-.9 1.6-1.8 1M16 10.2c-.6-.5-1.8-.5-2.1.2-.3.6.2 1.2 1.3 1.5 1.1.3 1.5.9 1.2 1.8-.3.8-1.6.9-2.4.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
@@ -30,7 +26,7 @@ const ICONS = {
   fastapi: '<circle cx="12" cy="12" r="9.6" fill="currentColor"/><path d="M13.4 5.4L7.4 13.2h4.6l-1.4 5.4 6-7.8H12z" fill="var(--c-bg, #fff)"/>',
   tailwind: '<path d="M4.8 10.4c1.5-3 3.6-3.9 6.2-2.8 1.3.5 2.2 1.6 3.3 1.9 1.7.6 3.4 0 4.9-1.9-1.5 3-3.6 3.9-6.2 2.8-1.3-.5-2.2-1.6-3.3-1.9-1.7-.6-3.4 0-4.9 1.9zm0 6.2c1.5-3 3.6-3.9 6.2-2.8 1.3.5 2.2 1.6 3.3 1.9 1.7.6 3.4 0 4.9-1.9-1.5 3-3.6 3.9-6.2 2.8-1.3-.5-2.2-1.6-3.3-1.9-1.7-.6-3.4 0-4.9 1.9z" fill="currentColor"/>',
 
-  // --- AI & DATA: AI/ML (Row 1) ---
+  // --- AI & DATA: AI/ML ---
   pytorch: '<path d="M15.2 4.2l-2.2 2.2a7.4 7.4 0 1 0 4.6 6.8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="16.2" cy="6.8" r="1.9" fill="currentColor"/>',
   tf: '<path d="M12 2.4l8.6 4.8v3.6l-5.2-2.9v3.5l3.2 1.8v3.4l-3.2-1.8v6.6L12 19.6V7.4L6.8 10.3V6.7z" fill="currentColor"/>',
   langchain: '<path d="M9.4 14.6l-2.4 2.4a3.6 3.6 0 0 1-5-5l2.8-2.8a3.6 3.6 0 0 1 5 0M14.6 9.4L17 7a3.6 3.6 0 0 1 5 5l-2.8 2.8a3.6 3.6 0 0 1-5 0M9 15l6-6" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"/>',
@@ -38,7 +34,7 @@ const ICONS = {
   openai: '<circle cx="12" cy="12" r="3.2" fill="currentColor"/><path d="M12 2.6a4.8 4.8 0 0 1 4.5 6.5 4.8 4.8 0 0 1 2.3 6.3 4.8 4.8 0 0 1-6 2.8A4.8 4.8 0 0 1 6.8 19.4a4.8 4.8 0 0 1-2.8-6 4.8 4.8 0 0 1 2.3-6.3A4.8 4.8 0 0 1 12 2.6z" fill="none" stroke="currentColor" stroke-width="2.05"/>',
   rag: '<circle cx="5.8" cy="6.4" r="2.8" fill="currentColor"/><circle cx="18.2" cy="6.4" r="2.8" fill="currentColor"/><circle cx="12" cy="18" r="3" fill="currentColor"/><path d="M7.6 8.4l3 7.2m5.8-7.2l-3 7.2M8.6 6.4h6.8" fill="none" stroke="currentColor" stroke-width="2.1"/>',
 
-  // --- AI & DATA: Databases (Row 3) ---
+  // --- AI & DATA: Databases ---
   pg: '<path d="M7.2 6C4.8 6.6 3.5 9.3 4 12.6c.4 2.7 2.2 4.5 4.1 4.5.9 0 1.5-.5 1.8-1.3v3.2c0 1.3 1 2.2 2.2 2.2s2.2-.9 2.2-2.2v-2.4c1.3.4 2.8.2 3.9-.9 1.5-1.5 2.2-4.5 1.3-7.3C18.4 4.8 14.8 3.2 11.2 3.8 9.4 4.1 8 4.9 7.2 6z" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"/><circle cx="10" cy="9.6" r="1.25" fill="currentColor"/><path d="M14.2 9.4c1.4-.4 2.6.4 2.6 2 0 1.4-.9 2.4-2 2.7" fill="none" stroke="currentColor" stroke-width="1.95" stroke-linecap="round"/>',
   mongo: '<path d="M12 1.8S5.8 7 5.8 13.2c0 4.2 2.9 7.2 6.2 8.4 3.3-1.2 6.2-4.2 6.2-8.4C18.2 7 12 1.8 12 1.8z" fill="currentColor"/><path d="M12 6v15.6" stroke="var(--c-bg, #fff)" stroke-width="2" stroke-linecap="round"/>',
   redis: '<polygon points="12,2.8 20.8,7.2 12,11.6 3.2,7.2" fill="currentColor"/><path d="M3.2 12l8.8 4.4 8.8-4.4M3.2 16.4l8.8 4.4 8.8-4.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
@@ -46,7 +42,7 @@ const ICONS = {
   sqlite: '<path d="M5.5 3.5h9.5l4.5 4.5v12.5a1.2 1.2 0 0 1-1.2 1.2H5.5a1.2 1.2 0 0 1-1.2-1.2V4.7a1.2 1.2 0 0 1 1.2-1.2z" fill="none" stroke="currentColor" stroke-width="2.05"/><path d="M8.5 13.5l2.5-5.5 4.5 8.5-7-3z" fill="currentColor"/>',
   sql: '<ellipse cx="12" cy="5.8" rx="7.8" ry="3" fill="currentColor"/><path d="M4.2 5.8v12.4c0 1.7 3.5 3 7.8 3s7.8-1.3 7.8-3V5.8M4.2 12c0 1.7 3.5 3 7.8 3s7.8-1.3 7.8-3" fill="none" stroke="currentColor" stroke-width="2.15"/>',
 
-  // --- SYSTEMS: OS & Shell (Row 1) ---
+  // --- SYSTEMS: OS & Shell ---
   linux: '<path d="M12 2.4c-2.8 0-4.6 2.2-4.6 5.2 0 1.8-.9 3.5-2 5.2-1.1 1.6-1.3 3.7-.4 5.2.8 1.3 2.2 1.8 3.5 2.4 1.1.5 2.3.7 3.5.7s2.4-.2 3.5-.7c1.3-.6 2.7-1.1 3.5-2.4.9-1.5.7-3.6-.4-5.2-1.1-1.7-2-3.4-2-5.2 0-3-1.8-5.2-4.6-5.2z" fill="none" stroke="currentColor" stroke-width="2.1"/><path d="M9.8 8.2L12 10l2.2-1.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10.2" cy="6.4" r="1.05" fill="currentColor"/><circle cx="13.8" cy="6.4" r="1.05" fill="currentColor"/>',
   ubuntu: '<circle cx="12" cy="12" r="5.6" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="12" cy="3.6" r="2.2" fill="currentColor"/><circle cx="4.6" cy="16.2" r="2.2" fill="currentColor"/><circle cx="19.4" cy="16.2" r="2.2" fill="currentColor"/>',
   arch: '<path d="M12 2L3.5 21.2c2.9-1.6 5.3-2.5 8.5-2.5s5.6.9 8.5 2.5L12 2zm0 7.8c1.7 2.6 2.4 4.9 2.6 6.8-1.7-.5-3.5-.5-5.2 0 .2-1.9.9-4.2 2.6-6.8z" fill="currentColor"/>',
@@ -54,7 +50,7 @@ const ICONS = {
   wsl: '<rect x="2.5" y="4" width="19" height="16" rx="2.8" fill="none" stroke="currentColor" stroke-width="2.1"/><path d="M6.5 9.2l3.4 2.8-3.4 2.8M11.6 14.8h4" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round"/><circle cx="17.2" cy="9.2" r="1.8" fill="currentColor"/>',
   bash: '<rect x="2.5" y="3.8" width="19" height="16.4" rx="3" fill="currentColor"/><path d="M6.8 9L11 12l-4.2 3M12.4 15.2h4.8" fill="none" stroke="var(--c-bg, #fff)" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>',
 
-  // --- SYSTEMS: Cloud & DevOps (Row 3) ---
+  // --- SYSTEMS: Cloud & DevOps ---
   git: '<path d="M12 1.8L22.2 12 12 22.2 1.8 12 12 1.8z" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linejoin="round"/><path d="M9 6.5l6 6M12 9.5v6.8" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/><circle cx="12" cy="9.5" r="1.8" fill="currentColor"/><circle cx="15" cy="12.5" r="1.8" fill="currentColor"/><circle cx="12" cy="16.3" r="1.8" fill="currentColor"/>',
   docker: '<path d="M2.5 13.2h14.4c2 0 3.5-.9 4.6-2.6-1.3-.4-2.4-.2-3 .4-.4-1.5-1.5-2.4-2.8-2.6-.6 1.1-.4 2.4.2 3.4H2.5c-.2 4.1 2.4 7.2 7.2 7.2 5.6 0 9-2.8 10.1-5.8" fill="currentColor"/><path d="M5.8 9.6h2.3v2.3H5.8zm3 0h2.3v2.3H8.8zm3 0h2.3v2.3h-2.3zm-3-3h2.3v2.3H8.8zm3 0h2.3v2.3h-2.3z" fill="currentColor"/>',
   gha: '<circle cx="6.8" cy="6.8" r="2.6" fill="currentColor"/><circle cx="17.2" cy="17.2" r="2.6" fill="currentColor"/><circle cx="17.2" cy="6.8" r="2.6" fill="currentColor"/><path d="M6.8 9.4v4.2c0 2 1.6 3.6 3.6 3.6h4.2M9.4 6.8h5.2" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round"/>',
@@ -111,16 +107,16 @@ function iconFor(id) {
   return ICONS[id] || ICONS.default;
 }
 
-const SAMUBIN_KEYS = [
-  { key: "s", label: "S", role: "Sequence 01 // S — Press S-A-M-U-B-I-N in any stack to run live DOM cipher decryption" },
-  { key: "a", label: "A", role: "Sequence 02 // A — Sakib Alam Mubin (SA Mubin) hardware signature key" },
-  { key: "m", label: "M", role: "Sequence 03 // M — Mechanical Web Audio switch synthesizer active" },
-  { key: "u", label: "U", role: "Sequence 04 // U — Unified Dual-Mode Architecture (Dev ⇄ Ethical Hacker)" },
-  { key: "b", label: "B", role: "Sequence 05 // B — Builder & Breaker engineering workbench" },
-  { key: "i", label: "I", role: "Sequence 06 // I — Interactive 60fps spring-damper physics rig" },
-  { key: "n", label: "N", role: "Sequence 07 // N — Complete sequence to unlock page cipher!" },
-  { key: "lock", label: "⇄", role: "Persona Flip // Toggle Developer Lab ⇄ Ethical Hacker Darkroom [Shortcut: H]" },
-];
+const SAMUBIN_META = {
+  s: { key: "s", label: "S", role: "Sequence 01 // S — Press S-A-M-U-B-I-N to unlock page cipher" },
+  a: { key: "a", label: "A", role: "Sequence 02 // A — Sakib Alam Mubin (SA Mubin) key" },
+  m: { key: "m", label: "M", role: "Sequence 03 // M — Mechanical switch synth active" },
+  u: { key: "u", label: "U", role: "Sequence 04 // U — Unified Dual-Mode Architecture" },
+  b: { key: "b", label: "B", role: "Sequence 05 // B — Builder & Breaker workbench" },
+  i: { key: "i", label: "I", role: "Sequence 06 // I — Interactive 60fps physics rig" },
+  n: { key: "n", label: "N", role: "Sequence 07 // N — Complete sequence to unlock cipher!" },
+  enter: { key: "lock", label: "ENTER ↵", role: "Enter // Flip Developer Lab ⇄ Ethical Hacker Darkroom [H]" },
+};
 
 export async function initLoadout() {
   const section = document.querySelector("[data-loadout]");
@@ -129,9 +125,13 @@ export async function initLoadout() {
   const rig = section.querySelector("[data-hanging-kb]");
   const chassis = section.querySelector("[data-kb-chassis]");
   const cableSvg = section.querySelector("[data-kb-cables]");
+  const powerMount = section.querySelector("[data-power-mount]");
+  const armGroup = section.querySelector("[data-kb-arm]");
+  const armHand = section.querySelector("[data-arm-hand]");
+  const regrabBtn = section.querySelector("[data-kb-regrab]");
+  const gripLed = section.querySelector("[data-kb-grip-led]");
   const board = section.querySelector("[data-loadout-board]");
-  const oledText = section.querySelector("[data-loadout-oled]");
-  const oledModeTag = section.querySelector("[data-loadout-tag]");
+  const modelTag = section.querySelector("[data-loadout-tag]");
   const titleEl = section.querySelector("[data-loadout-title]");
   const subEl = section.querySelector("[data-loadout-sub]");
   if (!board) return;
@@ -145,11 +145,14 @@ export async function initLoadout() {
   if (!data) return;
 
   let activeLayerIdx = 0;
-  let typeTimer = 0;
   let letterCursor = {};
   let samBuffer = "";
 
-  // --- Hanging Keyboard Spring-Damper Physics ---
+  // --- Two-State Hanging Keyboard Physics:
+  // State A (isLeftHeld = true): Left side gripped by Boy's Hand, Right side on Coiled USB-C Power Cable.
+  // State B (isLeftHeld = false): Left hand let go! Dangles & swings diagonally from the Right-Side Power Cable by real pendulum physics.
+  let isLeftHeld = true;
+  let yankEnergy = 0;
   let x = 0;
   let y = 0;
   let vx = 0;
@@ -162,52 +165,197 @@ export async function initLoadout() {
   let startX = 0;
   let startY = 0;
 
+  function buildCoiledPath(x1, y1, x2, y2) {
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const len = Math.hypot(dx, dy) || 1;
+    const ux = dx / len;
+    const uy = dy / len;
+    const nx = -uy;
+    const ny = ux;
+
+    const startCoil = 0.22;
+    const endCoil = 0.76;
+    const loops = 7;
+    const radius = 5.5;
+    let d = `M ${x1.toFixed(1)} ${(y1 + (y2 - y1) * startCoil).toFixed(1)}`;
+    const steps = loops * 4;
+    for (let i = 1; i <= steps; i++) {
+      const t = startCoil + ((endCoil - startCoil) * i) / steps;
+      const bx = x1 + dx * t;
+      const by = y1 + dy * t;
+      const side = Math.sin((i / 4) * Math.PI * 2) * radius;
+      const px = bx + nx * side;
+      const py = by + ny * side;
+      d += ` L ${px.toFixed(1)} ${py.toFixed(1)}`;
+    }
+    return d;
+  }
+
   function drawHanging() {
     if (!chassis) return;
     const deg = (ang * 180) / Math.PI;
     chassis.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) rotate(${deg.toFixed(2)}deg)`;
 
-    if (cableSvg && rig) {
-      const w = rig.clientWidth || 780;
-      const leftAnchorX = w * 0.24;
-      const rightAnchorX = w * 0.76;
-      const topY = 0;
-      const baseDrop = 44 + y;
-      const leftPortX = leftAnchorX + x - Math.sin(ang) * 16;
-      const leftPortY = baseDrop - Math.sin(ang) * 90;
-      const rightPortX = rightAnchorX + x - Math.sin(ang) * 16;
-      const rightPortY = baseDrop + Math.sin(ang) * 90;
-
-      const dL = `M ${leftAnchorX.toFixed(1)} ${topY} C ${leftAnchorX.toFixed(1)} ${(leftPortY * 0.55).toFixed(1)}, ${leftPortX.toFixed(1)} ${(leftPortY * 0.55).toFixed(1)}, ${leftPortX.toFixed(1)} ${leftPortY.toFixed(1)}`;
-      const dR = `M ${rightAnchorX.toFixed(1)} ${topY} C ${rightAnchorX.toFixed(1)} ${(rightPortY * 0.55).toFixed(1)}, ${rightPortX.toFixed(1)} ${(rightPortY * 0.55).toFixed(1)}, ${rightPortX.toFixed(1)} ${rightPortY.toFixed(1)}`;
-
-      cableSvg.querySelectorAll("[data-cable-l]").forEach((p) => p.setAttribute("d", dL));
-      cableSvg.querySelectorAll("[data-cable-r]").forEach((p) => p.setAttribute("d", dR));
+    if (gripLed) {
+      gripLed.classList.toggle("is-on", isLeftHeld);
     }
+
+    if (cableSvg && rig) {
+      const w = rig.clientWidth || 720;
+      const leftAnchorX = w * 0.21;
+      const rightAnchorX = w * 0.79;
+      const topY = 0;
+      const baseDrop = 76;
+
+      const halfSpan = w * 0.29;
+      const cosA = Math.cos(ang);
+      const sinA = Math.sin(ang);
+
+      // Left grip point & Right USB-C power plug point in rig coordinates
+      const leftPortX = w * 0.5 + x - halfSpan * cosA;
+      const leftPortY = baseDrop + y - halfSpan * sinA;
+
+      const rightPortX = w * 0.5 + x + halfSpan * cosA;
+      const rightPortY = baseDrop + y + halfSpan * sinA;
+
+      if (powerMount) {
+        powerMount.setAttribute("x", (rightAnchorX - 14).toFixed(1));
+        powerMount.setAttribute("y", "0");
+      }
+
+      // 1. Right-Side Coiled Power Cable
+      const dR = `M ${rightAnchorX.toFixed(1)} ${topY + 6} C ${rightAnchorX.toFixed(1)} ${(rightPortY * 0.45).toFixed(1)}, ${rightPortX.toFixed(1)} ${(rightPortY * 0.58).toFixed(1)}, ${rightPortX.toFixed(1)} ${rightPortY.toFixed(1)}`;
+      cableSvg.querySelectorAll("[data-cable-r]").forEach((p) => p.setAttribute("d", dR));
+
+      const coilEl = cableSvg.querySelector("[data-cable-coil]");
+      if (coilEl) {
+        coilEl.setAttribute("d", buildCoiledPath(rightAnchorX, topY + 6, rightPortX, rightPortY));
+      }
+
+      // 2. Left-Side Boy's Arm & Hand
+      if (armGroup) {
+        const handTargetX = isLeftHeld ? leftPortX : leftAnchorX - 6;
+        const handTargetY = isLeftHeld ? leftPortY - 2 : 30;
+
+        const elbowX = (leftAnchorX + handTargetX) * 0.5 - (isLeftHeld ? 8 : 4);
+        const elbowY = handTargetY * 0.52;
+
+        const dArm = `M ${leftAnchorX.toFixed(1)} -6 Q ${elbowX.toFixed(1)} ${elbowY.toFixed(1)} ${handTargetX.toFixed(1)} ${(handTargetY - 8).toFixed(1)}`;
+        cableSvg.querySelectorAll("[data-arm-sleeve]").forEach((p) => p.setAttribute("d", dArm));
+
+        const cuffEl = cableSvg.querySelector("[data-arm-cuff]");
+        if (cuffEl) {
+          cuffEl.setAttribute(
+            "d",
+            `M ${(handTargetX - 17).toFixed(1)} ${(handTargetY - 10).toFixed(1)} L ${(handTargetX + 17).toFixed(1)} ${(handTargetY - 10).toFixed(1)}`
+          );
+        }
+
+        if (armHand) {
+          const handDeg = isLeftHeld ? deg * 0.65 : -8;
+          armHand.setAttribute(
+            "transform",
+            `translate(${handTargetX.toFixed(1)}, ${handTargetY.toFixed(1)}) rotate(${handDeg.toFixed(1)})`
+          );
+        }
+
+        if (regrabBtn) {
+          regrabBtn.style.left = `${leftAnchorX.toFixed(0)}px`;
+        }
+      }
+    }
+  }
+
+  function releaseLeftHand() {
+    if (!isLeftHeld) return;
+    isLeftHeld = false;
+    yankEnergy = 0;
+    rig?.classList.add("is-left-released");
+    if (regrabBtn) regrabBtn.hidden = false;
+    sound.play("flip");
+    // Give realistic downward drop & counter-clockwise torque around the right-side power cable
+    vy += 6.5;
+    vx += 2.2;
+    vang -= 0.045;
+    if (!raf) raf = requestAnimationFrame(stepPhysics);
+  }
+
+  function regrabLeftHand() {
+    if (isLeftHeld) return;
+    isLeftHeld = true;
+    yankEnergy = 0;
+    rig?.classList.remove("is-left-released");
+    if (regrabBtn) regrabBtn.hidden = true;
+    sound.play("auth");
+    vy -= 4.0;
+    vang += 0.03;
+    if (!raf) raf = requestAnimationFrame(stepPhysics);
+  }
+
+  if (regrabBtn) {
+    regrabBtn.addEventListener("click", () => {
+      regrabLeftHand();
+    });
   }
 
   function stepPhysics() {
     raf = 0;
     if (!dragging) {
-      const fx = -x * 0.095;
-      const fy = -y * 0.11;
-      vx = (vx + fx) * 0.84;
-      vy = (vy + fy) * 0.84;
-      x += vx;
-      y += vy;
+      if (isLeftHeld) {
+        // Dual support: Left Hand + Right Power Cable -> Horizontal equilibrium (0, 0, 0deg)
+        const fx = -x * 0.1;
+        const fy = -y * 0.12;
+        vx = (vx + fx) * 0.83;
+        vy = (vy + fy) * 0.83;
+        x += vx;
+        y += vy;
 
-      const targetAng = Math.max(-0.08, Math.min(0.08, x * 0.0009 + vx * 0.003));
-      vang = (vang + (targetAng - ang) * 0.15) * 0.82;
-      ang += vang;
+        const targetAng = Math.max(-0.09, Math.min(0.09, x * 0.001 + vx * 0.003));
+        vang = (vang + (targetAng - ang) * 0.16) * 0.82;
+        ang += vang;
+        yankEnergy *= 0.92;
+      } else {
+        // Single-Cable Pendulum Physics!
+        // Hanging ONLY from the Right-Side Power Cable:
+        // Gravity pulls the left side down, settling around ang = -0.36 rad (-20.6 deg), y = +44px, x = +20px
+        const restX = 20;
+        const restY = 44;
+        const restAng = -0.36;
+
+        const fx = (restX - x) * 0.065 + Math.sin(ang - restAng) * 1.4;
+        const fy = (restY - y) * 0.075;
+        vx = (vx + fx) * 0.89;
+        vy = (vy + fy) * 0.88;
+        x += vx;
+        y += vy;
+
+        // Pendulum restoring torque from the right-side cable tension + horizontal swing coupling
+        const torque = (restAng - ang) * 0.085 - vx * 0.0022;
+        vang = (vang + torque) * 0.91;
+        ang += vang;
+      }
     }
+
     drawHanging();
-    const energy = Math.abs(vx) + Math.abs(vy) + Math.abs(vang) * 20 + Math.abs(x) * 0.02 + Math.abs(y) * 0.02;
-    if (dragging || energy > 0.02) {
+
+    const restX = isLeftHeld ? 0 : 20;
+    const restY = isLeftHeld ? 0 : 44;
+    const restAng = isLeftHeld ? 0 : -0.36;
+    const energy =
+      Math.abs(vx) +
+      Math.abs(vy) +
+      Math.abs(vang) * 25 +
+      Math.abs(x - restX) * 0.03 +
+      Math.abs(y - restY) * 0.03 +
+      Math.abs(ang - restAng) * 2;
+
+    if (dragging || energy > 0.018) {
       raf = requestAnimationFrame(stepPhysics);
     } else {
-      x = 0;
-      y = 0;
-      ang = 0;
+      x = restX;
+      y = restY;
+      ang = restAng;
       drawHanging();
     }
   }
@@ -216,7 +364,18 @@ export async function initLoadout() {
     if (reduceMotion) return;
     vy += downForce;
     vx += colRatio * 1.1;
-    vang += colRatio * 0.008;
+    if (isLeftHeld) {
+      vang += colRatio * 0.009;
+      // Rapid hard tapping on the left side also builds strain
+      if (colRatio < -0.2) yankEnergy += 0.16;
+      if (yankEnergy > 1.35) {
+        releaseLeftHand();
+        return;
+      }
+    } else {
+      // When hanging from right power cable only, pressing keys creates stronger pendulum torque
+      vang += (colRatio - 0.45) * 0.018;
+    }
     if (!raf) raf = requestAnimationFrame(stepPhysics);
   }
 
@@ -238,13 +397,40 @@ export async function initLoadout() {
 
     addEventListener("pointermove", (e) => {
       if (!dragging || e.pointerId !== pointerId) return;
-      const dx = Math.max(-56, Math.min(56, e.clientX - startX));
-      const dy = Math.max(-16, Math.min(48, e.clientY - startY));
-      vx = (dx - x) * 0.4;
-      vy = (dy - y) * 0.4;
-      x = dx;
-      y = dy;
-      ang = Math.max(-0.06, Math.min(0.06, dx * 0.0008));
+      const rawDx = e.clientX - startX;
+      const rawDy = e.clientY - startY;
+
+      if (isLeftHeld) {
+        const dx = Math.max(-72, Math.min(72, rawDx));
+        const dy = Math.max(-24, Math.min(72, rawDy));
+        const speed = Math.hypot(dx - x, dy - y);
+        vx = (dx - x) * 0.45;
+        vy = (dy - y) * 0.45;
+        x = dx;
+        y = dy;
+        ang = Math.max(-0.14, Math.min(0.12, dx * 0.0012 - dy * 0.0018));
+
+        // accumulate tug / yank energy ("beshi tan deya ba onek tanatani kora hobe")
+        yankEnergy += speed * 0.018;
+        const pullDist = Math.hypot(dx, Math.max(0, dy));
+        if (pullDist > 48 || dy > 42 || yankEnergy > 1.25) {
+          releaseLeftHand();
+        }
+      } else {
+        // Dragging while dangling on the right power cable
+        const dx = Math.max(-85, Math.min(85, rawDx));
+        const dy = Math.max(-18, Math.min(92, rawDy));
+        vx = (dx - x) * 0.45;
+        vy = (dy - y) * 0.45;
+        x = dx;
+        y = dy;
+        ang = -0.36 + dx * 0.0025 + (dy - 44) * -0.003;
+
+        // If user lifts the keyboard back up near the boy's left hand, he re-grabs it!
+        if (dy < 6 && Math.abs(dx) < 28) {
+          regrabLeftHand();
+        }
+      }
       drawHanging();
     });
 
@@ -260,120 +446,144 @@ export async function initLoadout() {
     addEventListener("resize", drawHanging, { passive: true });
   }
 
-  function typeOled(str, prefixTag = null) {
-    if (!oledText) return;
-    clearInterval(typeTimer);
-    if (oledModeTag && prefixTag) oledModeTag.textContent = prefixTag;
+  function createTechCap(item, layerMod, isHack, colRatio) {
+    const detailText = item.detail || "";
+    const cap = document.createElement("button");
+    cap.type = "button";
+    cap.className = `kb-cap kb-cap--icon kb-cap--${item.tier}`;
+    cap.dataset.itemId = item.id;
+    cap.dataset.letter = item.name[0].toLowerCase();
+    cap.dataset.tip = `${item.name} · ${item.short}`;
+    cap.setAttribute("aria-pressed", "false");
+    cap.setAttribute("aria-label", `${item.name} — ${item.tier} — ${detailText}`);
+    cap.innerHTML = `
+      <svg class="kb-cap-ico" viewBox="0 0 24 24" aria-hidden="true">${iconFor(item.id)}</svg>
+    `;
 
-    if (reduceMotion) {
-      oledText.textContent = str;
-      return;
-    }
-    oledText.textContent = "";
-    let i = 0;
-    typeTimer = setInterval(() => {
-      i += 3;
-      oledText.textContent = str.slice(0, i);
-      if (i >= str.length) clearInterval(typeTimer);
-    }, 11);
-  }
-
-  function buildTechCapRow(items, layerMod, isHack, rowIdx, isFlipping) {
-    const rowEl = document.createElement("div");
-    rowEl.className = "kb-caps kb-caps--tech";
-    if (isFlipping && !reduceMotion) {
-      rowEl.classList.add("is-flipping");
-      setTimeout(() => sound.play("flip"), rowIdx * 55);
-      setTimeout(() => rowEl.classList.remove("is-flipping"), 500 + rowIdx * 55);
-    }
-
-    items.forEach((item, cIdx) => {
-      const detailText = item.detail || "";
-      const cap = document.createElement("button");
-      cap.type = "button";
-      cap.className = `kb-cap kb-cap--icon kb-cap--${item.tier}`;
-      cap.dataset.itemId = item.id;
-      cap.dataset.letter = item.name[0].toLowerCase();
-      cap.dataset.tip = item.name;
-      cap.setAttribute("aria-pressed", "false");
-      cap.setAttribute("aria-label", `${item.name} — ${item.tier} — ${detailText}`);
-      cap.innerHTML = `
-        <svg class="kb-cap-ico" viewBox="0 0 24 24" aria-hidden="true">${iconFor(item.id)}</svg>
-      `;
-
-      const inspect = (fromClick = false) => {
-        board.querySelectorAll(".kb-cap[aria-pressed='true']").forEach((el) => {
-          el.setAttribute("aria-pressed", "false");
-        });
-        cap.setAttribute("aria-pressed", "true");
-        if (fromClick) {
-          sound.play("down");
-          setTimeout(() => sound.play("up"), 70);
-          const colRatio = (cIdx - (items.length - 1) / 2) / 3;
-          impulseKeyboard(colRatio, 3.0);
-        }
-        const tierName =
-          item.tier === "daily" ? "Daily Driver" : item.tier === "proficient" ? "Proficient" : "Familiar";
-        const prefix = isHack ? `ARSENAL // ${layerMod}` : `LOADOUT // ${layerMod}`;
-        typeOled(`${item.name} · ${tierName} · ${detailText}`, prefix);
-      };
-
-      cap.addEventListener("pointerenter", () => inspect(false));
-      cap.addEventListener("focus", () => inspect(false));
-      cap.addEventListener("click", () => inspect(true));
-
-      rowEl.appendChild(cap);
-    });
-
-    return rowEl;
-  }
-
-  function buildSamubinCapRow(layerMod, isFlipping) {
-    const rowEl = document.createElement("div");
-    rowEl.className = "kb-caps kb-caps--sam";
-    if (isFlipping && !reduceMotion) {
-      rowEl.classList.add("is-flipping");
-      setTimeout(() => rowEl.classList.remove("is-flipping"), 520);
-    }
-
-    SAMUBIN_KEYS.forEach((item, idx) => {
-      const cap = document.createElement("button");
-      cap.type = "button";
-      cap.className = `kb-cap kb-cap--sam ${item.key === "lock" ? "kb-cap--mode" : ""}`;
-      cap.dataset.samKey = item.key;
-      cap.dataset.tip = item.key === "lock" ? "Flip Mode [H]" : `Key ${item.label} · SAMUBIN`;
-      cap.setAttribute("aria-label", item.role);
-      cap.innerHTML = `<span class="kb-sam-char">${item.label}</span>`;
-
-      const inspect = () => {
-        typeOled(item.role, `${layerMod} // SAM-08`);
-      };
-      cap.addEventListener("pointerenter", inspect);
-      cap.addEventListener("focus", inspect);
-      cap.addEventListener("click", () => {
+    const inspect = (fromClick = false) => {
+      board.querySelectorAll(".kb-cap[aria-pressed='true']").forEach((el) => {
+        el.setAttribute("aria-pressed", "false");
+      });
+      cap.setAttribute("aria-pressed", "true");
+      if (modelTag) {
+        modelTag.textContent = `${isHack ? "ARSENAL" : "SAM-60"} // ${layerMod} · ${item.name.toUpperCase()}`;
+      }
+      if (fromClick) {
         sound.play("down");
-        setTimeout(() => sound.play("up"), 75);
-        cap.classList.add("is-down");
-        setTimeout(() => cap.classList.remove("is-down"), 140);
-        const colRatio = (idx - 3.5) / 3.5;
-        impulseKeyboard(colRatio, 3.6);
-        inspect();
+        setTimeout(() => sound.play("up"), 70);
+        impulseKeyboard(colRatio, 3.0);
+      }
+    };
 
-        if (item.key === "lock") {
-          toggleMode({ animate: true });
-        } else {
-          samBuffer = (samBuffer + item.key).slice(-10);
-          if (samBuffer.endsWith("samubin")) {
-            samBuffer = "";
-            triggerSamubinCipher();
-          }
+    cap.addEventListener("pointerenter", () => inspect(false));
+    cap.addEventListener("focus", () => inspect(false));
+    cap.addEventListener("click", () => inspect(true));
+    return cap;
+  }
+
+  function createSamCap(metaKey, layerMod, colRatio, isWideEnter = false) {
+    const item = SAMUBIN_META[metaKey];
+    const cap = document.createElement("button");
+    cap.type = "button";
+    cap.className = `kb-cap kb-cap--sam ${isWideEnter ? "kb-cap--enter" : ""}`;
+    cap.dataset.samKey = item.key;
+    cap.dataset.tip = isWideEnter ? "ENTER · Flip Mode [H]" : `Key ${item.label} · SAMUBIN`;
+    cap.setAttribute("aria-label", item.role);
+    cap.innerHTML = `<span class="kb-sam-char">${item.label}</span>`;
+
+    cap.addEventListener("pointerenter", () => {
+      if (modelTag) modelTag.textContent = `${layerMod} // KEY [${item.label}]`;
+    });
+    cap.addEventListener("click", () => {
+      sound.play("down");
+      setTimeout(() => sound.play("up"), 75);
+      cap.classList.add("is-down");
+      setTimeout(() => cap.classList.remove("is-down"), 140);
+      impulseKeyboard(colRatio, 3.6);
+
+      if (item.key === "lock") {
+        toggleMode({ animate: true });
+      } else {
+        samBuffer = (samBuffer + item.key).slice(-10);
+        if (samBuffer.endsWith("samubin")) {
+          samBuffer = "";
+          triggerSamubinCipher();
+        }
+      }
+    });
+    return cap;
+  }
+
+  // Build the 3-row compact keyboard matrix with SCRAMBLED S-A-M-U-B-I-N keys woven across all 3 rows:
+  // Wave order from left to right:
+  //   Col 1 (Middle Row 2): 'S' (1st)
+  //   Col 2 (Top Row 1):    'A' (2nd)
+  //   Col 3 (Bottom Row 3): 'M' (3rd)
+  //   Col 4 (Middle Row 2): 'U' (4th)
+  //   Col 5 (Top Row 1):    'B' (5th)
+  //   Col 5 (Bottom Row 3): 'I' (6th)
+  //   Col 6 (Middle Row 2): 'N' (7th)
+  //   Col 6-7 (Bottom Row 3, 2u wide): 'ENTER ↵'
+  function buildScrambledMatrix(techItems, layerMod, isHack, isFlipping) {
+    const matrixEl = document.createElement("div");
+    matrixEl.className = "kb-matrix";
+
+    // Row 1 (Top Row, 7u): [t0, 'A', t1, t2, 'B', t3, t4]
+    const row1Spec = [
+      { type: "tech", item: techItems[0] },
+      { type: "sam", key: "a" },
+      { type: "tech", item: techItems[1] },
+      { type: "tech", item: techItems[2] },
+      { type: "sam", key: "b" },
+      { type: "tech", item: techItems[3] },
+      { type: "tech", item: techItems[4] },
+    ];
+
+    // Row 2 (Middle Row, 7u): ['S', t5, t6, 'U', t7, 'N', t8]
+    const row2Spec = [
+      { type: "sam", key: "s" },
+      { type: "tech", item: techItems[5] },
+      { type: "tech", item: techItems[6] },
+      { type: "sam", key: "u" },
+      { type: "tech", item: techItems[7] },
+      { type: "sam", key: "n" },
+      { type: "tech", item: techItems[8] },
+    ];
+
+    // Row 3 (Bottom Row, 7u): [t9, t10, 'M', t11, 'I', 'ENTER (2u)']
+    const row3Spec = [
+      { type: "tech", item: techItems[9] },
+      { type: "tech", item: techItems[10] },
+      { type: "sam", key: "m" },
+      { type: "tech", item: techItems[11] },
+      { type: "sam", key: "i" },
+      { type: "enter", key: "enter" },
+    ];
+
+    [row1Spec, row2Spec, row3Spec].forEach((spec, rIdx) => {
+      const rowEl = document.createElement("div");
+      rowEl.className = "kb-caps";
+      if (isFlipping && !reduceMotion) {
+        rowEl.classList.add("is-flipping");
+        setTimeout(() => sound.play("flip"), rIdx * 55);
+        setTimeout(() => rowEl.classList.remove("is-flipping"), 500 + rIdx * 55);
+      }
+
+      spec.forEach((slot, cIdx) => {
+        const colRatio = (cIdx - 3) / 3;
+        if (slot.type === "tech" && slot.item) {
+          rowEl.appendChild(createTechCap(slot.item, layerMod, isHack, colRatio));
+        } else if (slot.type === "sam") {
+          rowEl.appendChild(createSamCap(slot.key, layerMod, colRatio, false));
+        } else if (slot.type === "enter") {
+          rowEl.appendChild(createSamCap("enter", layerMod, 0.85, true));
         }
       });
 
-      rowEl.appendChild(cap);
+      matrixEl.appendChild(rowEl);
     });
 
-    return rowEl;
+    return matrixEl;
   }
 
   function renderBoard(mode, { flipping = false, layerIndex = activeLayerIdx } = {}) {
@@ -387,20 +597,13 @@ export async function initLoadout() {
 
     if (titleEl) titleEl.textContent = modeData.title;
     if (subEl) subEl.textContent = modeData.subtitle;
-
-    const firstTool = currentLayer.topRow?.[0];
-    const defaultPrefix = isHack ? `ARSENAL // ${currentLayer.mod}` : `LOADOUT // ${currentLayer.mod}`;
-    if (firstTool) {
-      const tierName =
-        firstTool.tier === "daily" ? "Daily Driver" : firstTool.tier === "proficient" ? "Proficient" : "Familiar";
-      typeOled(`${firstTool.name} · ${tierName} · ${firstTool.detail}`, defaultPrefix);
-    } else {
-      typeOled(modeData.defaultOled, defaultPrefix);
+    if (modelTag) {
+      modelTag.textContent = `${isHack ? "ARSENAL" : "SAM-60"} // ${currentLayer.mod}`;
     }
 
     board.innerHTML = "";
 
-    // 1. Left Bank: 3 Merged Stack Selector Buttons
+    // 1. Left Bank: 3 Merged Stack Selector Keys (1.5u modifier keys)
     const leftBank = document.createElement("div");
     leftBank.className = "kb-layer-bank";
     leftBank.setAttribute("role", "tablist");
@@ -438,13 +641,9 @@ export async function initLoadout() {
       leftBank.appendChild(modBtn);
     });
 
-    // 2. Right Matrix: 3 Compact Rows (Row 1: 6 Tech Icons, Row 2: S-A-M-U-B-I-N + ⇄, Row 3: 6 Tech Icons)
-    const rightMatrix = document.createElement("div");
-    rightMatrix.className = "kb-matrix";
-
-    rightMatrix.appendChild(buildTechCapRow(currentLayer.topRow || [], currentLayer.mod, isHack, 0, flipping));
-    rightMatrix.appendChild(buildSamubinCapRow(currentLayer.mod, flipping));
-    rightMatrix.appendChild(buildTechCapRow(currentLayer.bottomRow || [], currentLayer.mod, isHack, 2, flipping));
+    // 2. Right Matrix: 12 Tech Icons + Scrambled S-A-M-U-B-I-N + 2u Wide ENTER ↵
+    const allTwelveTech = [...(currentLayer.topRow || []), ...(currentLayer.bottomRow || [])];
+    const rightMatrix = buildScrambledMatrix(allTwelveTech, currentLayer.mod, isHack, flipping);
 
     board.appendChild(leftBank);
     board.appendChild(rightMatrix);
@@ -454,18 +653,27 @@ export async function initLoadout() {
     requestAnimationFrame(drawHanging);
   }
 
-  // Real physical keyboard integration:
-  // Typing S-A-M-U-B-I-N depresses the embedded SAMUBIN keycaps in the active stack;
-  // pressing 1/2/3 switches stack layers; typing any letter highlights matching tech keycap!
+  // Physical keyboard integration
   addEventListener("keydown", (e) => {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     const tag = e.target?.tagName;
     if (tag === "INPUT" || tag === "TEXTAREA" || e.target?.isContentEditable) return;
     const ch = (e.key || "").toLowerCase();
-    if (!/^[a-z0-9]$/.test(ch) || ch === "h") return;
 
     const r = section.getBoundingClientRect();
     if (r.bottom < -100 || r.top > innerHeight + 100) return;
+
+    if (ch === "enter") {
+      const enterCap = board.querySelector(".kb-cap--enter");
+      if (enterCap) {
+        enterCap.classList.add("is-down");
+        setTimeout(() => enterCap.classList.remove("is-down"), 145);
+        enterCap.click();
+      }
+      return;
+    }
+
+    if (!/^[a-z0-9]$/.test(ch) || ch === "h") return;
 
     if (ch === "1" || ch === "2" || ch === "3") {
       const targetIdx = Number(ch) - 1;
@@ -477,7 +685,7 @@ export async function initLoadout() {
       return;
     }
 
-    // 1. Depress embedded S-A-M-U-B-I-N key if it matches
+    // 1. Depress scrambled S-A-M-U-B-I-N key if it matches
     const samCap = board.querySelector(`.kb-cap--sam[data-sam-key="${ch}"]`);
     if (samCap) {
       samCap.classList.add("is-down");
@@ -503,8 +711,8 @@ export async function initLoadout() {
 
   renderBoard(getMode(), { flipping: false, layerIndex: 0 });
   if (!reduceMotion) {
-    vy = -3.2;
-    ang = 0.016;
+    vy = -3.0;
+    ang = 0.015;
     raf = requestAnimationFrame(stepPhysics);
   }
 }

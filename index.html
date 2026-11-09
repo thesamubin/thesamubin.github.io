@@ -230,25 +230,70 @@
         </div>
 
         <div class="hanging-kb-rig" data-hanging-kb>
+          <!-- Right-side Coiled USB-C Power Cable & Left-side Arm SVG Stage -->
           <svg class="kb-cables" data-kb-cables aria-hidden="true">
-            <path class="cable-shadow" data-cable-l d="" />
-            <path class="cable-body" data-cable-l d="" />
-            <path class="cable-spec" data-cable-l d="" />
+            <!-- Ceiling power outlet mount on right -->
+            <rect class="power-mount" data-power-mount x="0" y="0" width="28" height="10" rx="3" />
+            <!-- Right-side Power Cable (shadow, outer insulated jacket, coiled spiral core, highlight) -->
             <path class="cable-shadow" data-cable-r d="" />
             <path class="cable-body" data-cable-r d="" />
+            <path class="cable-coil" data-cable-coil d="" />
             <path class="cable-spec" data-cable-r d="" />
+
+            <!-- Left-side Boy's Arm & Hand (holds the left side of the keyboard until pulled hard!) -->
+            <g class="kb-arm-group" data-kb-arm>
+              <path class="arm-sleeve-shadow" data-arm-sleeve d="" />
+              <path class="arm-sleeve" data-arm-sleeve d="" />
+              <path class="arm-cuff" data-arm-cuff d="" />
+              <g class="arm-hand" data-arm-hand>
+                <!-- Palm & thumb base -->
+                <rect class="hand-palm" x="-20" y="-12" width="40" height="24" rx="11" />
+                <!-- Open fingers shown when released -->
+                <g class="hand-open-fingers">
+                  <rect x="-18" y="6" width="8" height="15" rx="4" />
+                  <rect x="-8" y="8" width="8" height="17" rx="4" />
+                  <rect x="2" y="8" width="8" height="16" rx="4" />
+                  <rect x="12" y="5" width="7" height="13" rx="3.5" />
+                </g>
+              </g>
+            </g>
           </svg>
 
-          <div class="kb-shell" data-kb-chassis title="Drag bezel to swing · Click any icon or S-A-M-U-B-I-N key">
-            <div class="kb-port kb-port--left" aria-hidden="true"></div>
-            <div class="kb-port kb-port--right" aria-hidden="true"></div>
+          <!-- Interactive Re-Grab Button when the left hand lets go -->
+          <button class="kb-hand-btn" type="button" data-kb-regrab hidden aria-label="Click hand to grab keyboard again" title="Click to grab the keyboard back!">
+            <span>Grab Back ✋</span>
+          </button>
 
-            <div class="kb-oled" role="status" aria-live="polite">
-              <div class="oled-main">
-                <span class="oled-dot" aria-hidden="true"></span>
-                <span class="oled-tag" data-loadout-tag>LOADOUT // LAB</span>
-                <span class="oled-text" data-loadout-oled>Hover or press any icon switch — or hit S-A-M-U-B-I-N in the center row.</span>
-              </div>
+          <!-- Compact 60% Physical Mechanical Keyboard Case (No OLED bar) -->
+          <div class="kb-shell" data-kb-chassis title="Pull hard to slip from hand · Drag to swing on the power cable!">
+            <!-- Left Bezel: Boy's Gripping Fingers wrapped over the top-left edge -->
+            <div class="kb-grip-fingers" data-kb-fingers aria-hidden="true">
+              <span class="grip-thumb"></span>
+              <span class="grip-finger"></span>
+              <span class="grip-finger"></span>
+              <span class="grip-finger"></span>
+              <span class="grip-finger"></span>
+            </div>
+
+            <!-- Right Bezel: Real Metal USB-C / Aviator Power Connector Plug -->
+            <div class="kb-usb-plug" aria-hidden="true">
+              <span class="usb-boot"></span>
+              <span class="usb-collar"></span>
+              <span class="usb-housing">
+                <span class="usb-led"></span>
+              </span>
+            </div>
+
+            <!-- Subtle Top Hardware Bezel Trim (Screws + 3 Tiny Status LEDs) -->
+            <div class="kb-bezel-top" aria-hidden="true">
+              <span class="kb-screw"></span>
+              <span class="kb-model-etch" data-loadout-tag>SAM-60 // CORE</span>
+              <span class="kb-leds">
+                <span class="kb-ind is-on" title="Power Connected"><i></i>PWR</span>
+                <span class="kb-ind is-on" title="Active Stack Layer"><i></i>LYR</span>
+                <span class="kb-ind" data-kb-grip-led title="Hand Grip Status"><i></i>GRIP</span>
+              </span>
+              <span class="kb-screw"></span>
             </div>
 
             <div class="kb-plate" data-loadout-board></div>

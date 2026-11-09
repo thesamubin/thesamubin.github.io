@@ -1169,12 +1169,13 @@ html[data-mode="hack"] .cap--accent {
   background: var(--cap-fam-bg);
 }
 
-/* Custom Hanging Keyboard Rig & Chassis Enclosure (Compact 60% 3-Row Form Factor) */
+/* Custom Hanging Keyboard Rig: Left Held by Boy's Hand + Right Coiled USB-C Power Cable */
 .hanging-kb-rig {
   position: relative;
-  max-width: 780px;
+  max-width: 740px;
   margin-inline: auto;
-  padding-top: 44px;
+  padding-top: 76px;
+  padding-bottom: 56px;
 }
 
 .kb-cables {
@@ -1182,119 +1183,327 @@ html[data-mode="hack"] .cap--accent {
   top: 0;
   left: 0;
   width: 100%;
-  height: 92px;
+  height: 145px;
   overflow: visible;
   pointer-events: none;
   z-index: 1;
 }
 
+.power-mount {
+  fill: #2d3139;
+  stroke: rgba(0, 0, 0, 0.45);
+  stroke-width: 1.5px;
+}
+
+.cable-coil {
+  fill: none;
+  stroke: #1c1e24;
+  stroke-width: 5.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+html[data-mode="hack"] .cable-coil {
+  stroke: #381418;
+}
+
+/* Left-Side Boy's Arm & Hand in SVG */
+.arm-sleeve-shadow {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.25);
+  stroke-width: 34px;
+  stroke-linecap: round;
+  transform: translate(3px, 5px);
+}
+
+.arm-sleeve {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 31px;
+  stroke-linecap: round;
+}
+
+html[data-mode="hack"] .arm-sleeve {
+  stroke: #241013;
+}
+
+.arm-cuff {
+  fill: none;
+  stroke: #1e2128;
+  stroke-width: 9px;
+  stroke-linecap: round;
+}
+
+html[data-mode="hack"] .arm-cuff {
+  stroke: var(--accent);
+}
+
+.hand-palm {
+  fill: #ebb488;
+  stroke: #b57d52;
+  stroke-width: 2px;
+}
+
+.hand-open-fingers rect {
+  fill: #ebb488;
+  stroke: #b57d52;
+  stroke-width: 1.6px;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 180ms var(--ease-out), transform 180ms var(--ease-out);
+}
+
+.hanging-kb-rig.is-left-released .hand-open-fingers rect {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Re-grab button when keyboard slips from hand */
+.kb-hand-btn {
+  position: absolute;
+  top: 46px;
+  left: 21%;
+  translate: -50% 0;
+  z-index: 12;
+  appearance: none;
+  border: 1px solid var(--accent);
+  background: var(--oled-bg);
+  color: var(--oled-ink);
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.28rem 0.65rem;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
+  transition: transform 150ms var(--ease-out);
+}
+
+.kb-hand-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Real Compact 60% Mechanical Keyboard CNC Aluminum / Polycarbonate Case */
 .kb-shell {
   position: relative;
   z-index: 2;
+  padding: 12px 16px 18px;
   border-radius: 22px;
-  background: var(--surface);
-  border: 1px solid var(--line);
+  background: linear-gradient(180deg, #353942 0%, #23262e 55%, #181a20 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    0 28px 54px -20px rgba(0, 0, 0, 0.42),
-    0 6px 16px -4px rgba(0, 0, 0, 0.18);
+    inset 0 2px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -6px 0 #101217,
+    0 30px 56px -18px rgba(0, 0, 0, 0.62),
+    0 8px 20px -4px rgba(0, 0, 0, 0.32);
   overflow: visible;
-  transform-origin: 50% 0;
+  transform-origin: 79% 0;
   will-change: transform;
   cursor: grab;
+  user-select: none;
+}
+
+html[data-mode="hack"] .kb-shell {
+  background: linear-gradient(180deg, #281316 0%, #170b0d 55%, #0e0608 100%);
+  border-color: rgba(229, 57, 45, 0.28);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 120, 110, 0.18),
+    inset 0 -6px 0 #070304,
+    0 32px 60px -18px rgba(0, 0, 0, 0.82);
 }
 
 .kb-shell.is-dragging {
   cursor: grabbing;
 }
 
-.kb-port {
+/* Boy's Gripping Fingers wrapped over the top-left keyboard bezel */
+.kb-grip-fingers {
   position: absolute;
-  top: -10px;
-  width: 34px;
-  height: 11px;
-  border-radius: 5px 5px 2px 2px;
-  background: linear-gradient(180deg, #b8bec8, #6c727d);
-  border: 1px solid rgba(0, 0, 0, 0.35);
+  top: -11px;
+  left: 21%;
+  translate: -50% 0;
+  z-index: 6;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  pointer-events: none;
+  transition: opacity 160ms var(--ease-out), transform 180ms var(--ease-out);
+}
+
+.hanging-kb-rig.is-left-released .kb-grip-fingers {
+  opacity: 0;
+  transform: translateY(-16px) scale(0.85);
+}
+
+.grip-thumb {
+  width: 12px;
+  height: 18px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #f2be94, #d99b6c);
+  border: 1.5px solid #9e653c;
+  transform: rotate(-18deg) translateY(3px);
+  margin-right: 2px;
+}
+
+.grip-finger {
+  width: 10px;
+  height: 22px;
+  border-radius: 5px;
+  background: linear-gradient(180deg, #f4c299, #d79868);
+  border: 1.5px solid #9e653c;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.38);
+}
+
+.grip-finger:nth-child(3) {
+  height: 24px;
+}
+.grip-finger:nth-child(4) {
+  height: 23px;
+}
+.grip-finger:nth-child(5) {
+  height: 19px;
+}
+
+/* Right-Side Metal USB-C / Aviator Power Connector Plug */
+.kb-usb-plug {
+  position: absolute;
+  top: -28px;
+  left: 79%;
+  translate: -50% 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   pointer-events: none;
 }
 
-.kb-port--left {
-  left: 24%;
-  translate: -50% 0;
+.usb-boot {
+  width: 12px;
+  height: 9px;
+  border-radius: 3px 3px 0 0;
+  background: #1b1d22;
 }
 
-.kb-port--right {
-  left: 76%;
-  translate: -50% 0;
+.usb-collar {
+  width: 18px;
+  height: 6px;
+  background: linear-gradient(90deg, #525761, #a3a9b5 50%, #525761);
+  border: 1px solid #23262d;
 }
 
-/* Top OLED Telemetry Readout Strip */
-.kb-oled {
+.usb-housing {
+  width: 26px;
+  height: 14px;
+  border-radius: 4px 4px 2px 2px;
+  background: linear-gradient(90deg, #7d838f, #cfd4de 48%, #686e7a);
+  border: 1px solid #20232a;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45);
+}
+
+.usb-led {
+  width: 10px;
+  height: 3px;
+  border-radius: 2px;
+  background: #4ade80;
+}
+
+html[data-mode="hack"] .usb-led {
+  background: var(--accent);
+}
+
+/* Subtle Top Hardware Bezel Bar (Hex Screws + Engraved Model + 3 Tiny Status LEDs) */
+.kb-bezel-top {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0.85rem 1.25rem;
-  border-radius: 21px 21px 0 0;
-  background: var(--oled-bg);
-  color: var(--oled-ink);
-  border-bottom: 1px solid var(--line);
+  padding: 2px 8px 10px;
   font-family: var(--mono);
-  font-size: 0.82rem;
-  font-variant-numeric: tabular-nums;
+  font-size: 0.72rem;
+  color: #d6dbe6;
 }
 
-.oled-main {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  min-height: 1.4rem;
-}
-
-.oled-dot {
+.kb-screw {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--accent);
-  flex-shrink: 0;
+  background: radial-gradient(circle, #181a20 35%, #5b606b 40%, #2c3038 100%);
+  border: 1px solid rgba(0, 0, 0, 0.6);
 }
 
-.oled-tag {
+.kb-model-etch {
   font-weight: 700;
-  color: var(--oled-muted);
-  padding-right: 0.5rem;
-  border-right: 1px solid rgba(255, 255, 255, 0.16);
+  letter-spacing: 0.08em;
+  color: #e4e8f0;
 }
 
-.oled-text {
-  font-weight: 600;
-  color: var(--oled-ink);
+.kb-leds {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
 }
 
-/* Recessed Switch Plate: 2-Column Layout (3 Merged Stack Buttons on Left + 3-Row Key Matrix on Right) */
+.kb-ind {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  color: #d2d7e2;
+}
+
+.kb-ind i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #555b69;
+  display: inline-block;
+}
+
+.kb-ind.is-on {
+  color: #f2f5fa;
+}
+
+.kb-ind.is-on i {
+  background: #4ade80;
+}
+
+html[data-mode="hack"] .kb-ind.is-on i {
+  background: var(--accent);
+}
+
+/* Recessed Switch Plate: 2-Column Layout (1.5u Left Modifiers + 7u 3-Row Matrix) */
 .kb-plate {
-  padding: 18px;
-  border-radius: 0 0 21px 21px;
-  background: var(--plate);
+  padding: 14px;
+  border-radius: 14px;
+  background: #14161b;
+  box-shadow:
+    inset 0 3px 7px rgba(0, 0, 0, 0.75),
+    0 1px 0 rgba(255, 255, 255, 0.08);
   display: grid;
-  grid-template-columns: 164px minmax(0, 1fr);
-  gap: 0.85rem;
+  grid-template-columns: 148px minmax(0, 1fr);
+  gap: 8px;
   align-items: stretch;
   perspective: 1100px;
+}
+
+html[data-mode="hack"] .kb-plate {
+  background: #090405;
 }
 
 .kb-layer-bank {
   display: grid;
   grid-template-rows: repeat(3, 1fr);
-  gap: 0.65rem;
+  gap: 8px;
 }
 
 .kb-matrix {
   display: grid;
   grid-template-rows: repeat(3, 1fr);
-  gap: 0.65rem;
+  gap: 8px;
   transform-style: preserve-3d;
 }
 
@@ -1315,7 +1524,7 @@ html[data-mode="hack"] .cap--accent {
   }
 }
 
-/* Left-hand Merged Stack Selector Keys (01 · CORE, 02 · AI & DATA, 03 · SYSTEMS) */
+/* Left-hand 1.5u Modifier Keys (01 · CORE, 02 · AI & DATA, 03 · SYSTEMS) */
 .kb-mod {
   appearance: none;
   border: 0;
@@ -1325,22 +1534,22 @@ html[data-mode="hack"] .cap--accent {
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 0.62rem 0.82rem 0.82rem;
-  border-radius: 12px;
+  padding: 0.55rem 0.72rem 0.78rem;
+  border-radius: 10px;
   text-align: left;
   color: var(--cap-prof-ink);
   background: linear-gradient(180deg, var(--cap-prof-top), var(--cap-prof-bg));
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
     inset 0 -5px 0 var(--cap-prof-side),
-    0 3px 6px rgba(0, 0, 0, 0.3);
+    0 3px 6px rgba(0, 0, 0, 0.45);
   transition: transform 75ms var(--ease-out), box-shadow 75ms;
 }
 
 .kb-mod-top {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.4rem;
 }
 
 .kb-mod:hover {
@@ -1354,7 +1563,7 @@ html[data-mode="hack"] .cap--accent {
   color: var(--accent-ink);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    inset 0 -2px 0 var(--accent-side);
+    inset 0 -3px 0 var(--accent-side);
 }
 
 html[data-mode="hack"] .kb-mod:active,
@@ -1363,8 +1572,8 @@ html[data-mode="hack"] .kb-mod[aria-pressed="true"] {
 }
 
 .kb-mod-led {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--accent);
   flex-shrink: 0;
@@ -1372,36 +1581,27 @@ html[data-mode="hack"] .kb-mod[aria-pressed="true"] {
 
 .kb-mod[aria-pressed="true"] .kb-mod-led {
   background: #ffffff;
-  box-shadow: 0 0 6px rgba(255, 255, 255, 0.85);
 }
 
 .kb-mod-code {
   font-family: var(--mono);
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   letter-spacing: 0.02em;
 }
 
 .kb-mod-sub {
-  font-size: 0.78rem;
+  font-size: 0.73rem;
   font-weight: 600;
   opacity: 0.9;
 }
 
-/* Technology Icon-Only Keycap Grid & Embedded S-A-M-U-B-I-N Row */
+/* 7-Unit Keycap Row (Scrambled S-A-M-U-B-I-N + Oversized Tech Icons + 2u Wide ENTER Key) */
 .kb-caps {
   display: grid;
-  gap: 0.6rem;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
   transform-style: preserve-3d;
-}
-
-.kb-caps--tech {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-}
-
-.kb-caps--sam {
-  grid-template-columns: repeat(8, minmax(0, 1fr));
-  gap: 0.5rem;
 }
 
 .kb-cap {
@@ -1413,17 +1613,17 @@ html[data-mode="hack"] .kb-mod[aria-pressed="true"] {
   appearance: none;
   border: 0;
   cursor: pointer;
-  min-height: 68px;
+  min-height: 64px;
   display: grid;
   place-items: center;
-  padding: 0.45rem 0.45rem 0.75rem;
-  border-radius: 12px;
+  padding: 0.42rem 0.42rem 0.72rem;
+  border-radius: 10px;
   color: var(--c-ink);
   background: linear-gradient(180deg, var(--c-top), var(--c-bg) 80%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
     inset 0 -5px 0 var(--c-side),
-    0 4px 8px -1px rgba(0, 0, 0, 0.36);
+    0 4px 7px -1px rgba(0, 0, 0, 0.55);
   transition: transform 75ms var(--ease-out), box-shadow 75ms, filter 120ms;
 }
 
@@ -1441,13 +1641,12 @@ html[data-mode="hack"] .kb-mod[aria-pressed="true"] {
   --c-ink: var(--cap-fam-ink);
 }
 
-/* Embedded S - A - M - U - B - I - N Keycaps (Present in Every Stack Layer) */
+/* Scrambled S - A - M - U - B - I - N Keycaps & 2u Wide ENTER ↵ Key */
 .kb-cap--sam {
   --c-top: #ff7e4d;
   --c-bg: var(--accent);
   --c-side: var(--accent-side);
   --c-ink: var(--accent-ink);
-  min-height: 62px;
 }
 
 html[data-mode="hack"] .kb-cap--sam {
@@ -1457,11 +1656,19 @@ html[data-mode="hack"] .kb-cap--sam {
   --c-ink: var(--accent-ink);
 }
 
-.kb-cap--mode {
+.kb-cap--enter {
+  grid-column: span 2;
   --c-top: #323640;
   --c-bg: #1e2128;
   --c-side: #0e1014;
   --c-ink: #f4a83a;
+}
+
+html[data-mode="hack"] .kb-cap--enter {
+  --c-top: #f24a40;
+  --c-bg: var(--accent);
+  --c-side: var(--accent-side);
+  --c-ink: #140607;
 }
 
 .kb-sam-char {
@@ -1471,6 +1678,13 @@ html[data-mode="hack"] .kb-cap--sam {
   font-size: 1.38rem;
   letter-spacing: -0.02em;
   line-height: 1;
+}
+
+.kb-cap--enter .kb-sam-char {
+  font-family: var(--mono);
+  font-size: 0.96rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
 }
 
 .kb-cap:hover {
@@ -1487,10 +1701,10 @@ html[data-mode="hack"] .kb-cap--sam {
     0 0 0 2px var(--accent);
 }
 
-/* Oversized, High-Clarity Recognizable Tech Icons (38px × 38px) */
+/* Oversized, High-Clarity Recognizable Tech Icons (36px × 36px) */
 .kb-cap-ico {
-  width: 2.35rem;
-  height: 2.35rem;
+  width: 2.25rem;
+  height: 2.25rem;
   flex-shrink: 0;
 }
 
@@ -1530,10 +1744,7 @@ html[data-mode="hack"] .kb-cap--sam {
     grid-template-rows: none;
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  .kb-caps--tech {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .kb-caps--sam {
+  .kb-caps {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
