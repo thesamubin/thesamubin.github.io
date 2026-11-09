@@ -650,31 +650,6 @@ html[data-mode="hack"] .hero-role {
   color: var(--ink-3);
 }
 
-/* Darkroom secret developer note (develops when safelight beam passes near) */
-html[data-mode="dev"] .darkroom-note {
-  display: none;
-}
-
-.darkroom-note {
-  margin-top: 1rem;
-  padding: 12px 16px;
-  border-radius: 8px;
-  border: 1px dashed var(--line-strong);
-  font-family: var(--mono);
-  font-size: 0.8125rem;
-  color: var(--ink-2);
-  opacity: 0.65;
-  transition: opacity 260ms var(--ease-out), color 260ms, border-color 260ms;
-}
-
-.darkroom-note.is-developed,
-.darkroom-note:hover,
-.darkroom-note:focus-within {
-  opacity: 1;
-  color: var(--accent-text);
-  border-color: var(--accent);
-}
-
 /* Avatar Stage Column */
 .avatar-col {
   display: flex;
@@ -2653,8 +2628,5 @@ html[data-mode="hack"] .peeker .pk-hood-canopy {
   }
   html[data-mode="hack"] body::after {
     display: none;
-  }
-  .darkroom-note {
-    opacity: 1;
   }
 }
