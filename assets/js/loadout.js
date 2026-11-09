@@ -154,8 +154,11 @@ export async function initLoadout() {
   const mountR = section.querySelector("[data-mount-r]");
   const usbTipL = section.querySelector("[data-usb-tip-l]");
   const usbTipR = section.querySelector("[data-usb-tip-r]");
+  const portL = section.querySelector(".kb-usb-port--left");
+  const portR = section.querySelector(".kb-usb-port--right");
   const freePlugL = section.querySelector("[data-free-plug-l]");
   const board = section.querySelector("[data-loadout-board]");
+  const tipEl = section.querySelector("[data-kb-tip]");
   const pillsWrap = section.querySelector("[data-stack-pills]");
   const readoutTag = section.querySelector("[data-loadout-tag]");
   const readoutText = section.querySelector("[data-loadout-oled]");
@@ -195,39 +198,84 @@ export async function initLoadout() {
 
   let raf = 0;
   let dragging = false;
+  let pendingDrag = false;
   let pointerId = null;
+  let downClientX = 0;
+  let downClientY = 0;
   let startX = 0;
   let startY = 0;
+  let suppressClickUntil = 0;
+  let portRatio = 0.14;
 
   function setReadout(badgeText, detailText) {
     if (readoutTag && badgeText) readoutTag.textContent = badgeText;
     if (readoutText && detailText) readoutText.textContent = detailText;
   }
 
-  // Draws the unified one-piece molded plastic keyboard body + smooth S-curve fillets around the top button slot
+  function showCapTip(cap) {
+    if (!tipEl || !chassis || !cap) return;
+    const text = cap.dataset.tip;
+    if (!text) {
+      hideCapTip();
+      return;
+    }
+    tipEl.textContent = text;
+    let ox = 0;
+    let oy = 0;
+    let el = cap;
+    while (el && el !== chassis) {
+      ox += el.offsetLeft;
+      oy += el.offsetTop;
+      el = el.offsetParent;
+    }
+    const W = chassis.offsetWidth || 600;
+    const halfTip = Math.min(72, (tipEl.offsetWidth || 64) * 0.5 + 4);
+    const cx = Math.max(halfTip, Math.min(W - halfTip, ox + cap.offsetWidth * 0.5));
+    const cy = oy - 6;
+    tipEl.style.left = `${cx.toFixed(1)}px`;
+    tipEl.style.top = `${cy.toFixed(1)}px`;
+    tipEl.classList.add("is-visible");
+  }
+
+  function hideCapTip() {
+    if (!tipEl) return;
+    tipEl.classList.remove("is-visible");
+  }
+
+  // Draws the unified one-piece molded plastic keyboard body + subtle tight fillets around the top button slot
   function updateCaseSvg() {
     if (!chassis || !caseSvg || !pillsWrap) return;
     const W = chassis.offsetWidth;
     const H = chassis.offsetHeight;
     if (W <= 0 || H <= 0) return;
 
-    const tabsW = pillsWrap.offsetWidth || 320;
-    const tabsH = pillsWrap.offsetHeight || 34;
+    const cs = getComputedStyle(chassis);
+    const bezel = parseFloat(cs.paddingTop) || 7;
+    const padBot = parseFloat(cs.paddingBottom) || 11;
+    const lipH = Math.max(2.5, padBot - bezel);
+    const cornerR = Math.max(9, Math.min(15, bezel * 2.1));
+    const topR = Math.max(7, Math.min(9.5, bezel * 1.35));
 
-    const bezel = 7; // Exact 7px continuous plastic border matching the main keyboard rim
-    const cornerR = 15;
-    const topR = 12;
+    const tabsW = pillsWrap.offsetWidth || 280;
+    const tabsH = pillsWrap.offsetHeight || 30;
 
     const hx1 = W * 0.5 - tabsW * 0.5 - bezel;
     const hx2 = W * 0.5 + tabsW * 0.5 + bezel;
     const hy1 = -tabsH - bezel;
 
-    // Smooth concave S-curve fillet dimensions at the two shoulder junctions
-    const filletH = Math.min(22, Math.max(10, -hy1 - topR - 1));
-    const maxFilletW = Math.max(10, hx1 - (W * 0.14 + 18));
-    const filletW = Math.min(28, maxFilletW);
+    // Tight, crisp industrial fillet at the two shoulder corners (much smaller & cleaner radius)
+    const filletH = Math.min(7.5, Math.max(4.5, -hy1 - topR - 2));
+    const maxFilletW = Math.max(3.5, (hx1 - cornerR) * 0.25);
+    const filletW = Math.min(8.5, maxFilletW);
 
-    const topPad = Math.ceil(-hy1 + 14);
+    // Center Left & Right USB-C ports cleanly on the flat left/right shoulders at every resolution
+    const shoulderSpan = Math.max(16, hx1 - filletW - cornerR);
+    portRatio = Math.min(0.14, Math.max(0.065, (cornerR + shoulderSpan * 0.46) / W));
+    if (portL) portL.style.left = `${(portRatio * 100).toFixed(2)}%`;
+    if (portR) portR.style.left = `${((1 - portRatio) * 100).toFixed(2)}%`;
+    chassis.style.transformOrigin = `${((1 - portRatio) * 100).toFixed(2)}% 0`;
+
+    const topPad = Math.ceil(-hy1 + 12);
     const totalH = H + topPad + 8;
     caseSvg.style.top = `${-topPad}px`;
     caseSvg.style.height = `${totalH}px`;
@@ -238,15 +286,15 @@ export async function initLoadout() {
       return [
         `M ${f(cornerR)} 0`,
         `L ${f(hx1 - filletW)} 0`,
-        // Left smooth concave cubic Bezier fillet (zero-seam S-shoulder)
-        `C ${f(hx1 - filletW * 0.36)} 0, ${f(hx1)} ${f(-filletH * 0.36)}, ${f(hx1)} ${f(-filletH)}`,
+        // Subtle, tight concave corner softening at left shoulder
+        `Q ${f(hx1)} 0, ${f(hx1)} ${f(-filletH)}`,
         `L ${f(hx1)} ${f(hy1 + topR)}`,
         `Q ${f(hx1)} ${f(hy1)}, ${f(hx1 + topR)} ${f(hy1)}`,
         `L ${f(hx2 - topR)} ${f(hy1)}`,
         `Q ${f(hx2)} ${f(hy1)}, ${f(hx2)} ${f(hy1 + topR)}`,
         `L ${f(hx2)} ${f(-filletH)}`,
-        // Right smooth concave cubic Bezier fillet (zero-seam S-shoulder)
-        `C ${f(hx2)} ${f(-filletH * 0.36)}, ${f(hx2 + filletW * 0.36)} 0, ${f(hx2 + filletW)} 0`,
+        // Subtle, tight concave corner softening at right shoulder
+        `Q ${f(hx2)} 0, ${f(hx2 + filletW)} 0`,
         `L ${f(W - cornerR)} 0`,
         `Q ${f(W)} 0, ${f(W)} ${f(cornerR)}`,
         `L ${f(W)} ${f(botY - cornerR)}`,
@@ -260,26 +308,26 @@ export async function initLoadout() {
     };
 
     const buildTopSpec = () => {
-      const s = 1.2;
+      const s = 1.15;
       const f = (n) => n.toFixed(2);
       return [
         `M ${f(s)} ${f(cornerR)}`,
         `Q ${f(s)} ${f(s)}, ${f(cornerR)} ${f(s)}`,
         `L ${f(hx1 - filletW)} ${f(s)}`,
-        `C ${f(hx1 - filletW * 0.36)} ${f(s)}, ${f(hx1 + s)} ${f(-filletH * 0.36 + s)}, ${f(hx1 + s)} ${f(-filletH)}`,
+        `Q ${f(hx1 + s)} ${f(s)}, ${f(hx1 + s)} ${f(-filletH)}`,
         `L ${f(hx1 + s)} ${f(hy1 + topR)}`,
         `Q ${f(hx1 + s)} ${f(hy1 + s)}, ${f(hx1 + topR)} ${f(hy1 + s)}`,
         `L ${f(hx2 - topR)} ${f(hy1 + s)}`,
         `Q ${f(hx2 - s)} ${f(hy1 + s)}, ${f(hx2 - s)} ${f(hy1 + topR)}`,
         `L ${f(hx2 - s)} ${f(-filletH)}`,
-        `C ${f(hx2 - s)} ${f(-filletH * 0.36 + s)}, ${f(hx2 + filletW * 0.36)} ${f(s)}, ${f(hx2 + filletW)} ${f(s)}`,
+        `Q ${f(hx2 - s)} ${f(s)}, ${f(hx2 + filletW)} ${f(s)}`,
         `L ${f(W - cornerR)} ${f(s)}`,
         `Q ${f(W - s)} ${f(s)}, ${f(W - s)} ${f(cornerR)}`,
       ].join(" ");
     };
 
     const fullPath = buildClosedCase(H);
-    const bodyPath = buildClosedCase(H - 4);
+    const bodyPath = buildClosedCase(H - lipH);
     const specPath = buildTopSpec();
 
     if (caseLipPath) caseLipPath.setAttribute("d", fullPath);
@@ -300,8 +348,8 @@ export async function initLoadout() {
     const h = svgRect.height || 145;
     cableSvg.setAttribute("viewBox", `0 0 ${w.toFixed(1)} ${h.toFixed(1)}`);
 
-    const leftAnchorX = w * 0.14;
-    const rightAnchorX = w * 0.86;
+    const leftAnchorX = w * portRatio;
+    const rightAnchorX = w * (1 - portRatio);
 
     if (mountL) {
       mountL.setAttribute("x", (leftAnchorX - 12).toFixed(1));
@@ -419,9 +467,10 @@ export async function initLoadout() {
         // Single-Cable Rigid-Body Pendulum Physics (Suspended from Right USB-C Cable at 86%):
         // Center of mass hangs to the left of the right cable, producing natural pendulum oscillations
         // coupled with horizontal sway of the right tether.
-        const restX = 11;
-        const restY = 28;
-        const restAng = -0.35;
+        const narrow = window.innerWidth < 760;
+        const restX = narrow ? -28 : 11;
+        const restY = narrow ? 20 : 28;
+        const restAng = narrow ? -0.21 : -0.35;
 
         const swingDelta = ang - restAng;
         const fx = (restX - x) * 0.075 + Math.sin(swingDelta) * 1.45;
@@ -480,24 +529,90 @@ export async function initLoadout() {
     if (!raf) raf = requestAnimationFrame(stepPhysics);
   }
 
+  if (board) {
+    board.addEventListener("pointerover", (e) => {
+      if (dragging || e.pointerType === "touch") return;
+      const cap = e.target.closest(".kb-cap[data-tip]");
+      if (cap) showCapTip(cap);
+    });
+    board.addEventListener("pointerout", (e) => {
+      const cap = e.target.closest(".kb-cap[data-tip]");
+      if (cap && !cap.contains(e.relatedTarget)) hideCapTip();
+    });
+    board.addEventListener("focusin", (e) => {
+      const cap = e.target.closest(".kb-cap[data-tip]");
+      if (cap) showCapTip(cap);
+    });
+    board.addEventListener("focusout", () => hideCapTip());
+  }
+
   if (chassis) {
+    // Prevent vertical page scroll on touch devices when pulling/dragging anywhere on the keyboard
+    chassis.addEventListener(
+      "touchmove",
+      (e) => {
+        if (!reduceMotion) e.preventDefault();
+      },
+      { passive: false }
+    );
+
+    // Swallow synthetic click right after a drag gesture that started on a keycap/button
+    chassis.addEventListener(
+      "click",
+      (e) => {
+        if (performance.now() < suppressClickUntil) {
+          e.preventDefault();
+          e.stopPropagation();
+          suppressClickUntil = 0;
+        }
+      },
+      true
+    );
+
     chassis.addEventListener("pointerdown", (e) => {
       if (e.button && e.button !== 0) return;
-      if (e.target.closest("button")) return;
       if (reduceMotion) return;
       pointerId = e.pointerId;
+      downClientX = e.clientX;
+      downClientY = e.clientY;
       startX = e.clientX - x;
       startY = e.clientY - y;
-      dragging = true;
-      chassis.classList.add("is-dragging");
-      try {
-        chassis.setPointerCapture(pointerId);
-      } catch {}
-      if (!raf) raf = requestAnimationFrame(stepPhysics);
+
+      const onBtn = Boolean(e.target.closest("button"));
+      if (onBtn) {
+        // Allow normal tap/click if finger/mouse doesn't drag past 6px
+        pendingDrag = true;
+        dragging = false;
+      } else {
+        pendingDrag = false;
+        dragging = true;
+        hideCapTip();
+        chassis.classList.add("is-dragging");
+        try {
+          chassis.setPointerCapture(pointerId);
+        } catch {}
+        if (!raf) raf = requestAnimationFrame(stepPhysics);
+      }
     });
 
     addEventListener("pointermove", (e) => {
-      if (!dragging || e.pointerId !== pointerId) return;
+      if (e.pointerId !== pointerId) return;
+      if (pendingDrag && !dragging) {
+        if (Math.hypot(e.clientX - downClientX, e.clientY - downClientY) > 6) {
+          pendingDrag = false;
+          dragging = true;
+          suppressClickUntil = performance.now() + 450;
+          hideCapTip();
+          chassis.classList.add("is-dragging");
+          try {
+            chassis.setPointerCapture(pointerId);
+          } catch {}
+          if (!raf) raf = requestAnimationFrame(stepPhysics);
+        } else {
+          return;
+        }
+      }
+      if (!dragging) return;
       const rawDx = e.clientX - startX;
       const rawDy = e.clientY - startY;
 
@@ -523,7 +638,8 @@ export async function initLoadout() {
         vy = (dy - y) * 0.45;
         x = dx;
         y = dy;
-        ang = -0.35 + dx * 0.0024 + (dy - 28) * -0.0026;
+        const baseAng = window.innerWidth < 760 ? -0.21 : -0.35;
+        ang = baseAng + dx * 0.0024 + (dy - 24) * -0.0026;
 
         if (dy < 6 && Math.abs(dx) < 28) {
           regrabLeftHand();
@@ -533,9 +649,11 @@ export async function initLoadout() {
     });
 
     const endDrag = (e) => {
-      if (!dragging || (e.pointerId !== undefined && e.pointerId !== pointerId)) return;
-      dragging = false;
+      if (e.pointerId !== undefined && e.pointerId !== pointerId) return;
+      pendingDrag = false;
       pointerId = null;
+      if (!dragging) return;
+      dragging = false;
       chassis.classList.remove("is-dragging");
       if (!raf) raf = requestAnimationFrame(stepPhysics);
     };
@@ -544,6 +662,7 @@ export async function initLoadout() {
     addEventListener(
       "resize",
       () => {
+        hideCapTip();
         updateCaseSvg();
         drawHanging();
       },
@@ -667,6 +786,7 @@ export async function initLoadout() {
   }
 
   function renderBoard(mode, { flipping = false, layerIndex = activeLayerIdx } = {}) {
+    hideCapTip();
     const modeData = data[mode] || data.dev;
     const isHack = mode === "hack";
     const layers = modeData.layers || [];

@@ -1183,9 +1183,9 @@ html[data-mode="hack"] .cap--accent {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 4px;
-  border-radius: 8px;
+  gap: clamp(3px, 0.6vw, 5px);
+  padding: clamp(2.5px, 0.5vw, 4px);
+  border-radius: clamp(6px, 1vw, 8px);
   background: #1a1c20;
   box-shadow:
     inset 0 2px 6px rgba(0, 0, 0, 0.86),
@@ -1204,12 +1204,13 @@ html[data-mode="hack"] .kb-top-tabs {
   border: 0;
   background: linear-gradient(180deg, #9da3aa 0%, #7d838b 100%);
   color: #141619;
-  border-radius: 6px;
-  padding: 0.3rem 0.72rem 0.38rem;
+  border-radius: clamp(4.5px, 0.8vw, 6px);
+  padding: clamp(0.14rem, 0.42vw, 0.3rem) clamp(0.28rem, 0.9vw, 0.72rem) clamp(0.18rem, 0.5vw, 0.38rem);
   display: inline-flex;
   align-items: center;
-  gap: 0.38rem;
+  gap: clamp(0.16rem, 0.48vw, 0.38rem);
   cursor: pointer;
+  touch-action: none;
   font-family: var(--font);
   white-space: nowrap;
   box-shadow:
@@ -1239,8 +1240,8 @@ html[data-mode="hack"] .stack-pill[aria-selected="true"] {
 }
 
 .stack-pill-dot {
-  width: 6px;
-  height: 6px;
+  width: clamp(4.5px, 0.75vw, 6px);
+  height: clamp(4.5px, 0.75vw, 6px);
   border-radius: 50%;
   background: var(--accent);
   flex-shrink: 0;
@@ -1252,13 +1253,13 @@ html[data-mode="hack"] .stack-pill[aria-selected="true"] {
 
 .stack-pill-code {
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: clamp(0.46rem, 0.9vw, 0.7rem);
   font-weight: 800;
   opacity: 0.85;
 }
 
 .stack-pill-label {
-  font-size: 0.76rem;
+  font-size: clamp(0.5rem, 1vw, 0.76rem);
   font-weight: 800;
   letter-spacing: -0.01em;
 }
@@ -1268,8 +1269,8 @@ html[data-mode="hack"] .stack-pill[aria-selected="true"] {
   position: relative;
   max-width: 780px;
   margin-inline: auto;
-  padding-top: 84px;
-  padding-bottom: 118px;
+  padding-top: clamp(64px, 10vw, 84px);
+  padding-bottom: clamp(78px, 14vw, 118px);
 }
 
 .kb-cables {
@@ -1328,7 +1329,7 @@ html[data-mode="hack"] .stack-pill[aria-selected="true"] {
 .kb-shell {
   position: relative;
   z-index: 2;
-  padding: 7px 7px 11px;
+  padding: clamp(4.5px, 0.9vw, 7px) clamp(4.5px, 0.9vw, 7px) clamp(7.5px, 1.4vw, 11px);
   border-radius: 15px;
   background: transparent;
   border: 0;
@@ -1337,6 +1338,7 @@ html[data-mode="hack"] .stack-pill[aria-selected="true"] {
   will-change: transform;
   cursor: grab;
   user-select: none;
+  touch-action: none;
 }
 
 .kb-shell.is-dragging {
@@ -1483,19 +1485,19 @@ html[data-mode="hack"] .usb-led {
   background: var(--accent);
 }
 
-/* Deep Dark Recessed Switch Plate Cavity (4 Rows Total: 3-Row Top Grid + 1-Row Spacebar Row) */
+/* Deep Dark Recessed Switch Plate Cavity (4 Rows Total: Preserves Exact Layout Across All Screen Sizes) */
 .kb-plate {
   position: relative;
   z-index: 3;
-  padding: 6px;
-  border-radius: 10px;
+  padding: clamp(3px, 0.75vw, 6px);
+  border-radius: clamp(6px, 1.3vw, 10px);
   background: #1a1c20;
   box-shadow:
     inset 0 3px 8px rgba(0, 0, 0, 0.88),
     0 1px 0 rgba(255, 255, 255, 0.45);
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: clamp(2.5px, 0.65vw, 5px);
   perspective: 1100px;
 }
 
@@ -1508,36 +1510,40 @@ html[data-mode="hack"] .kb-plate {
 
 .kb-top-grid {
   display: grid;
-  grid-template-columns: 98px minmax(0, 1fr);
-  gap: 5px;
+  grid-template-columns: 1.18fr 7fr;
+  gap: clamp(2.5px, 0.65vw, 5px);
   align-items: stretch;
 }
 
 .kb-layer-bank {
   display: grid;
   grid-template-rows: repeat(3, 1fr);
-  gap: 5px;
+  gap: clamp(2.5px, 0.65vw, 5px);
+  min-width: 0;
 }
 
 .kb-matrix {
   display: grid;
   grid-template-rows: repeat(3, 1fr);
-  gap: 5px;
+  gap: clamp(2.5px, 0.65vw, 5px);
   transform-style: preserve-3d;
+  min-width: 0;
 }
 
 .kb-caps {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 5px;
+  gap: clamp(2.5px, 0.65vw, 5px);
   transform-style: preserve-3d;
+  min-width: 0;
 }
 
 /* 4th Row (Bottom Row with Fn, Win[Yellow], Alt, Orange Spacebar, Back[Cream], Mode) */
 .kb-bottom-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 2.8fr 1.6fr 1.2fr;
-  gap: 5px;
+  grid-template-columns: 1fr 1fr 1fr 2.7fr 1.65fr 1.25fr;
+  gap: clamp(2.5px, 0.65vw, 5px);
+  min-width: 0;
 }
 
 /* Split-flap X-axis flip wave during mode or layer morph */
@@ -1571,12 +1577,14 @@ html[data-mode="hack"] .kb-plate {
   --cap-ink: #17191c;
 
   position: relative;
+  min-width: 0;
   appearance: none;
   border: 0;
   cursor: pointer;
-  min-height: 62px;
-  padding: 3px 5px 8px 5px;
-  border-radius: 8px;
+  touch-action: none;
+  min-height: clamp(34px, 7.6vw, 62px);
+  padding: clamp(2px, 0.4vw, 3px) clamp(2px, 0.6vw, 5px) clamp(4px, 1vw, 8px);
+  border-radius: clamp(5px, 1vw, 8px);
   color: var(--cap-ink);
   background: linear-gradient(180deg, var(--skirt-top) 0%, var(--skirt-bot) 100%);
   box-shadow:
@@ -1591,13 +1599,14 @@ html[data-mode="hack"] .kb-plate {
 
 .kb-cap-dish {
   width: 100%;
-  border-radius: 5px;
+  min-width: 0;
+  border-radius: clamp(3.5px, 0.65vw, 5px);
   background: linear-gradient(180deg, var(--dish-top) 0%, var(--dish-bg) 100%);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.62),
     inset 0 -1px 2px rgba(0, 0, 0, 0.14),
     0 1px 2px rgba(0, 0, 0, 0.32);
-  padding: 4px 5px;
+  padding: clamp(2px, 0.5vw, 4px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1692,19 +1701,19 @@ html[data-mode="hack"] .kb-cap--enter {
 .kb-mod-dish {
   align-items: center;
   justify-content: center;
-  padding: 5px 7px;
+  padding: clamp(2px, 0.5vw, 5px) clamp(2px, 0.6vw, 7px);
   text-align: center;
 }
 
 .kb-mod-top {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: clamp(0.16rem, 0.4vw, 0.35rem);
 }
 
 .kb-mod-led {
-  width: 6px;
-  height: 6px;
+  width: clamp(4px, 0.75vw, 6px);
+  height: clamp(4px, 0.75vw, 6px);
   border-radius: 50%;
   background: var(--accent);
   flex-shrink: 0;
@@ -1717,14 +1726,15 @@ html[data-mode="hack"] .kb-cap--enter {
 .kb-mod-code {
   font-family: var(--font);
   font-weight: 800;
-  font-size: 0.86rem;
+  font-size: clamp(0.54rem, 1.12vw, 0.86rem);
   letter-spacing: -0.01em;
+  white-space: nowrap;
 }
 
 /* Large Centered Tech Icon inside the 3D Dish; Short Tech Name Appears ONLY in Floating Top Badge on Hover */
 .kb-cap-ico {
-  width: 2.15rem;
-  height: 2.15rem;
+  width: clamp(1rem, 2.75vw, 2.15rem);
+  height: clamp(1rem, 2.75vw, 2.15rem);
   flex-shrink: 0;
 }
 
@@ -1732,33 +1742,35 @@ html[data-mode="hack"] .kb-cap--enter {
   font-family: var(--font);
   font-weight: 850;
   font-stretch: 118%;
-  font-size: 1.42rem;
+  font-size: clamp(0.8rem, 1.85vw, 1.42rem);
   letter-spacing: -0.02em;
   line-height: 1;
 }
 
 .kb-cap--enter .kb-sam-char {
   font-family: var(--font);
-  font-size: 0.98rem;
+  font-size: clamp(0.56rem, 1.28vw, 0.98rem);
   font-weight: 800;
+  white-space: nowrap;
 }
 
 .kb-bot-main {
   font-family: var(--font);
-  font-size: 0.88rem;
+  font-size: clamp(0.5rem, 1.14vw, 0.88rem);
   font-weight: 800;
   line-height: 1.05;
+  white-space: nowrap;
 }
 
 /* Center 3D Spacebar Dish (Only says "Space") */
 .kb-space-dish {
   flex-direction: column;
   justify-content: center;
-  gap: 4px;
+  gap: clamp(2px, 0.45vw, 4px);
 }
 
 .kb-space-barline {
-  width: 38px;
+  width: clamp(18px, 4.8vw, 38px);
   height: 2px;
   border-radius: 2px;
   background: currentColor;
@@ -1767,14 +1779,10 @@ html[data-mode="hack"] .kb-cap--enter {
 
 .kb-space-text {
   font-family: var(--font);
-  font-size: 0.78rem;
+  font-size: clamp(0.54rem, 1.08vw, 0.78rem);
   font-weight: 800;
   letter-spacing: 0.01em;
   white-space: nowrap;
-}
-
-.kb-cap--space[data-tip]::after {
-  display: none;
 }
 
 /* Physical 3D Keycap Depression on Click / Active */
@@ -1786,60 +1794,47 @@ html[data-mode="hack"] .kb-cap--enter {
 .kb-cap.is-down,
 .kb-cap[aria-pressed="true"] {
   transform: translateY(2px);
-  padding-bottom: 5px;
+  padding-bottom: clamp(2.5px, 0.65vw, 5px);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.35),
     0 1px 2px rgba(0, 0, 0, 0.75),
     0 0 0 2px var(--accent);
 }
 
-/* Floating Short Hardware Keycap Tooltip on Hover/Focus */
-.kb-cap[data-tip]::after {
-  content: attr(data-tip);
+/* Top-Layer Floating Hover Badge (Mounted Outside .kb-plate at z-index: 999 so NEVER Behind Anything!) */
+.kb-hover-tip {
   position: absolute;
-  bottom: calc(100% + 7px);
-  left: 50%;
-  translate: -50% 4px;
-  z-index: 20;
-  padding: 0.22rem 0.52rem;
+  left: 0;
+  top: 0;
+  translate: -50% calc(-100% + 4px);
+  z-index: 999;
+  padding: 0.24rem 0.56rem;
   border-radius: 6px;
   background: var(--oled-bg);
   color: var(--oled-ink);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   font-family: var(--mono);
   font-size: 0.72rem;
   font-weight: 700;
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45);
-  transition: opacity 130ms var(--ease-out), translate 130ms var(--ease-out);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.52);
+  transition: opacity 120ms var(--ease-out), translate 120ms var(--ease-out);
 }
 
-.kb-cap[data-tip]:hover::after,
-.kb-cap[data-tip]:focus-visible::after {
+.kb-hover-tip.is-visible {
   opacity: 1;
-  translate: -50% 0;
+  translate: -50% -100%;
 }
 
-@media (max-width: 740px) {
-  .stack-pill {
-    padding: 0.24rem 0.5rem 0.3rem;
+@media (max-width: 580px) {
+  #loadout .wrap {
+    padding-inline: 10px;
   }
-  .kb-top-grid {
-    grid-template-columns: 1fr;
-  }
-  .kb-layer-bank {
-    grid-template-rows: none;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .kb-caps {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-  .kb-bottom-row {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-  .kb-cap--space {
-    grid-column: span 3;
+  .kb-usb-port {
+    scale: 0.72;
+    transform-origin: center top;
   }
 }
 
