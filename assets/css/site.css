@@ -119,9 +119,9 @@ html[data-mode="hack"] {
     0 28px 56px -22px rgba(0, 0, 0, 0.88),
     0 6px 16px -4px rgba(0, 0, 0, 0.7);
 
-  --stretch-display: 84%;
-  --stretch-head: 88%;
-  --stretch-title: 92%;
+  --stretch-display: 112%;
+  --stretch-head: 108%;
+  --stretch-title: 104%;
 
   color-scheme: dark;
 }
