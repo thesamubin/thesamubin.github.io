@@ -1169,39 +1169,55 @@ html[data-mode="hack"] .cap--accent {
   background: var(--cap-fam-bg);
 }
 
-/* Integrated Top Bezel Extension on the Keyboard for Short, Clean Stack Layer Buttons */
+/* Integrated Top Bezel Extension on the Keyboard (Seamlessly Molded One-Piece Bezel & Cavity) */
 .kb-top-extension {
   position: absolute;
-  top: -32px;
+  bottom: 100%;
   left: 50%;
   translate: -50% 0;
   z-index: 6;
-  padding: 5px 7px 9px;
-  border-radius: 12px 12px 0 0;
-  background: linear-gradient(180deg, #f3f1ec 0%, #dcd8cf 100%);
+  padding: 7px 7px 0;
+  border-radius: 13px 13px 0 0;
+  background: #f3f1ec;
   border: 1px solid rgba(0, 0, 0, 0.22);
   border-bottom: 0;
-  box-shadow:
-    inset 0 2px 0 rgba(255, 255, 255, 0.85),
-    0 -6px 16px -4px rgba(0, 0, 0, 0.18);
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.85);
+}
+
+/* Seamless bezel bridge that erases the parent top border & highlight underneath the extension */
+.kb-top-extension::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  height: 9px;
+  background: #f3f1ec;
+  z-index: 1;
+  pointer-events: none;
 }
 
 html[data-mode="hack"] .kb-top-extension {
-  background: linear-gradient(180deg, #2b1518 0%, #190c0e 100%);
+  background: #2b1518;
   border-color: rgba(229, 57, 45, 0.34);
-  box-shadow:
-    inset 0 2px 0 rgba(255, 120, 110, 0.2),
-    0 -6px 16px -4px rgba(0, 0, 0, 0.65);
+  box-shadow: inset 0 2px 0 rgba(255, 120, 110, 0.2);
+}
+
+html[data-mode="hack"] .kb-top-extension::before {
+  background: #2b1518;
 }
 
 .kb-top-tabs {
+  position: relative;
+  z-index: 2;
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 3px;
-  border-radius: 8px;
+  padding: 5px 5px 8px;
+  margin-bottom: -8px;
+  border-radius: 8px 8px 0 0;
   background: #1a1c20;
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.82);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.78);
 }
 
 html[data-mode="hack"] .kb-top-tabs {
@@ -1361,7 +1377,7 @@ html[data-mode="hack"] .stack-pill[aria-selected="true"] {
   z-index: 2;
   padding: 7px 7px 11px;
   border-radius: 15px;
-  background: linear-gradient(180deg, #f3f1ec 0%, #dcd8cf 70%, #b9b4a8 100%);
+  background: linear-gradient(180deg, #f3f1ec 0%, #f3f1ec 18px, #dcd8cf 72%, #b9b4a8 100%);
   border: 1px solid rgba(0, 0, 0, 0.22);
   box-shadow:
     inset 0 2px 0 rgba(255, 255, 255, 0.85),
@@ -1376,7 +1392,7 @@ html[data-mode="hack"] .stack-pill[aria-selected="true"] {
 }
 
 html[data-mode="hack"] .kb-shell {
-  background: linear-gradient(180deg, #2b1518 0%, #190c0e 70%, #100708 100%);
+  background: linear-gradient(180deg, #2b1518 0%, #2b1518 18px, #190c0e 72%, #100708 100%);
   border-color: rgba(229, 57, 45, 0.34);
   box-shadow:
     inset 0 2px 0 rgba(255, 120, 110, 0.2),
@@ -1709,61 +1725,31 @@ html[data-mode="hack"] .kb-cap--enter {
   letter-spacing: -0.01em;
 }
 
-/* Large Tech Icon inside the 3D Dish; Short Tech Name Appears ONLY on Hover/Focus */
+/* Large Centered Tech Icon inside the 3D Dish; Short Tech Name Appears ONLY in Floating Top Badge on Hover */
 .kb-cap-ico {
-  width: 2.1rem;
-  height: 2.1rem;
+  width: 2.15rem;
+  height: 2.15rem;
   flex-shrink: 0;
-  transition: transform 140ms var(--ease-out);
-}
-
-.kb-cap-name {
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  line-height: 1;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  opacity: 0;
-  max-height: 0;
-  transform: translateY(3px);
-  transition: opacity 130ms var(--ease-out), max-height 130ms var(--ease-out), transform 130ms var(--ease-out);
-}
-
-.kb-cap:hover .kb-cap-ico,
-.kb-cap:focus-visible .kb-cap-ico {
-  transform: translateY(-2px) scale(0.9);
-}
-
-.kb-cap:hover .kb-cap-name,
-.kb-cap:focus-visible .kb-cap-name {
-  opacity: 0.95;
-  max-height: 14px;
-  transform: translateY(0);
 }
 
 .kb-sam-char {
   font-family: var(--font);
   font-weight: 850;
   font-stretch: 118%;
-  font-size: 1.38rem;
+  font-size: 1.42rem;
   letter-spacing: -0.02em;
   line-height: 1;
-  transition: transform 130ms var(--ease-out);
 }
 
 .kb-cap--enter .kb-sam-char {
   font-family: var(--font);
-  font-size: 0.96rem;
+  font-size: 0.98rem;
   font-weight: 800;
 }
 
 .kb-bot-main {
   font-family: var(--font);
-  font-size: 0.86rem;
+  font-size: 0.88rem;
   font-weight: 800;
   line-height: 1.05;
 }
@@ -1841,8 +1827,7 @@ html[data-mode="hack"] .kb-cap--enter {
 
 @media (max-width: 740px) {
   .kb-top-extension {
-    top: -30px;
-    padding: 4px 5px 8px;
+    padding: 5px 5px 0;
   }
   .stack-pill {
     padding: 0.24rem 0.5rem 0.3rem;

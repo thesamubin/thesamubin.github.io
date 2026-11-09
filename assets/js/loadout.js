@@ -476,7 +476,6 @@ export async function initLoadout() {
     cap.innerHTML = `
       <span class="kb-cap-dish">
         <svg class="kb-cap-ico" viewBox="0 0 24 24" aria-hidden="true">${iconFor(item.id)}</svg>
-        <span class="kb-cap-name">${shortLabel}</span>
       </span>
     `;
 
@@ -510,7 +509,6 @@ export async function initLoadout() {
     cap.innerHTML = `
       <span class="kb-cap-dish">
         <span class="kb-sam-char">${item.label}</span>
-        <span class="kb-cap-name">${isWideEnter ? "Mode ⇄" : "Cipher"}</span>
       </span>
     `;
 
@@ -605,7 +603,6 @@ export async function initLoadout() {
             <span class="kb-mod-led" aria-hidden="true"></span>
             <span class="kb-mod-code">${modKeyHints[idx]}</span>
           </span>
-          <span class="kb-cap-name">${layer.mod}</span>
         </span>
       `;
       modBtn.addEventListener("click", () => {
@@ -688,7 +685,7 @@ export async function initLoadout() {
     fnKey.type = "button";
     fnKey.className = "kb-cap kb-cap--cream";
     fnKey.dataset.tip = "Next Layer";
-    fnKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Fn</span><span class="kb-cap-name">Layer ↻</span></span>`;
+    fnKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Fn</span></span>`;
     fnKey.addEventListener("click", () => {
       sound.play("down");
       setTimeout(() => sound.play("up"), 70);
@@ -701,7 +698,7 @@ export async function initLoadout() {
     winKey.type = "button";
     winKey.className = "kb-cap kb-cap--yellow";
     winKey.dataset.tip = "36 Stack";
-    winKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">${isHack ? "Red" : "Dev"}</span><span class="kb-cap-name">36 Stack</span></span>`;
+    winKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">${isHack ? "Red" : "Dev"}</span></span>`;
     winKey.addEventListener("click", () => {
       sound.play("down");
       setTimeout(() => sound.play("up"), 70);
@@ -713,7 +710,7 @@ export async function initLoadout() {
     altKey.type = "button";
     altKey.className = "kb-cap kb-cap--cream";
     altKey.dataset.tip = isLeftHeld ? "Unplug Cable" : "Plug Cable";
-    altKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Alt</span><span class="kb-cap-name">Cable</span></span>`;
+    altKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Alt</span></span>`;
     altKey.addEventListener("click", () => {
       if (isLeftHeld) {
         releaseLeftHand();
@@ -726,7 +723,6 @@ export async function initLoadout() {
     const spaceKey = document.createElement("button");
     spaceKey.type = "button";
     spaceKey.className = "kb-cap kb-cap--sam kb-cap--space";
-    spaceKey.dataset.tip = "Space";
     spaceKey.innerHTML = `
       <span class="kb-cap-dish kb-space-dish">
         <span class="kb-space-barline" aria-hidden="true"></span>
@@ -749,7 +745,7 @@ export async function initLoadout() {
     backKey.type = "button";
     backKey.className = "kb-cap kb-cap--cream kb-cap--back";
     backKey.dataset.tip = "Run Cipher";
-    backKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">SAMUBIN</span><span class="kb-cap-name">Cipher</span></span>`;
+    backKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">SAMUBIN</span></span>`;
     backKey.addEventListener("click", () => {
       sound.play("auth");
       impulseKeyboard(0.45, 3.4);
@@ -761,7 +757,7 @@ export async function initLoadout() {
     modeKey.type = "button";
     modeKey.className = "kb-cap kb-cap--proficient";
     modeKey.dataset.tip = isHack ? "Dev Mode" : "Hack Mode";
-    modeKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Mode ⇄</span><span class="kb-cap-name">${isHack ? "Dev" : "Hack"}</span></span>`;
+    modeKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Mode ⇄</span></span>`;
     modeKey.addEventListener("click", () => {
       sound.play("down");
       setTimeout(() => sound.play("up"), 75);
