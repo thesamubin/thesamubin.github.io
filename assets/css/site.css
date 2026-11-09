@@ -1169,13 +1169,62 @@ html[data-mode="hack"] .cap--accent {
   background: var(--cap-fam-bg);
 }
 
-/* Custom Keyboard Chassis Enclosure */
+/* Custom Hanging Keyboard Rig & Chassis Enclosure */
+.hanging-kb-rig {
+  position: relative;
+  padding-top: 48px;
+}
+
+.kb-cables {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 96px;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 1;
+}
+
 .kb-shell {
+  position: relative;
+  z-index: 2;
   border-radius: 22px;
   background: var(--surface);
   border: 1px solid var(--line);
-  box-shadow: var(--shadow-enclosure);
-  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 28px 54px -20px rgba(0, 0, 0, 0.42),
+    0 6px 16px -4px rgba(0, 0, 0, 0.18);
+  overflow: visible;
+  transform-origin: 50% 0;
+  will-change: transform;
+  cursor: grab;
+}
+
+.kb-shell.is-dragging {
+  cursor: grabbing;
+}
+
+.kb-port {
+  position: absolute;
+  top: -10px;
+  width: 34px;
+  height: 11px;
+  border-radius: 5px 5px 2px 2px;
+  background: linear-gradient(180deg, #b8bec8, #6c727d);
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+.kb-port--left {
+  left: 24%;
+  translate: -50% 0;
+}
+
+.kb-port--right {
+  left: 76%;
+  translate: -50% 0;
 }
 
 /* Top OLED Telemetry Readout Strip */
@@ -1186,6 +1235,7 @@ html[data-mode="hack"] .cap--accent {
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.9rem 1.35rem;
+  border-radius: 21px 21px 0 0;
   background: var(--oled-bg);
   color: var(--oled-ink);
   border-bottom: 1px solid var(--line);
@@ -1223,7 +1273,8 @@ html[data-mode="hack"] .cap--accent {
 
 /* Recessed Switch Plate */
 .kb-plate {
-  padding: clamp(1rem, 2.2vw, 1.65rem);
+  padding: 20px;
+  border-radius: 0 0 21px 21px;
   background: var(--plate);
   display: flex;
   flex-direction: column;
@@ -1238,6 +1289,12 @@ html[data-mode="hack"] .cap--accent {
   align-items: stretch;
   transform-style: preserve-3d;
   transition: opacity 220ms var(--ease-out), transform 420ms var(--ease-out);
+}
+
+.kb-row--samubin {
+  padding-block: 0.25rem;
+  border-top: 1px dashed var(--line-strong);
+  border-bottom: 1px dashed var(--line-strong);
 }
 
 .kb-row.is-dimmed {
@@ -1271,7 +1328,7 @@ html[data-mode="hack"] .cap--accent {
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 0.6rem 0.75rem 0.85rem;
+  padding: 0.55rem 0.75rem 0.78rem;
   border-radius: 10px;
   text-align: left;
   color: var(--cap-prof-ink);
@@ -1281,6 +1338,15 @@ html[data-mode="hack"] .cap--accent {
     inset 0 -5px 0 var(--cap-prof-side),
     0 3px 6px rgba(0, 0, 0, 0.3);
   transition: transform 75ms var(--ease-out), box-shadow 75ms;
+}
+
+.kb-mod--sam {
+  background: linear-gradient(180deg, #272a30, #181a1f);
+  color: #f2f4f7;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -5px 0 #0c0d10,
+    0 3px 6px rgba(0, 0, 0, 0.4);
 }
 
 .kb-mod:active,
@@ -1312,10 +1378,10 @@ html[data-mode="hack"] .cap--accent {
   opacity: 0.82;
 }
 
-/* Technology Keycap Grid per Row */
+/* Technology Icon-Only Keycap Grid per Row */
 .kb-caps {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
   gap: 0.55rem;
 }
 
@@ -1324,23 +1390,21 @@ html[data-mode="hack"] .cap--accent {
   --c-bg: var(--cap-daily-bg);
   --c-side: var(--cap-daily-side);
   --c-ink: var(--cap-daily-ink);
+  position: relative;
   appearance: none;
   border: 0;
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 0.38rem;
-  padding: 0.58rem 0.72rem 0.82rem;
-  border-radius: 10px;
-  text-align: left;
+  min-height: 58px;
+  display: grid;
+  place-items: center;
+  padding: 0.45rem 0.5rem 0.72rem;
+  border-radius: 11px;
   color: var(--c-ink);
   background: linear-gradient(180deg, var(--c-top), var(--c-bg) 80%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.48),
     inset 0 -5px 0 var(--c-side),
-    0 3px 6px -1px rgba(0, 0, 0, 0.32);
+    0 3px 7px -1px rgba(0, 0, 0, 0.34);
   transition: transform 75ms var(--ease-out), box-shadow 75ms, filter 120ms;
 }
 
@@ -1358,6 +1422,37 @@ html[data-mode="hack"] .cap--accent {
   --c-ink: var(--cap-fam-ink);
 }
 
+/* Embedded S - A - M - U - B - I - N Keycaps */
+.kb-cap--sam {
+  --c-top: #ff7e4d;
+  --c-bg: var(--accent);
+  --c-side: var(--accent-side);
+  --c-ink: var(--accent-ink);
+}
+
+html[data-mode="hack"] .kb-cap--sam {
+  --c-top: #f24a40;
+  --c-bg: var(--accent);
+  --c-side: var(--accent-side);
+  --c-ink: var(--accent-ink);
+}
+
+.kb-cap--mode {
+  --c-top: #323640;
+  --c-bg: #1e2128;
+  --c-side: #0e1014;
+  --c-ink: #f4a83a;
+}
+
+.kb-sam-char {
+  font-family: var(--font);
+  font-weight: 850;
+  font-stretch: 118%;
+  font-size: 1.32rem;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
 .kb-cap:hover {
   transform: translateY(-1px);
 }
@@ -1372,32 +1467,38 @@ html[data-mode="hack"] .cap--accent {
     0 0 0 2px var(--accent);
 }
 
-.kb-cap-top {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.35rem;
-}
-
 .kb-cap-ico {
-  width: 1.05rem;
-  height: 1.05rem;
+  width: 1.7rem;
+  height: 1.7rem;
   flex-shrink: 0;
 }
 
-.kb-cap-code {
+/* Floating Hardware Keycap Tooltip on Hover/Focus */
+.kb-cap[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  translate: -50% 4px;
+  z-index: 20;
+  padding: 0.24rem 0.55rem;
+  border-radius: 6px;
+  background: var(--oled-bg);
+  color: var(--oled-ink);
   font-family: var(--mono);
   font-size: 0.75rem;
   font-weight: 700;
-  opacity: 0.78;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45);
+  transition: opacity 130ms var(--ease-out), translate 130ms var(--ease-out);
 }
 
-.kb-cap-name {
-  font-family: var(--font);
-  font-weight: 750;
-  font-size: 0.85rem;
-  line-height: 1.15;
+.kb-cap[data-tip]:hover::after,
+.kb-cap[data-tip]:focus-visible::after {
+  opacity: 1;
+  translate: -50% 0;
 }
 
 @media (max-width: 720px) {
@@ -1410,7 +1511,358 @@ html[data-mode="hack"] .cap--accent {
     padding: 0.5rem 0.75rem 0.68rem;
   }
   .kb-caps {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ---------- 11. Expertise Section: 4-Channel Architectural Bus Matrix ---------- */
+.exp-matrix {
+  border-radius: 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-enclosure);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  padding: 16px;
+}
+
+.exp-channel {
+  position: relative;
+  padding: 26px;
+  border-radius: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+  transition: border-color 180ms var(--ease-out), transform 180ms var(--ease-out);
+}
+
+.exp-channel:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.exp-ch-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px dashed var(--line-strong);
+}
+
+.exp-ch-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--accent-text);
+}
+
+html[data-mode="hack"] .exp-ch-id {
+  color: var(--accent);
+}
+
+.exp-ch-led {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.exp-ch-spec {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--ink-3);
+}
+
+.exp-ch-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 88px;
+  align-items: start;
+  gap: 1.25rem;
+}
+
+.exp-ch-body h3 {
+  margin-bottom: 0.55rem;
+}
+
+.exp-ch-body p {
+  color: var(--ink-2);
+  font-size: 0.96rem;
+  line-height: 1.58;
+}
+
+.exp-ch-Schematic {
+  width: 88px;
+  height: 76px;
+  border-radius: 10px;
+  background: var(--oled-bg);
+  color: var(--oled-ink);
+  padding: 10px;
+  display: grid;
+  place-items: center;
+}
+
+.exp-ch-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 900px) {
+  .exp-matrix {
+    grid-template-columns: 1fr;
+  }
+  .exp-ch-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- 12. Projects Section: Visual Hardware Cartridge Showcase ---------- */
+.proj-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.proj-card {
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-enclosure);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.15rem;
+  transition: border-color 180ms var(--ease-out), transform 180ms var(--ease-out);
+}
+
+.proj-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.proj-viewport {
+  position: relative;
+  height: 196px;
+  border-radius: 14px;
+  background: var(--oled-bg);
+  color: var(--oled-ink);
+  border: 1px solid var(--line-strong);
+  padding: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.proj-vp-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--oled-muted);
+}
+
+.proj-vp-art {
+  width: 100%;
+  height: 128px;
+}
+
+.proj-content {
+  padding: 6px 8px;
+}
+
+.proj-content h3 {
+  margin-bottom: 0.5rem;
+}
+
+.proj-content p {
+  color: var(--ink-2);
+  font-size: 0.96rem;
+  line-height: 1.58;
+}
+
+.proj-foot {
+  padding: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 900px) {
+  .proj-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- 13. Experience Section: PCB Signal-Trace Career Ledger ---------- */
+.ledger-enclosure {
+  border-radius: 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-enclosure);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ledger-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 1.5rem;
+  padding: 22px 24px;
+  border-radius: 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+}
+
+.ledger-time {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-family: var(--mono);
+}
+
+.ledger-period {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-text);
+}
+
+html[data-mode="hack"] .ledger-period {
+  color: var(--accent);
+}
+
+.ledger-node {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.22);
+}
+
+.ledger-org {
+  font-size: 0.78rem;
+  color: var(--ink-3);
+}
+
+.ledger-main h3 {
+  margin-bottom: 0.45rem;
+}
+
+.ledger-main p {
+  color: var(--ink-2);
+  font-size: 0.96rem;
+}
+
+@media (max-width: 860px) {
+  .ledger-row {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+}
+
+/* ---------- 14. Homepage Contact Console: Direct Frequency Dispatch ---------- */
+.dispatch-console {
+  border-radius: 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-enclosure);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+  gap: 16px;
+  padding: 16px;
+}
+
+.dispatch-bay {
+  padding: 28px;
+  border-radius: 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.35rem;
+}
+
+.freq-readout {
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: var(--oled-bg);
+  color: var(--oled-ink);
+  font-family: var(--mono);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.freq-label {
+  font-size: 0.75rem;
+  color: var(--oled-muted);
+}
+
+.freq-addr {
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  font-weight: 700;
+  color: var(--oled-ink);
+  word-break: break-all;
+}
+
+.patch-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.patch-key {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink);
+  transition: border-color 150ms, transform 120ms;
+}
+
+.patch-key:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .dispatch-console {
+    grid-template-columns: 1fr;
+  }
+  .patch-grid {
+    grid-template-columns: 1fr;
   }
 }
 
