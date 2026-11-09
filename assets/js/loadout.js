@@ -684,6 +684,35 @@ export async function initLoadout() {
     }
   }
 
+  let flipTimers = [];
+  function clearFlipTimers() {
+    flipTimers.forEach((id) => clearTimeout(id));
+    flipTimers = [];
+  }
+
+  function updateTechCap(cap, item, layerMod, isHack) {
+    if (!cap || !item) return;
+    cap._item = item;
+    cap._layerMod = layerMod;
+    const detailText = item.detail || "";
+    const shortLabel = shortHoverName(item);
+    const tierName =
+      item.tier === "daily" ? "Daily Driver" : item.tier === "proficient" ? "Proficient" : "Familiar";
+
+    cap.dataset.itemId = item.id;
+    cap.dataset.letter = item.name[0].toLowerCase();
+    cap.dataset.tip = shortLabel;
+    cap.setAttribute("aria-label", `${item.name} — ${tierName} — ${detailText}`);
+
+    cap.classList.remove("kb-cap--daily", "kb-cap--proficient", "kb-cap--familiar");
+    cap.classList.add(`kb-cap--${item.tier}`);
+
+    const dish = cap.querySelector(".kb-cap-dish");
+    if (dish) {
+      dish.innerHTML = `<svg class="kb-cap-ico" viewBox="0 0 24 24" aria-hidden="true">${iconFor(item.id)}</svg>`;
+    }
+  }
+
   function createTechCap(item, layerMod, isHack, colRatio, isCreamKey = false) {
     const detailText = item.detail || "";
     const shortLabel = shortHoverName(item);
@@ -703,16 +732,23 @@ export async function initLoadout() {
       </span>
     `;
 
+    cap._item = item;
+    cap._layerMod = layerMod;
+    cap._colRatio = colRatio;
+
     const inspect = (fromClick = false) => {
       board.querySelectorAll(".kb-cap[aria-pressed='true']").forEach((el) => {
         el.setAttribute("aria-pressed", "false");
       });
       cap.setAttribute("aria-pressed", "true");
-      setReadout(`${layerMod} // ${item.short}`, `${item.name} · ${tierName} — ${detailText}`);
+      const it = cap._item || item;
+      const lm = cap._layerMod || layerMod;
+      const tn = it.tier === "daily" ? "Daily Driver" : it.tier === "proficient" ? "Proficient" : "Familiar";
+      setReadout(`${lm} // ${it.short}`, `${it.name} · ${tn} — ${it.detail || ""}`);
       if (fromClick) {
         sound.play("down");
         setTimeout(() => sound.play("up"), 70);
-        impulseKeyboard(colRatio, 2.8);
+        impulseKeyboard(cap._colRatio ?? colRatio, 2.8);
       }
     };
 
@@ -736,8 +772,11 @@ export async function initLoadout() {
       </span>
     `;
 
+    cap._layerMod = layerMod;
+
     cap.addEventListener("pointerenter", () => {
-      setReadout(`${layerMod} // KEY [${item.label}]`, item.role);
+      const lm = cap._layerMod || layerMod;
+      setReadout(`${lm} // KEY [${item.label}]`, item.role);
     });
     cap.addEventListener("click", () => {
       sound.play("down");
@@ -792,6 +831,7 @@ export async function initLoadout() {
     const layers = modeData.layers || [];
     if (!layers.length) return;
 
+    const prevIdx = activeLayerIdx;
     activeLayerIdx = Math.max(0, Math.min(layers.length - 1, layerIndex));
     const currentLayer = layers[activeLayerIdx];
 
@@ -803,6 +843,143 @@ export async function initLoadout() {
     const allTwelveTech = [...(currentLayer.topRow || []), ...(currentLayer.bottomRow || [])];
     const firstTool = allTwelveTech[0];
 
+    const row1Spec = [
+      { type: "tech", item: allTwelveTech[0], cream: false },
+      { type: "sam", key: "a" },
+      { type: "tech", item: allTwelveTech[1], cream: false },
+      { type: "tech", item: allTwelveTech[2], cream: false },
+      { type: "sam", key: "b" },
+      { type: "tech", item: allTwelveTech[3], cream: false },
+      { type: "tech", item: allTwelveTech[4], cream: false },
+    ];
+    const row2Spec = [
+      { type: "sam", key: "s" },
+      { type: "tech", item: allTwelveTech[5], cream: true },
+      { type: "tech", item: allTwelveTech[6], cream: true },
+      { type: "sam", key: "u" },
+      { type: "tech", item: allTwelveTech[7], cream: true },
+      { type: "sam", key: "n" },
+      { type: "tech", item: allTwelveTech[8], cream: true },
+    ];
+    const row3Spec = [
+      { type: "tech", item: allTwelveTech[9], cream: false },
+      { type: "tech", item: allTwelveTech[10], cream: false },
+      { type: "sam", key: "m" },
+      { type: "tech", item: allTwelveTech[11], cream: false },
+      { type: "sam", key: "i" },
+      { type: "enter", key: "enter" },
+    ];
+    const rowSpecs = [row1Spec, row2Spec, row3Spec];
+
+    const existingMatrix = board.querySelector(".kb-matrix");
+    if (existingMatrix) {
+      // Dynamic in-place 3D keycap wave transition
+      clearFlipTimers();
+
+      // Update Left Bank modifier keys (Esc, Tab, Shift)
+      const modBtns = board.querySelectorAll(".kb-layer-bank .kb-mod");
+      modBtns.forEach((btn, idx) => {
+        const isSelected = idx === activeLayerIdx;
+        btn.setAttribute("aria-pressed", String(isSelected));
+        btn.classList.remove("is-punching");
+        if (isSelected && flipping && !reduceMotion) {
+          void btn.offsetWidth;
+          btn.classList.add("is-punching");
+          const pTimer = setTimeout(() => btn.classList.remove("is-punching"), 280);
+          flipTimers.push(pTimer);
+        }
+      });
+
+      // Update OLED readout to new layer's first tool
+      if (firstTool) {
+        const tn = firstTool.tier === "daily" ? "Daily Driver" : firstTool.tier === "proficient" ? "Proficient" : "Familiar";
+        setReadout(`${currentLayer.mod} // ${firstTool.short}`, `${firstTool.name} · ${tn} — ${firstTool.detail || ""}`);
+      }
+
+      const rowEls = existingMatrix.querySelectorAll(".kb-caps");
+      rowSpecs.forEach((spec, rIdx) => {
+        const rowEl = rowEls[rIdx];
+        if (!rowEl) return;
+        const caps = rowEl.children;
+
+        spec.forEach((slot, cIdx) => {
+          const cap = caps[cIdx];
+          if (!cap) return;
+
+          if (!flipping || reduceMotion) {
+            if (slot.type === "tech" && slot.item) {
+              updateTechCap(cap, slot.item, currentLayer.mod, isHack);
+            } else if (slot.type === "sam" || slot.type === "enter") {
+              cap._layerMod = currentLayer.mod;
+            }
+            return;
+          }
+
+          // Directional ripple wave timing:
+          // Left->Right when advancing (01->02, 02->03)
+          // Right->Left when retreating (03->02, 02->01)
+          // Outward from center when targeting 02 from outside
+          let waveDelay;
+          if (activeLayerIdx > prevIdx) {
+            waveDelay = cIdx * 32 + rIdx * 24;
+          } else if (activeLayerIdx < prevIdx) {
+            waveDelay = (6 - cIdx) * 32 + rIdx * 24;
+          } else {
+            waveDelay = Math.abs(cIdx - 3) * 36 + rIdx * 24;
+          }
+
+          cap.style.setProperty("--k-delay", `${waveDelay}ms`);
+          cap.classList.remove("is-flipping", "is-settling");
+          void cap.offsetWidth; // force reflow
+
+          if (slot.type === "tech" && slot.item) {
+            cap.classList.add("is-flipping");
+
+            // Invisible content swap at edge-on rotation midpoint
+            const mTimer = setTimeout(() => {
+              updateTechCap(cap, slot.item, currentLayer.mod, isHack);
+            }, waveDelay + 165);
+            flipTimers.push(mTimer);
+
+            const eTimer = setTimeout(() => {
+              cap.classList.remove("is-flipping");
+              cap.style.removeProperty("--k-delay");
+            }, waveDelay + 390);
+            flipTimers.push(eTimer);
+          } else {
+            // SAMUBIN cipher key (S, A, M, U, B, I, N, Enter) tactile spring re-seat bounce
+            cap._layerMod = currentLayer.mod;
+            cap.classList.add("is-settling");
+            const eTimer = setTimeout(() => {
+              cap.classList.remove("is-settling");
+              cap.style.removeProperty("--k-delay");
+            }, waveDelay + 330);
+            flipTimers.push(eTimer);
+          }
+        });
+      });
+
+      // Synchronized cascading audio clacks across the columns
+      if (flipping && !reduceMotion) {
+        for (let c = 0; c < 7; c++) {
+          const colTime = (activeLayerIdx < prevIdx ? (6 - c) : c) * 32;
+          const sTimer = setTimeout(() => {
+            sound.play("flip");
+          }, colTime);
+          flipTimers.push(sTimer);
+        }
+      }
+
+      // Update bottom row mode button text/tip if mode changed
+      const modeKey = board.querySelector(".kb-bottom-row .kb-cap--proficient");
+      if (modeKey) modeKey.dataset.tip = isHack ? "Dev Mode" : "Hack Mode";
+      const devKeyText = board.querySelector(".kb-bottom-row .kb-cap--yellow .kb-bot-main");
+      if (devKeyText) devKeyText.textContent = isHack ? "Red" : "Dev";
+
+      return;
+    }
+
+    // INITIAL RENDER (only runs on initial mount)
     board.innerHTML = "";
 
     // Build 4-Row Realistic 3D Mechanical Keyboard:
@@ -841,48 +1018,13 @@ export async function initLoadout() {
       leftBank.appendChild(modBtn);
     });
 
-    // Right 3-Row Matrix (7u per row):
-    // Row 1 (7u): [t0, 'A', t1, t2, 'B', t3, t4]
-    // Row 2 (7u): ['S', t5(cream), t6(cream), 'U', t7(cream), 'N', t8(cream)]
-    // Row 3 (7u): [t9, t10, 'M', t11, 'I', 'Enter ↵ (2u)']
+    // Right 3-Row Matrix (7u per row)
     const matrixEl = document.createElement("div");
     matrixEl.className = "kb-matrix";
 
-    const row1Spec = [
-      { type: "tech", item: allTwelveTech[0], cream: false },
-      { type: "sam", key: "a" },
-      { type: "tech", item: allTwelveTech[1], cream: false },
-      { type: "tech", item: allTwelveTech[2], cream: false },
-      { type: "sam", key: "b" },
-      { type: "tech", item: allTwelveTech[3], cream: false },
-      { type: "tech", item: allTwelveTech[4], cream: false },
-    ];
-    const row2Spec = [
-      { type: "sam", key: "s" },
-      { type: "tech", item: allTwelveTech[5], cream: true },
-      { type: "tech", item: allTwelveTech[6], cream: true },
-      { type: "sam", key: "u" },
-      { type: "tech", item: allTwelveTech[7], cream: true },
-      { type: "sam", key: "n" },
-      { type: "tech", item: allTwelveTech[8], cream: true },
-    ];
-    const row3Spec = [
-      { type: "tech", item: allTwelveTech[9], cream: false },
-      { type: "tech", item: allTwelveTech[10], cream: false },
-      { type: "sam", key: "m" },
-      { type: "tech", item: allTwelveTech[11], cream: false },
-      { type: "sam", key: "i" },
-      { type: "enter", key: "enter" },
-    ];
-
-    [row1Spec, row2Spec, row3Spec].forEach((spec, rIdx) => {
+    rowSpecs.forEach((spec) => {
       const rowEl = document.createElement("div");
       rowEl.className = "kb-caps";
-      if (flipping && !reduceMotion) {
-        rowEl.classList.add("is-flipping");
-        setTimeout(() => sound.play("flip"), rIdx * 55);
-        setTimeout(() => rowEl.classList.remove("is-flipping"), 500 + rIdx * 55);
-      }
 
       spec.forEach((slot, cIdx) => {
         const colRatio = (cIdx - 3) / 3;
@@ -903,6 +1045,7 @@ export async function initLoadout() {
 
     // Row 4: Bottom Modifier & Spacebar Row (Spacebar ONLY says "Space")
     const bottomRow = document.createElement("div");
+    bottomRow.className = "kb-bottom-row";
     bottomRow.className = "kb-bottom-row";
 
     // 1. Fn Key (Cream)
