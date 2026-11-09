@@ -216,9 +216,9 @@
       <div class="wrap">
         <div class="section-head">
           <div>
-            <h2 data-loadout-title data-scramble>Engineering Loadout</h2>
+            <h2 data-loadout-title data-scramble>Key Stack in the Board</h2>
             <p class="section-sub" data-loadout-sub>
-              Suspended 44-switch hardware matrix: grab the chassis to swing it, press any icon switch to inspect runtime telemetry on the OLED strip, or hit the embedded S-A-M-U-B-I-N keys in the center row.
+              Every keycap on this 3D mechanical board is a language, framework, AI pipeline, or cloud system I build with. Switch stack layers, click any keycap to inspect my stack, or yank the board to test the cable physics.
             </p>
           </div>
 
@@ -229,15 +229,19 @@
           </div>
         </div>
 
+        <!-- Clear Tech-Stack Category Switcher Pills -->
+        <div class="stack-inspector-bar">
+          <div class="stack-layer-pills" data-stack-pills role="tablist" aria-label="Technology Stack Categories"></div>
+        </div>
+
         <div class="hanging-kb-rig" data-hanging-kb>
-          <!-- Right-side Coiled USB-C Power Cable & Left-side Arm SVG Stage -->
+          <!-- Simple, Always-Connected Right Power Cable & Left Hand SVG Stage -->
           <svg class="kb-cables" data-kb-cables aria-hidden="true">
             <!-- Ceiling power outlet mount on right -->
-            <rect class="power-mount" data-power-mount x="0" y="0" width="28" height="10" rx="3" />
-            <!-- Right-side Power Cable (shadow, outer insulated jacket, coiled spiral core, highlight) -->
+            <rect class="power-mount" data-power-mount x="0" y="0" width="24" height="8" rx="3" />
+            <!-- Right-side Simple Smooth Power Cable (Guaranteed 100% connected to USB plug tip) -->
             <path class="cable-shadow" data-cable-r d="" />
             <path class="cable-body" data-cable-r d="" />
-            <path class="cable-coil" data-cable-coil d="" />
             <path class="cable-spec" data-cable-r d="" />
 
             <!-- Left-side Boy's Arm & Hand (holds the left side of the keyboard until pulled hard!) -->
@@ -246,9 +250,7 @@
               <path class="arm-sleeve" data-arm-sleeve d="" />
               <path class="arm-cuff" data-arm-cuff d="" />
               <g class="arm-hand" data-arm-hand>
-                <!-- Palm & thumb base -->
                 <rect class="hand-palm" x="-20" y="-12" width="40" height="24" rx="11" />
-                <!-- Open fingers shown when released -->
                 <g class="hand-open-fingers">
                   <rect x="-18" y="6" width="8" height="15" rx="4" />
                   <rect x="-8" y="8" width="8" height="17" rx="4" />
@@ -264,10 +266,11 @@
             <span>Grab Back ✋</span>
           </button>
 
-          <!-- Compact 60% Physical Mechanical Keyboard Case (No OLED bar) -->
-          <div class="kb-shell" data-kb-chassis title="Pull hard to slip from hand · Drag to swing on the power cable!">
+          <!-- Realistic 3D Sculpted 40%/60% Mechanical Keyboard (Snug Case Frame like Reference Photo) -->
+          <div class="kb-shell" data-kb-chassis title="Drag or pull hard to slip from hand · Click any 3D keycap to inspect tech stack!">
             <!-- Left Bezel: Boy's Gripping Fingers wrapped over the top-left edge -->
             <div class="kb-grip-fingers" data-kb-fingers aria-hidden="true">
+              <span class="grip-tip-anchor" data-grip-tip></span>
               <span class="grip-thumb"></span>
               <span class="grip-finger"></span>
               <span class="grip-finger"></span>
@@ -275,25 +278,14 @@
               <span class="grip-finger"></span>
             </div>
 
-            <!-- Right Bezel: Real Metal USB-C / Aviator Power Connector Plug -->
+            <!-- Right Bezel: Real Metal USB-C Power Connector Plug (with exact tip anchor for cable) -->
             <div class="kb-usb-plug" aria-hidden="true">
+              <span class="usb-tip-anchor" data-usb-tip></span>
               <span class="usb-boot"></span>
               <span class="usb-collar"></span>
               <span class="usb-housing">
                 <span class="usb-led"></span>
               </span>
-            </div>
-
-            <!-- Subtle Top Hardware Bezel Trim (Screws + 3 Tiny Status LEDs) -->
-            <div class="kb-bezel-top" aria-hidden="true">
-              <span class="kb-screw"></span>
-              <span class="kb-model-etch" data-loadout-tag>SAM-60 // CORE</span>
-              <span class="kb-leds">
-                <span class="kb-ind is-on" title="Power Connected"><i></i>PWR</span>
-                <span class="kb-ind is-on" title="Active Stack Layer"><i></i>LYR</span>
-                <span class="kb-ind" data-kb-grip-led title="Hand Grip Status"><i></i>GRIP</span>
-              </span>
-              <span class="kb-screw"></span>
             </div>
 
             <div class="kb-plate" data-loadout-board></div>

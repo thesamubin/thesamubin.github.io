@@ -1,8 +1,8 @@
 {
   "dev": {
-    "title": "Engineering Loadout",
-    "subtitle": "Compact 3-layer mechanical switchboard: click any merged stack button on the left to flip the keys, press any oversized icon switch, or type S-A-M-U-B-I-N in every layer.",
-    "defaultOled": "LOADOUT // CORE — TypeScript · Daily Driver · End-to-end typed web, APIs & AI agent pipelines",
+    "title": "Key Stack in the Board",
+    "subtitle": "Every keycap on this 3D mechanical board is a language, framework, AI pipeline, or cloud system I build with. Switch stack layers on the left, click any keycap to inspect my stack, or yank the board to test the cable physics.",
+    "defaultOled": "KEY STACK // CORE — TypeScript · Daily Driver · End-to-end typed web, APIs & AI agent pipelines",
     "layers": [
       {
         "id": "core",
@@ -73,9 +73,9 @@
     ]
   },
   "hack": {
-    "title": "Offensive & Defensive Arsenal",
-    "subtitle": "Compact 3-layer security switchboard: switch between Recon/Web, Exploit/Network, and RE/Labs, inspect any tool under the safelight, or press S-A-M-U-B-I-N in every stack.",
-    "defaultOled": "ARSENAL // RECON & WEB — Burp Suite · Core Tool · Manual HTTP interception, auth bypass & AppSec auditing",
+    "title": "Key Arsenal in the Board",
+    "subtitle": "Every keycap flipped to my offensive & defensive security stack: switch between Recon/Web, Exploit/Network, and RE/Labs, inspect any tool under the safelight, or press S-A-M-U-B-I-N.",
+    "defaultOled": "KEY ARSENAL // RECON & WEB — Burp Suite · Core Tool · Manual HTTP interception, auth bypass & AppSec auditing",
     "layers": [
       {
         "id": "recon-web",

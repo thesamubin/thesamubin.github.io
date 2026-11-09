@@ -1169,13 +1169,89 @@ html[data-mode="hack"] .cap--accent {
   background: var(--cap-fam-bg);
 }
 
-/* Custom Hanging Keyboard Rig: Left Held by Boy's Hand + Right Coiled USB-C Power Cable */
+/* Tech Stack Category Switcher Pills */
+.stack-inspector-bar {
+  max-width: 780px;
+  margin: 0 auto 0.5rem;
+}
+
+.stack-layer-pills {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.stack-pill {
+  appearance: none;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink-2);
+  border-radius: 12px;
+  padding: 0.58rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font);
+  box-shadow: var(--shadow-enclosure);
+  transition: border-color 140ms, background-color 140ms, transform 100ms;
+}
+
+.stack-pill:hover {
+  border-color: var(--accent);
+}
+
+.stack-pill[aria-selected="true"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+
+.stack-pill-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.stack-pill[aria-selected="true"] .stack-pill-dot {
+  background: currentColor;
+}
+
+.stack-pill-code {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.stack-pill-label {
+  font-size: 0.84rem;
+  font-weight: 700;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stack-pill-count {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.14);
+}
+
+/* Custom Hanging 3D Keyboard Rig: Left Held by Boy's Hand + Right Always-Connected Power Cable */
 .hanging-kb-rig {
   position: relative;
-  max-width: 740px;
+  max-width: 780px;
   margin-inline: auto;
-  padding-top: 76px;
-  padding-bottom: 56px;
+  padding-top: 74px;
+  padding-bottom: 58px;
 }
 
 .kb-cables {
@@ -1193,18 +1269,6 @@ html[data-mode="hack"] .cap--accent {
   fill: #2d3139;
   stroke: rgba(0, 0, 0, 0.45);
   stroke-width: 1.5px;
-}
-
-.cable-coil {
-  fill: none;
-  stroke: #1c1e24;
-  stroke-width: 5.5px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-html[data-mode="hack"] .cable-coil {
-  stroke: #381418;
 }
 
 /* Left-Side Boy's Arm & Hand in SVG */
@@ -1261,7 +1325,7 @@ html[data-mode="hack"] .arm-cuff {
 /* Re-grab button when keyboard slips from hand */
 .kb-hand-btn {
   position: absolute;
-  top: 46px;
+  top: 44px;
   left: 21%;
   translate: -50% 0;
   z-index: 12;
@@ -1283,19 +1347,19 @@ html[data-mode="hack"] .arm-cuff {
   transform: scale(1.05);
 }
 
-/* Real Compact 60% Mechanical Keyboard CNC Aluminum / Polycarbonate Case */
+/* Real 3D Miniature 40%/60% Mechanical Keyboard Case (Snug Molded Rim like Reference Photo) */
 .kb-shell {
   position: relative;
   z-index: 2;
-  padding: 12px 16px 18px;
-  border-radius: 22px;
-  background: linear-gradient(180deg, #353942 0%, #23262e 55%, #181a20 100%);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 7px 7px 11px;
+  border-radius: 15px;
+  background: linear-gradient(180deg, #f3f1ec 0%, #dcd8cf 70%, #b9b4a8 100%);
+  border: 1px solid rgba(0, 0, 0, 0.22);
   box-shadow:
-    inset 0 2px 0 rgba(255, 255, 255, 0.22),
-    inset 0 -6px 0 #101217,
-    0 30px 56px -18px rgba(0, 0, 0, 0.62),
-    0 8px 20px -4px rgba(0, 0, 0, 0.32);
+    inset 0 2px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -4px 0 #9c978b,
+    0 28px 46px -14px rgba(0, 0, 0, 0.44),
+    0 8px 18px -4px rgba(0, 0, 0, 0.25);
   overflow: visible;
   transform-origin: 79% 0;
   will-change: transform;
@@ -1304,12 +1368,12 @@ html[data-mode="hack"] .arm-cuff {
 }
 
 html[data-mode="hack"] .kb-shell {
-  background: linear-gradient(180deg, #281316 0%, #170b0d 55%, #0e0608 100%);
-  border-color: rgba(229, 57, 45, 0.28);
+  background: linear-gradient(180deg, #2b1518 0%, #190c0e 70%, #100708 100%);
+  border-color: rgba(229, 57, 45, 0.34);
   box-shadow:
-    inset 0 2px 0 rgba(255, 120, 110, 0.18),
-    inset 0 -6px 0 #070304,
-    0 32px 60px -18px rgba(0, 0, 0, 0.82);
+    inset 0 2px 0 rgba(255, 120, 110, 0.2),
+    inset 0 -4px 0 #080304,
+    0 32px 54px -14px rgba(0, 0, 0, 0.85);
 }
 
 .kb-shell.is-dragging {
@@ -1328,6 +1392,14 @@ html[data-mode="hack"] .kb-shell {
   gap: 3px;
   pointer-events: none;
   transition: opacity 160ms var(--ease-out), transform 180ms var(--ease-out);
+}
+
+.grip-tip-anchor {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 2px;
 }
 
 .hanging-kb-rig.is-left-released .kb-grip-fingers {
@@ -1354,20 +1426,20 @@ html[data-mode="hack"] .kb-shell {
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.38);
 }
 
-.grip-finger:nth-child(3) {
+.grip-finger:nth-child(4) {
   height: 24px;
 }
-.grip-finger:nth-child(4) {
+.grip-finger:nth-child(5) {
   height: 23px;
 }
-.grip-finger:nth-child(5) {
+.grip-finger:nth-child(6) {
   height: 19px;
 }
 
-/* Right-Side Metal USB-C / Aviator Power Connector Plug */
+/* Right-Side Metal USB-C Power Connector Plug (with exact tip anchor for cable) */
 .kb-usb-plug {
   position: absolute;
-  top: -28px;
+  top: -24px;
   left: 79%;
   translate: -50% 0;
   z-index: 5;
@@ -1377,33 +1449,39 @@ html[data-mode="hack"] .kb-shell {
   pointer-events: none;
 }
 
+.usb-tip-anchor {
+  width: 4px;
+  height: 2px;
+  display: block;
+}
+
 .usb-boot {
-  width: 12px;
-  height: 9px;
+  width: 11px;
+  height: 8px;
   border-radius: 3px 3px 0 0;
   background: #1b1d22;
 }
 
 .usb-collar {
-  width: 18px;
-  height: 6px;
+  width: 16px;
+  height: 5px;
   background: linear-gradient(90deg, #525761, #a3a9b5 50%, #525761);
   border: 1px solid #23262d;
 }
 
 .usb-housing {
-  width: 26px;
-  height: 14px;
+  width: 24px;
+  height: 12px;
   border-radius: 4px 4px 2px 2px;
   background: linear-gradient(90deg, #7d838f, #cfd4de 48%, #686e7a);
   border: 1px solid #20232a;
   display: grid;
   place-items: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .usb-led {
-  width: 10px;
+  width: 9px;
   height: 3px;
   border-radius: 2px;
   background: #4ade80;
@@ -1413,98 +1491,59 @@ html[data-mode="hack"] .usb-led {
   background: var(--accent);
 }
 
-/* Subtle Top Hardware Bezel Bar (Hex Screws + Engraved Model + 3 Tiny Status LEDs) */
-.kb-bezel-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 2px 8px 10px;
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  color: #d6dbe6;
-}
-
-.kb-screw {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #181a20 35%, #5b606b 40%, #2c3038 100%);
-  border: 1px solid rgba(0, 0, 0, 0.6);
-}
-
-.kb-model-etch {
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #e4e8f0;
-}
-
-.kb-leds {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  font-size: 0.66rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-}
-
-.kb-ind {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.28rem;
-  color: #d2d7e2;
-}
-
-.kb-ind i {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #555b69;
-  display: inline-block;
-}
-
-.kb-ind.is-on {
-  color: #f2f5fa;
-}
-
-.kb-ind.is-on i {
-  background: #4ade80;
-}
-
-html[data-mode="hack"] .kb-ind.is-on i {
-  background: var(--accent);
-}
-
-/* Recessed Switch Plate: 2-Column Layout (1.5u Left Modifiers + 7u 3-Row Matrix) */
+/* Deep Dark Recessed Switch Plate Cavity (4 Rows Total: 3-Row Top Grid + 1-Row Spacebar Row) */
 .kb-plate {
-  padding: 14px;
-  border-radius: 14px;
-  background: #14161b;
+  padding: 6px;
+  border-radius: 10px;
+  background: #1a1c20;
   box-shadow:
-    inset 0 3px 7px rgba(0, 0, 0, 0.75),
-    0 1px 0 rgba(255, 255, 255, 0.08);
-  display: grid;
-  grid-template-columns: 148px minmax(0, 1fr);
-  gap: 8px;
-  align-items: stretch;
+    inset 0 3px 8px rgba(0, 0, 0, 0.88),
+    0 1px 0 rgba(255, 255, 255, 0.45);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   perspective: 1100px;
 }
 
 html[data-mode="hack"] .kb-plate {
-  background: #090405;
+  background: #080405;
+  box-shadow:
+    inset 0 3px 8px rgba(0, 0, 0, 0.95),
+    0 1px 0 rgba(255, 110, 99, 0.14);
+}
+
+.kb-top-grid {
+  display: grid;
+  grid-template-columns: 118px minmax(0, 1fr);
+  gap: 5px;
+  align-items: stretch;
 }
 
 .kb-layer-bank {
   display: grid;
   grid-template-rows: repeat(3, 1fr);
-  gap: 8px;
+  gap: 5px;
 }
 
 .kb-matrix {
   display: grid;
   grid-template-rows: repeat(3, 1fr);
-  gap: 8px;
+  gap: 5px;
   transform-style: preserve-3d;
+}
+
+.kb-caps {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
+  transform-style: preserve-3d;
+}
+
+/* 4th Row (Bottom Row with Fn, Win[Yellow], Alt, Orange Spacebar, Back[Cream], Mode) */
+.kb-bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 2.8fr 1.6fr 1.2fr;
+  gap: 5px;
 }
 
 /* Split-flap X-axis flip wave during mode or layer morph */
@@ -1524,51 +1563,149 @@ html[data-mode="hack"] .kb-plate {
   }
 }
 
-/* Left-hand 1.5u Modifier Keys (01 · CORE, 02 · AI & DATA, 03 · SYSTEMS) */
-.kb-mod {
+/* ==========================================================================
+   TRUE 3D SCULPTED TRAPEZOIDAL KEYCAPS (Matching Reference Photo)
+   - Outer .kb-cap forms the tapered 3D beveled keycap skirt (top/left/right/bottom walls)
+   - Inner .kb-cap-dish forms the recessed concave top surface with icon + tech name
+   ========================================================================== */
+.kb-cap {
+  /* Default Cool Machined Grey Keycap (like Q W E R T Y alphas in the reference photo) */
+  --dish-top: #aeb4bb;
+  --dish-bg: #999fa6;
+  --skirt-top: #7f858c;
+  --skirt-bot: #5c6168;
+  --cap-ink: #17191c;
+
+  position: relative;
   appearance: none;
   border: 0;
   cursor: pointer;
-  position: relative;
+  min-height: 62px;
+  padding: 3px 5px 8px 5px;
+  border-radius: 8px;
+  color: var(--cap-ink);
+  background: linear-gradient(180deg, var(--skirt-top) 0%, var(--skirt-bot) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.42),
+    0 3px 4px rgba(0, 0, 0, 0.72);
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  transition: transform 70ms var(--ease-out), padding 70ms var(--ease-out), box-shadow 70ms;
+}
+
+.kb-cap-dish {
+  width: 100%;
+  border-radius: 5px;
+  background: linear-gradient(180deg, var(--dish-top) 0%, var(--dish-bg) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.14),
+    0 1px 2px rgba(0, 0, 0, 0.32);
+  padding: 4px 5px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  overflow: hidden;
+}
+
+/* Warm Cream Keycaps (like S D F G H & Fn / Backcnns in reference photo) */
+.kb-cap--cream {
+  --dish-top: #f5f1e7;
+  --dish-bg: #e7e2d5;
+  --skirt-top: #cbc5b6;
+  --skirt-bot: #a49e8f;
+  --cap-ink: #191b1e;
+}
+
+/* Warm Mustard / Ochre Keycap (like Win key in reference photo) */
+.kb-cap--yellow {
+  --dish-top: #f3d778;
+  --dish-bg: #e4c45a;
+  --skirt-top: #c4a33b;
+  --skirt-bot: #9a7d22;
+  --cap-ink: #1e1806;
+}
+
+/* Darker Slate / Proficient Keycaps */
+.kb-cap--proficient {
+  --dish-top: #8f959d;
+  --dish-bg: #7d838b;
+  --skirt-top: #636870;
+  --skirt-bot: #474b52;
+  --cap-ink: #121417;
+}
+
+/* Persimmon / Terracotta Orange Keycaps (Esc, Scrambled S-A-M-U-B-I-N, & Spacebar) */
+.kb-cap--sam,
+.kb-mod[aria-pressed="true"] {
+  --dish-top: #f28757;
+  --dish-bg: #e27240;
+  --skirt-top: #c45626;
+  --skirt-bot: #963c15;
+  --cap-ink: #1a0c05;
+}
+
+/* Wide 2u Enter Key */
+.kb-cap--enter {
+  grid-column: span 2;
+  --dish-top: #989ea5;
+  --dish-bg: #858b92;
+  --skirt-top: #696f76;
+  --skirt-bot: #4c5157;
+  --cap-ink: #141619;
+}
+
+/* Hack Mode 3D Sculpted Darkroom Keycap Palette */
+html[data-mode="hack"] .kb-cap {
+  --dish-top: #321a1d;
+  --dish-bg: #261316;
+  --skirt-top: #1b0c0e;
+  --skirt-bot: #0f0607;
+  --cap-ink: #f3dfdc;
+}
+
+html[data-mode="hack"] .kb-cap--cream {
+  --dish-top: #422226;
+  --dish-bg: #33191c;
+  --skirt-top: #231013;
+  --skirt-bot: #130809;
+  --cap-ink: #faeae7;
+}
+
+html[data-mode="hack"] .kb-cap--yellow {
+  --dish-top: #f4a83a;
+  --dish-bg: #db8e22;
+  --skirt-top: #b36e10;
+  --skirt-bot: #804b06;
+  --cap-ink: #180e02;
+}
+
+html[data-mode="hack"] .kb-cap--sam,
+html[data-mode="hack"] .kb-mod[aria-pressed="true"],
+html[data-mode="hack"] .kb-cap--enter {
+  --dish-top: #f24a40;
+  --dish-bg: #df362b;
+  --skirt-top: #b5231a;
+  --skirt-bot: #82140d;
+  --cap-ink: #160505;
+}
+
+/* Left Modifier Keys (Esc · CORE, Tab · AI/DB, Shift · SYSTEMS) */
+.kb-mod-dish {
   align-items: flex-start;
-  padding: 0.55rem 0.72rem 0.78rem;
-  border-radius: 10px;
+  justify-content: space-between;
+  padding: 5px 7px;
   text-align: left;
-  color: var(--cap-prof-ink);
-  background: linear-gradient(180deg, var(--cap-prof-top), var(--cap-prof-bg));
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    inset 0 -5px 0 var(--cap-prof-side),
-    0 3px 6px rgba(0, 0, 0, 0.45);
-  transition: transform 75ms var(--ease-out), box-shadow 75ms;
 }
 
 .kb-mod-top {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-}
-
-.kb-mod:hover {
-  transform: translateY(-1px);
-}
-
-.kb-mod:active,
-.kb-mod[aria-pressed="true"] {
-  transform: translateY(2px);
-  background: linear-gradient(180deg, #ff7a47, var(--accent));
-  color: var(--accent-ink);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    inset 0 -3px 0 var(--accent-side);
-}
-
-html[data-mode="hack"] .kb-mod:active,
-html[data-mode="hack"] .kb-mod[aria-pressed="true"] {
-  background: linear-gradient(180deg, #f24a40, var(--accent));
+  gap: 0.35rem;
 }
 
 .kb-mod-led {
@@ -1580,113 +1717,92 @@ html[data-mode="hack"] .kb-mod[aria-pressed="true"] {
 }
 
 .kb-mod[aria-pressed="true"] .kb-mod-led {
-  background: #ffffff;
+  background: #1a0c05;
 }
 
 .kb-mod-code {
   font-family: var(--mono);
-  font-weight: 700;
-  font-size: 0.76rem;
-  letter-spacing: 0.02em;
+  font-weight: 800;
+  font-size: 0.72rem;
+  letter-spacing: 0.01em;
 }
 
 .kb-mod-sub {
-  font-size: 0.73rem;
-  font-weight: 600;
-  opacity: 0.9;
+  font-size: 0.68rem;
+  font-weight: 700;
+  opacity: 0.88;
+  line-height: 1.15;
 }
 
-/* 7-Unit Keycap Row (Scrambled S-A-M-U-B-I-N + Oversized Tech Icons + 2u Wide ENTER Key) */
-.kb-caps {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 8px;
-  transform-style: preserve-3d;
+/* Tech Icon + Micro-Engraved Tech Name inside the 3D Dish */
+.kb-cap-ico {
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
 }
 
-.kb-cap {
-  --c-top: var(--cap-daily-top);
-  --c-bg: var(--cap-daily-bg);
-  --c-side: var(--cap-daily-side);
-  --c-ink: var(--cap-daily-ink);
-  position: relative;
-  appearance: none;
-  border: 0;
-  cursor: pointer;
-  min-height: 64px;
-  display: grid;
-  place-items: center;
-  padding: 0.42rem 0.42rem 0.72rem;
-  border-radius: 10px;
-  color: var(--c-ink);
-  background: linear-gradient(180deg, var(--c-top), var(--c-bg) 80%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.55),
-    inset 0 -5px 0 var(--c-side),
-    0 4px 7px -1px rgba(0, 0, 0, 0.55);
-  transition: transform 75ms var(--ease-out), box-shadow 75ms, filter 120ms;
-}
-
-.kb-cap--proficient {
-  --c-top: var(--cap-prof-top);
-  --c-bg: var(--cap-prof-bg);
-  --c-side: var(--cap-prof-side);
-  --c-ink: var(--cap-prof-ink);
-}
-
-.kb-cap--familiar {
-  --c-top: var(--cap-fam-top);
-  --c-bg: var(--cap-fam-bg);
-  --c-side: var(--cap-fam-side);
-  --c-ink: var(--cap-fam-ink);
-}
-
-/* Scrambled S - A - M - U - B - I - N Keycaps & 2u Wide ENTER ↵ Key */
-.kb-cap--sam {
-  --c-top: #ff7e4d;
-  --c-bg: var(--accent);
-  --c-side: var(--accent-side);
-  --c-ink: var(--accent-ink);
-}
-
-html[data-mode="hack"] .kb-cap--sam {
-  --c-top: #f24a40;
-  --c-bg: var(--accent);
-  --c-side: var(--accent-side);
-  --c-ink: var(--accent-ink);
-}
-
-.kb-cap--enter {
-  grid-column: span 2;
-  --c-top: #323640;
-  --c-bg: #1e2128;
-  --c-side: #0e1014;
-  --c-ink: #f4a83a;
-}
-
-html[data-mode="hack"] .kb-cap--enter {
-  --c-top: #f24a40;
-  --c-bg: var(--accent);
-  --c-side: var(--accent-side);
-  --c-ink: #140607;
+.kb-cap-name {
+  font-family: var(--mono);
+  font-size: 0.58rem;
+  font-weight: 750;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.92;
 }
 
 .kb-sam-char {
   font-family: var(--font);
   font-weight: 850;
   font-stretch: 118%;
-  font-size: 1.38rem;
+  font-size: 1.24rem;
   letter-spacing: -0.02em;
   line-height: 1;
 }
 
 .kb-cap--enter .kb-sam-char {
   font-family: var(--mono);
-  font-size: 0.96rem;
+  font-size: 0.92rem;
   font-weight: 800;
-  letter-spacing: 0.04em;
 }
 
+.kb-bot-main {
+  font-family: var(--font);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+/* Center 3D Spacebar Dish */
+.kb-space-dish {
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+
+.kb-space-barline {
+  width: 34px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.45;
+}
+
+.kb-space-text {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Physical 3D Keycap Depression on Click / Active */
 .kb-cap:hover {
   transform: translateY(-1px);
 }
@@ -1694,18 +1810,12 @@ html[data-mode="hack"] .kb-cap--enter {
 .kb-cap:active,
 .kb-cap.is-down,
 .kb-cap[aria-pressed="true"] {
-  transform: translateY(3px);
+  transform: translateY(2px);
+  padding-bottom: 5px;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.35),
-    inset 0 -2px 0 var(--accent-side),
+    0 1px 2px rgba(0, 0, 0, 0.75),
     0 0 0 2px var(--accent);
-}
-
-/* Oversized, High-Clarity Recognizable Tech Icons (36px × 36px) */
-.kb-cap-ico {
-  width: 2.25rem;
-  height: 2.25rem;
-  flex-shrink: 0;
 }
 
 /* Floating Hardware Keycap Tooltip on Hover/Focus */
@@ -1721,7 +1831,7 @@ html[data-mode="hack"] .kb-cap--enter {
   background: var(--oled-bg);
   color: var(--oled-ink);
   font-family: var(--mono);
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   font-weight: 700;
   white-space: nowrap;
   pointer-events: none;
@@ -1736,8 +1846,11 @@ html[data-mode="hack"] .kb-cap--enter {
   translate: -50% 0;
 }
 
-@media (max-width: 720px) {
-  .kb-plate {
+@media (max-width: 740px) {
+  .stack-layer-pills {
+    grid-template-columns: 1fr;
+  }
+  .kb-top-grid {
     grid-template-columns: 1fr;
   }
   .kb-layer-bank {
@@ -1746,6 +1859,12 @@ html[data-mode="hack"] .kb-cap--enter {
   }
   .kb-caps {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .kb-bottom-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .kb-cap--space {
+    grid-column: span 3;
   }
 }
 
