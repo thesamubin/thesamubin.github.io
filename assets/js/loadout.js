@@ -108,6 +108,24 @@ function iconFor(id) {
   return ICONS[id] || ICONS.default;
 }
 
+const SHORT_HOVER_NAMES = {
+  tailwind: "Tailwind",
+  hf: "HuggingFace",
+  rag: "Vector/RAG",
+  arch: "Arch",
+  xsstrike: "XSS Lab",
+  john: "JohnRipper",
+  lfi: "LFI Lab",
+  aircrack: "Aircrack",
+  whois: "Whois",
+  gdb: "GDB",
+  bugcrowd: "Bugcrowd",
+};
+
+function shortHoverName(item) {
+  return SHORT_HOVER_NAMES[item.id] || item.name;
+}
+
 const SAMUBIN_META = {
   s: { key: "s", label: "S", role: "Sequence 01 // S — Press S-A-M-U-B-I-N to unlock page cipher" },
   a: { key: "a", label: "A", role: "Sequence 02 // A — Sakib Alam Mubin (SA Mubin) key" },
@@ -126,11 +144,11 @@ export async function initLoadout() {
   const rig = section.querySelector("[data-hanging-kb]");
   const chassis = section.querySelector("[data-kb-chassis]");
   const cableSvg = section.querySelector("[data-kb-cables]");
-  const powerMount = section.querySelector("[data-power-mount]");
-  const usbTip = section.querySelector("[data-usb-tip]");
-  const gripTip = section.querySelector("[data-grip-tip]");
-  const armGroup = section.querySelector("[data-kb-arm]");
-  const armHand = section.querySelector("[data-arm-hand]");
+  const mountL = section.querySelector("[data-mount-l]");
+  const mountR = section.querySelector("[data-mount-r]");
+  const usbTipL = section.querySelector("[data-usb-tip-l]");
+  const usbTipR = section.querySelector("[data-usb-tip-r]");
+  const freePlugL = section.querySelector("[data-free-plug-l]");
   const regrabBtn = section.querySelector("[data-kb-regrab]");
   const board = section.querySelector("[data-loadout-board]");
   const pillsWrap = section.querySelector("[data-stack-pills]");
@@ -151,11 +169,10 @@ export async function initLoadout() {
   let activeLayerIdx = 0;
   let letterCursor = {};
   let samBuffer = "";
-  let spacebarTextEl = null;
 
-  // --- Two-State Hanging Keyboard Physics ---
-  // State A (isLeftHeld = true): Left side gripped by Boy's Hand, Right side on Simple Connected Power Cable.
-  // State B (isLeftHeld = false): Left hand let go! Dangles & swings diagonally from the Right Power Cable (which NEVER detaches!).
+  // --- Dual-Cable & Single-Cable Pendulum Physics ---
+  // State A (isLeftHeld = true): Both Left & Right USB-C power cables connected.
+  // State B (isLeftHeld = false): Left power cable unplugs & recoils; keyboard swings realistically on the Right power cable.
   let isLeftHeld = true;
   let yankEnergy = 0;
   let x = 0;
@@ -164,16 +181,22 @@ export async function initLoadout() {
   let vy = 0;
   let ang = 0;
   let vang = 0;
+
+  // Free-hanging unplugged left cable connector physics
+  let freePlugOffsetX = 0;
+  let freePlugOffsetY = 36;
+  let freePlugVx = 0;
+  let freePlugVy = 0;
+
   let raf = 0;
   let dragging = false;
   let pointerId = null;
   let startX = 0;
   let startY = 0;
 
-  function setReadout(badgeText, detailText, spacebarLabel = null) {
+  function setReadout(badgeText, detailText) {
     if (readoutTag && badgeText) readoutTag.textContent = badgeText;
     if (readoutText && detailText) readoutText.textContent = detailText;
-    if (spacebarTextEl && spacebarLabel) spacebarTextEl.textContent = spacebarLabel;
   }
 
   function drawHanging() {
@@ -187,67 +210,56 @@ export async function initLoadout() {
     const h = svgRect.height || 145;
     cableSvg.setAttribute("viewBox", `0 0 ${w.toFixed(1)} ${h.toFixed(1)}`);
 
-    const leftAnchorX = w * 0.21;
-    const rightAnchorX = w * 0.79;
+    const leftAnchorX = w * 0.14;
+    const rightAnchorX = w * 0.86;
 
-    // Measure exact real-time pixel position of the USB-C plug tip so the power cable NEVER detaches!
+    if (mountL) {
+      mountL.setAttribute("x", (leftAnchorX - 12).toFixed(1));
+      mountL.setAttribute("y", "0");
+    }
+    if (mountR) {
+      mountR.setAttribute("x", (rightAnchorX - 12).toFixed(1));
+      mountR.setAttribute("y", "0");
+    }
+
+    // 1. Measure exact real-time pixel position of the Right USB-C plug tip so it NEVER detaches!
     let rightPortX = rightAnchorX;
     let rightPortY = 74 + y;
-    if (usbTip && svgRect.width > 0) {
-      const tipR = usbTip.getBoundingClientRect();
+    if (usbTipR && svgRect.width > 0) {
+      const tipR = usbTipR.getBoundingClientRect();
       rightPortX = tipR.left + tipR.width * 0.5 - svgRect.left;
       rightPortY = tipR.top + tipR.height * 0.5 - svgRect.top + 2;
     }
 
-    // Measure exact real-time pixel position of the left gripping fingers
-    let leftPortX = leftAnchorX;
-    let leftPortY = 74 + y;
-    if (gripTip && svgRect.width > 0) {
-      const gripR = gripTip.getBoundingClientRect();
-      leftPortX = gripR.left + gripR.width * 0.5 - svgRect.left;
-      leftPortY = gripR.top + gripR.height * 0.5 - svgRect.top + 2;
-    }
-
-    if (powerMount) {
-      powerMount.setAttribute("x", (rightAnchorX - 12).toFixed(1));
-      powerMount.setAttribute("y", "0");
-    }
-
-    // 1. Simple, Smooth, 100% Connected Power Cable from ceiling mount (rightAnchorX, 4) into USB-C plug tip (rightPortX, rightPortY)
-    const midY = (4 + rightPortY) * 0.52;
-    const dR = `M ${rightAnchorX.toFixed(1)} 4 C ${rightAnchorX.toFixed(1)} ${midY.toFixed(1)}, ${rightPortX.toFixed(1)} ${midY.toFixed(1)}, ${rightPortX.toFixed(1)} ${rightPortY.toFixed(1)}`;
+    const rMidX = (rightAnchorX + rightPortX) * 0.5 + vx * 0.45;
+    const rMidY = (4 + rightPortY) * 0.54;
+    const dR = `M ${rightAnchorX.toFixed(1)} 4 C ${rightAnchorX.toFixed(1)} ${rMidY.toFixed(1)}, ${rMidX.toFixed(1)} ${rMidY.toFixed(1)}, ${rightPortX.toFixed(1)} ${rightPortY.toFixed(1)}`;
     cableSvg.querySelectorAll("[data-cable-r]").forEach((p) => p.setAttribute("d", dR));
 
-    // 2. Left-Side Boy's Arm & Hand
-    if (armGroup) {
-      const handTargetX = isLeftHeld ? leftPortX : leftAnchorX - 4;
-      const handTargetY = isLeftHeld ? leftPortY - 2 : 28;
+    // 2. Left Power Cable: Connected to Left USB-C plug when attached, or hanging loose with unplugged USB-C tip when detached
+    let leftPortX = leftAnchorX + freePlugOffsetX;
+    let leftPortY = freePlugOffsetY;
+    if (isLeftHeld && usbTipL && svgRect.width > 0) {
+      const tipL = usbTipL.getBoundingClientRect();
+      leftPortX = tipL.left + tipL.width * 0.5 - svgRect.left;
+      leftPortY = tipL.top + tipL.height * 0.5 - svgRect.top + 2;
+    }
 
-      const elbowX = (leftAnchorX + handTargetX) * 0.5 - (isLeftHeld ? 6 : 3);
-      const elbowY = handTargetY * 0.52;
+    const lMidX = (leftAnchorX + leftPortX) * 0.5 + (isLeftHeld ? vx * 0.45 : freePlugVx * 0.6);
+    const lMidY = (4 + leftPortY) * 0.54;
+    const dL = `M ${leftAnchorX.toFixed(1)} 4 C ${leftAnchorX.toFixed(1)} ${lMidY.toFixed(1)}, ${lMidX.toFixed(1)} ${lMidY.toFixed(1)}, ${leftPortX.toFixed(1)} ${leftPortY.toFixed(1)}`;
+    cableSvg.querySelectorAll("[data-cable-l]").forEach((p) => p.setAttribute("d", dL));
 
-      const dArm = `M ${leftAnchorX.toFixed(1)} -6 Q ${elbowX.toFixed(1)} ${elbowY.toFixed(1)} ${handTargetX.toFixed(1)} ${(handTargetY - 6).toFixed(1)}`;
-      cableSvg.querySelectorAll("[data-arm-sleeve]").forEach((p) => p.setAttribute("d", dArm));
+    if (freePlugL) {
+      const plugAngle = isLeftHeld ? deg : Math.max(-28, Math.min(28, -freePlugOffsetX * 0.65 - freePlugVx * 2.2));
+      freePlugL.setAttribute(
+        "transform",
+        `translate(${leftPortX.toFixed(1)}, ${leftPortY.toFixed(1)}) rotate(${plugAngle.toFixed(1)})`
+      );
+    }
 
-      const cuffEl = cableSvg.querySelector("[data-arm-cuff]");
-      if (cuffEl) {
-        cuffEl.setAttribute(
-          "d",
-          `M ${(handTargetX - 16).toFixed(1)} ${(handTargetY - 8).toFixed(1)} L ${(handTargetX + 16).toFixed(1)} ${(handTargetY - 8).toFixed(1)}`
-        );
-      }
-
-      if (armHand) {
-        const handDeg = isLeftHeld ? deg * 0.75 : -8;
-        armHand.setAttribute(
-          "transform",
-          `translate(${handTargetX.toFixed(1)}, ${handTargetY.toFixed(1)}) rotate(${handDeg.toFixed(1)})`
-        );
-      }
-
-      if (regrabBtn) {
-        regrabBtn.style.left = `${leftAnchorX.toFixed(0)}px`;
-      }
+    if (regrabBtn) {
+      regrabBtn.style.left = `${leftAnchorX.toFixed(0)}px`;
     }
   }
 
@@ -258,9 +270,17 @@ export async function initLoadout() {
     rig?.classList.add("is-left-released");
     if (regrabBtn) regrabBtn.hidden = false;
     sound.play("flip");
-    vy += 5.5;
-    vx += 1.5;
-    vang -= 0.042;
+
+    // Initialize the unplugged left cable tip at the exact port position and recoil it upward!
+    freePlugOffsetX = x * 0.6;
+    freePlugOffsetY = Math.max(28, 66 + y);
+    freePlugVx = -2.6;
+    freePlugVy = -8.5;
+
+    // Realistic downward drop & counter-clockwise torque as the left support vanishes
+    vy += 6.4;
+    vx += 2.2;
+    vang -= 0.052;
     if (!raf) raf = requestAnimationFrame(stepPhysics);
   }
 
@@ -271,8 +291,8 @@ export async function initLoadout() {
     rig?.classList.remove("is-left-released");
     if (regrabBtn) regrabBtn.hidden = true;
     sound.play("auth");
-    vy -= 3.5;
-    vang += 0.03;
+    vy -= 4.2;
+    vang += 0.038;
     if (!raf) raf = requestAnimationFrame(stepPhysics);
   }
 
@@ -284,54 +304,72 @@ export async function initLoadout() {
 
   function stepPhysics() {
     raf = 0;
+
+    // Step the loose left cable plug whenever unplugged
+    if (!isLeftHeld) {
+      const restPlugX = -2;
+      const restPlugY = 34;
+      const pfx = (restPlugX - freePlugOffsetX) * 0.12;
+      const pfy = (restPlugY - freePlugOffsetY) * 0.14;
+      freePlugVx = (freePlugVx + pfx) * 0.86;
+      freePlugVy = (freePlugVy + pfy) * 0.85;
+      freePlugOffsetX += freePlugVx;
+      freePlugOffsetY += freePlugVy;
+    }
+
     if (!dragging) {
       if (isLeftHeld) {
-        const fx = -x * 0.1;
-        const fy = -y * 0.12;
-        vx = (vx + fx) * 0.83;
-        vy = (vy + fy) * 0.83;
+        // Dual-Cable Coupled Spring-Damper Physics
+        const fx = -x * 0.11;
+        const fy = -y * 0.135;
+        vx = (vx + fx) * 0.84;
+        vy = (vy + fy) * 0.84;
         x += vx;
         y += vy;
 
-        const targetAng = Math.max(-0.08, Math.min(0.08, x * 0.001 + vx * 0.003));
-        vang = (vang + (targetAng - ang) * 0.16) * 0.82;
+        const targetAng = Math.max(-0.08, Math.min(0.08, x * 0.0012 + vx * 0.0032));
+        vang = (vang + (targetAng - ang) * 0.17) * 0.83;
         ang += vang;
         yankEnergy *= 0.92;
       } else {
-        // Single-Cable Pendulum Physics:
-        // Pivoting around the right-side USB-C power plug (`transform-origin: 79% 0`),
-        // gravity pulls the left side down to restAng = -0.34 rad (-19.5 deg) while the right power cable stays taut and connected!
-        const restX = 8;
-        const restY = 26;
-        const restAng = -0.34;
+        // Single-Cable Rigid-Body Pendulum Physics (Suspended from Right USB-C Cable at 86%):
+        // Center of mass hangs to the left of the right cable, producing natural pendulum oscillations
+        // coupled with horizontal sway of the right tether.
+        const restX = 11;
+        const restY = 28;
+        const restAng = -0.35;
 
-        const fx = (restX - x) * 0.07 + Math.sin(ang - restAng) * 1.2;
-        const fy = (restY - y) * 0.08;
-        vx = (vx + fx) * 0.88;
+        const swingDelta = ang - restAng;
+        const fx = (restX - x) * 0.075 + Math.sin(swingDelta) * 1.45;
+        const fy = (restY - y) * 0.088 + Math.abs(Math.sin(swingDelta)) * 0.45;
+        vx = (vx + fx) * 0.89;
         vy = (vy + fy) * 0.88;
         x += vx;
         y += vy;
 
-        const torque = (restAng - ang) * 0.085 - vx * 0.002;
-        vang = (vang + torque) * 0.91;
+        // Gravitational restoring torque + translational inertia coupling
+        const torque = -Math.sin(swingDelta) * 0.092 - vx * 0.0024;
+        vang = (vang + torque) * 0.915;
         ang += vang;
       }
     }
 
     drawHanging();
 
-    const restX = isLeftHeld ? 0 : 8;
-    const restY = isLeftHeld ? 0 : 26;
-    const restAng = isLeftHeld ? 0 : -0.34;
+    const restX = isLeftHeld ? 0 : 11;
+    const restY = isLeftHeld ? 0 : 28;
+    const restAng = isLeftHeld ? 0 : -0.35;
+    const plugEnergy = isLeftHeld ? 0 : Math.abs(freePlugVx) + Math.abs(freePlugVy);
     const energy =
+      plugEnergy +
       Math.abs(vx) +
       Math.abs(vy) +
-      Math.abs(vang) * 25 +
+      Math.abs(vang) * 26 +
       Math.abs(x - restX) * 0.03 +
       Math.abs(y - restY) * 0.03 +
-      Math.abs(ang - restAng) * 2;
+      Math.abs(ang - restAng) * 2.2;
 
-    if (dragging || energy > 0.018) {
+    if (dragging || energy > 0.015) {
       raf = requestAnimationFrame(stepPhysics);
     } else {
       x = restX;
@@ -344,16 +382,16 @@ export async function initLoadout() {
   function impulseKeyboard(colRatio = 0, downForce = 3.0) {
     if (reduceMotion) return;
     vy += downForce;
-    vx += colRatio * 1.0;
+    vx += colRatio * 1.05;
     if (isLeftHeld) {
-      vang += colRatio * 0.008;
-      if (colRatio < -0.2) yankEnergy += 0.15;
-      if (yankEnergy > 1.35) {
+      vang += colRatio * 0.009;
+      if (colRatio < -0.2) yankEnergy += 0.16;
+      if (yankEnergy > 1.3) {
         releaseLeftHand();
         return;
       }
     } else {
-      vang += (colRatio - 0.45) * 0.016;
+      vang += (colRatio - 0.45) * 0.018;
     }
     if (!raf) raf = requestAnimationFrame(stepPhysics);
   }
@@ -387,11 +425,11 @@ export async function initLoadout() {
         vy = (dy - y) * 0.45;
         x = dx;
         y = dy;
-        ang = Math.max(-0.14, Math.min(0.12, dx * 0.0012 - dy * 0.0018));
+        ang = Math.max(-0.15, Math.min(0.12, dx * 0.0014 - dy * 0.002));
 
-        yankEnergy += speed * 0.018;
+        yankEnergy += speed * 0.019;
         const pullDist = Math.hypot(dx, Math.max(0, dy));
-        if (pullDist > 46 || dy > 40 || yankEnergy > 1.25) {
+        if (pullDist > 45 || dy > 38 || yankEnergy > 1.2) {
           releaseLeftHand();
         }
       } else {
@@ -401,7 +439,7 @@ export async function initLoadout() {
         vy = (dy - y) * 0.45;
         x = dx;
         y = dy;
-        ang = -0.34 + dx * 0.0022 + (dy - 26) * -0.0025;
+        ang = -0.35 + dx * 0.0024 + (dy - 28) * -0.0026;
 
         if (dy < 6 && Math.abs(dx) < 28) {
           regrabLeftHand();
@@ -424,6 +462,7 @@ export async function initLoadout() {
 
   function createTechCap(item, layerMod, isHack, colRatio, isCreamKey = false) {
     const detailText = item.detail || "";
+    const shortLabel = shortHoverName(item);
     const tierName =
       item.tier === "daily" ? "Daily Driver" : item.tier === "proficient" ? "Proficient" : "Familiar";
     const cap = document.createElement("button");
@@ -431,13 +470,13 @@ export async function initLoadout() {
     cap.className = `kb-cap kb-cap--icon kb-cap--${item.tier} ${isCreamKey ? "kb-cap--cream" : ""}`;
     cap.dataset.itemId = item.id;
     cap.dataset.letter = item.name[0].toLowerCase();
-    cap.dataset.tip = `${item.name} (${tierName})`;
+    cap.dataset.tip = shortLabel;
     cap.setAttribute("aria-pressed", "false");
     cap.setAttribute("aria-label", `${item.name} — ${tierName} — ${detailText}`);
     cap.innerHTML = `
       <span class="kb-cap-dish">
         <svg class="kb-cap-ico" viewBox="0 0 24 24" aria-hidden="true">${iconFor(item.id)}</svg>
-        <span class="kb-cap-name">${item.name}</span>
+        <span class="kb-cap-name">${shortLabel}</span>
       </span>
     `;
 
@@ -446,11 +485,7 @@ export async function initLoadout() {
         el.setAttribute("aria-pressed", "false");
       });
       cap.setAttribute("aria-pressed", "true");
-      setReadout(
-        `${layerMod} // ${item.short}`,
-        `${item.name} · ${tierName} — ${detailText}`,
-        `STACK // ${item.name} · ${tierName}`
-      );
+      setReadout(`${layerMod} // ${item.short}`, `${item.name} · ${tierName} — ${detailText}`);
       if (fromClick) {
         sound.play("down");
         setTimeout(() => sound.play("up"), 70);
@@ -470,17 +505,17 @@ export async function initLoadout() {
     cap.type = "button";
     cap.className = `kb-cap kb-cap--sam ${isWideEnter ? "kb-cap--enter" : ""}`;
     cap.dataset.samKey = item.key;
-    cap.dataset.tip = isWideEnter ? "Enter · Flip Dev ⇄ Hack [H]" : `Key ${item.label} · SAMUBIN`;
+    cap.dataset.tip = isWideEnter ? "Flip Mode" : `Key ${item.label}`;
     cap.setAttribute("aria-label", item.role);
     cap.innerHTML = `
       <span class="kb-cap-dish">
         <span class="kb-sam-char">${item.label}</span>
-        ${isWideEnter ? '<span class="kb-cap-name">Flip Mode</span>' : '<span class="kb-cap-name">Cipher</span>'}
+        <span class="kb-cap-name">${isWideEnter ? "Mode ⇄" : "Cipher"}</span>
       </span>
     `;
 
     cap.addEventListener("pointerenter", () => {
-      setReadout(`${layerMod} // KEY [${item.label}]`, item.role, `SAMUBIN // KEY [${item.label}]`);
+      setReadout(`${layerMod} // KEY [${item.label}]`, item.role);
     });
     cap.addEventListener("click", () => {
       sound.play("down");
@@ -502,7 +537,7 @@ export async function initLoadout() {
     return cap;
   }
 
-  function renderPills(layers, isHack) {
+  function renderPills(layers) {
     if (!pillsWrap) return;
     pillsWrap.innerHTML = "";
     layers.forEach((layer, idx) => {
@@ -516,13 +551,12 @@ export async function initLoadout() {
         <span class="stack-pill-dot"></span>
         <span class="stack-pill-code">${layer.code}</span>
         <span class="stack-pill-label">${layer.label}</span>
-        <span class="stack-pill-count">12</span>
       `;
       pill.addEventListener("click", () => {
         if (activeLayerIdx === idx) return;
         sound.play("down");
         setTimeout(() => sound.play("up"), 75);
-        impulseKeyboard(-0.6, 3.2);
+        impulseKeyboard((idx - 1) * 0.45, 3.0);
         renderBoard(getMode(), { flipping: true, layerIndex: idx });
       });
       pillsWrap.appendChild(pill);
@@ -541,19 +575,19 @@ export async function initLoadout() {
     if (titleEl) titleEl.textContent = modeData.title;
     if (subEl) subEl.textContent = modeData.subtitle;
 
-    renderPills(layers, isHack);
+    renderPills(layers);
 
     const allTwelveTech = [...(currentLayer.topRow || []), ...(currentLayer.bottomRow || [])];
     const firstTool = allTwelveTech[0];
 
     board.innerHTML = "";
 
-    // Build 4-Row Realistic 3D Mechanical Keyboard (like custom 40%/60% keyboard photo):
-    // Rows 1-3: Left 1.35u Layer Key (Esc / Tab / Shift style) + 7u Main Tech & Scrambled SAMUBIN Matrix
+    // Build 4-Row Realistic 3D Mechanical Keyboard:
+    // Rows 1-3: Left 1.25u Layer Key (Esc / Tab / Shift) + 7u Main Tech & Scrambled SAMUBIN Matrix
     const topGrid = document.createElement("div");
     topGrid.className = "kb-top-grid";
 
-    // Left Bank: 3 Stack Layer Keys (styled like Esc [Orange], Tab [Grey], Shift Fn [Grey])
+    // Left Bank: 3 Clean Mechanical Modifier Keys (Esc, Tab, Shift)
     const leftBank = document.createElement("div");
     leftBank.className = "kb-layer-bank";
     const modKeyHints = ["Esc", "Tab", "Shift"];
@@ -562,15 +596,16 @@ export async function initLoadout() {
       const modBtn = document.createElement("button");
       modBtn.type = "button";
       modBtn.className = `kb-cap kb-mod ${idx === 0 ? "kb-mod--esc" : ""}`;
+      modBtn.dataset.tip = layer.label;
       modBtn.setAttribute("aria-pressed", String(isSelected));
-      modBtn.setAttribute("aria-label", `Switch keyboard to ${layer.mod} — ${layer.label}`);
+      modBtn.setAttribute("aria-label", `Switch keyboard to ${layer.label}`);
       modBtn.innerHTML = `
         <span class="kb-cap-dish kb-mod-dish">
           <span class="kb-mod-top">
             <span class="kb-mod-led" aria-hidden="true"></span>
-            <span class="kb-mod-code">${modKeyHints[idx]} · ${layer.mod}</span>
+            <span class="kb-mod-code">${modKeyHints[idx]}</span>
           </span>
-          <span class="kb-mod-sub">${layer.label}</span>
+          <span class="kb-cap-name">${layer.mod}</span>
         </span>
       `;
       modBtn.addEventListener("click", () => {
@@ -586,7 +621,7 @@ export async function initLoadout() {
 
     // Right 3-Row Matrix (7u per row):
     // Row 1 (7u): [t0, 'A', t1, t2, 'B', t3, t4]
-    // Row 2 (7u): ['S', t5(cream), t6(cream), 'U', t7(cream), 'N', t8]
+    // Row 2 (7u): ['S', t5(cream), t6(cream), 'U', t7(cream), 'N', t8(cream)]
     // Row 3 (7u): [t9, t10, 'M', t11, 'I', 'Enter ↵ (2u)']
     const matrixEl = document.createElement("div");
     matrixEl.className = "kb-matrix";
@@ -644,16 +679,15 @@ export async function initLoadout() {
     topGrid.appendChild(leftBank);
     topGrid.appendChild(matrixEl);
 
-    // Row 4: Bottom Modifier & Spacebar Row (matching the 4th row of the reference 3D keyboard photo!)
-    // [Fn · Layer] [Win · 36 Stack (Yellow)] [Alt · Grip] [Orange Spacebar (Live Tech Stack Readout)] [Back · SAMUBIN (Cream)] [Mode ⇄]
+    // Row 4: Bottom Modifier & Spacebar Row (Spacebar ONLY says "Space")
     const bottomRow = document.createElement("div");
     bottomRow.className = "kb-bottom-row";
 
-    // 1. Fn / Next Stack Key (Cream)
+    // 1. Fn Key (Cream)
     const fnKey = document.createElement("button");
     fnKey.type = "button";
     fnKey.className = "kb-cap kb-cap--cream";
-    fnKey.dataset.tip = "Switch Stack Layer [1/2/3]";
+    fnKey.dataset.tip = "Next Layer";
     fnKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Fn</span><span class="kb-cap-name">Layer ↻</span></span>`;
     fnKey.addEventListener("click", () => {
       sound.play("down");
@@ -662,29 +696,24 @@ export async function initLoadout() {
       renderBoard(getMode(), { flipping: true, layerIndex: (activeLayerIdx + 1) % layers.length });
     });
 
-    // 2. Win / 36 Tools Key (Warm Mustard Yellow like the reference photo!)
+    // 2. Win / Dev Key (Warm Mustard Yellow)
     const winKey = document.createElement("button");
     winKey.type = "button";
     winKey.className = "kb-cap kb-cap--yellow";
-    winKey.dataset.tip = "36 Total Technologies & Security Tools";
+    winKey.dataset.tip = "36 Stack";
     winKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">${isHack ? "Red" : "Dev"}</span><span class="kb-cap-name">36 Stack</span></span>`;
     winKey.addEventListener("click", () => {
       sound.play("down");
       setTimeout(() => sound.play("up"), 70);
       impulseKeyboard(-0.55, 2.8);
-      setReadout(
-        "FULL STACK // 36 TOOLS",
-        "3 Layers × 12 Technologies per mode (72 total across Developer Lab & Ethical Hacker Arsenal).",
-        "36 STACK // 01 CORE · 02 AI/DB · 03 SYS"
-      );
     });
 
-    // 3. Alt / Cable Physics Test Key (Cream)
+    // 3. Alt / Cable Detach Test Key (Cream)
     const altKey = document.createElement("button");
     altKey.type = "button";
     altKey.className = "kb-cap kb-cap--cream";
-    altKey.dataset.tip = "Test Hand Slip / Re-Grab Physics";
-    altKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Alt</span><span class="kb-cap-name">${isLeftHeld ? "Yank" : "Grab"}</span></span>`;
+    altKey.dataset.tip = isLeftHeld ? "Unplug Cable" : "Plug Cable";
+    altKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Alt</span><span class="kb-cap-name">Cable</span></span>`;
     altKey.addEventListener("click", () => {
       if (isLeftHeld) {
         releaseLeftHand();
@@ -693,18 +722,17 @@ export async function initLoadout() {
       }
     });
 
-    // 4. Center Orange Sculpted Spacebar (Displays active Tech Stack name right on the spacebar!)
+    // 4. Center Orange Sculpted Spacebar (ONLY says "Space"!)
     const spaceKey = document.createElement("button");
     spaceKey.type = "button";
     spaceKey.className = "kb-cap kb-cap--sam kb-cap--space";
-    spaceKey.dataset.tip = "Active Tech Stack — Click to cycle tools";
+    spaceKey.dataset.tip = "Space";
     spaceKey.innerHTML = `
       <span class="kb-cap-dish kb-space-dish">
         <span class="kb-space-barline" aria-hidden="true"></span>
-        <span class="kb-space-text" data-kb-space-text>STACK // ${firstTool ? firstTool.name : "TypeScript"}</span>
+        <span class="kb-space-text">Space</span>
       </span>
     `;
-    spacebarTextEl = spaceKey.querySelector("[data-kb-space-text]");
     spaceKey.addEventListener("click", () => {
       sound.play("down");
       setTimeout(() => sound.play("up"), 75);
@@ -716,24 +744,24 @@ export async function initLoadout() {
       next?.click();
     });
 
-    // 5. Wide Cream Key ("SAMUBIN · Cipher" — like Backcnns in the photo!)
+    // 5. Wide Cream Key ("SAMUBIN")
     const backKey = document.createElement("button");
     backKey.type = "button";
     backKey.className = "kb-cap kb-cap--cream kb-cap--back";
-    backKey.dataset.tip = "Run S-A-M-U-B-I-N Page Cipher";
-    backKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">SAMUBIN</span><span class="kb-cap-name">Run Cipher</span></span>`;
+    backKey.dataset.tip = "Run Cipher";
+    backKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">SAMUBIN</span><span class="kb-cap-name">Cipher</span></span>`;
     backKey.addEventListener("click", () => {
       sound.play("auth");
       impulseKeyboard(0.45, 3.4);
       triggerSamubinCipher();
     });
 
-    // 6. Bottom-Right Grey Mode Key ("Mode ⇄" — like bottom-right Enter in the photo!)
+    // 6. Bottom-Right Grey Mode Key ("Mode ⇄")
     const modeKey = document.createElement("button");
     modeKey.type = "button";
     modeKey.className = "kb-cap kb-cap--proficient";
-    modeKey.dataset.tip = "Toggle Dev ⇄ Ethical Hacker [H]";
-    modeKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Mode ⇄</span><span class="kb-cap-name">${isHack ? "Dev Lab" : "Hack Lab"}</span></span>`;
+    modeKey.dataset.tip = isHack ? "Dev Mode" : "Hack Mode";
+    modeKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Mode ⇄</span><span class="kb-cap-name">${isHack ? "Dev" : "Hack"}</span></span>`;
     modeKey.addEventListener("click", () => {
       sound.play("down");
       setTimeout(() => sound.play("up"), 75);
@@ -756,11 +784,7 @@ export async function initLoadout() {
       firstCap.setAttribute("aria-pressed", "true");
       const tierName =
         firstTool.tier === "daily" ? "Daily Driver" : firstTool.tier === "proficient" ? "Proficient" : "Familiar";
-      setReadout(
-        `${currentLayer.mod} // ${firstTool.short}`,
-        `${firstTool.name} · ${tierName} — ${firstTool.detail}`,
-        `STACK // ${firstTool.name} · ${tierName}`
-      );
+      setReadout(`${currentLayer.mod} // ${firstTool.short}`, `${firstTool.name} · ${tierName} — ${firstTool.detail}`);
     }
 
     requestAnimationFrame(drawHanging);

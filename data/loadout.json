@@ -6,9 +6,9 @@
     "layers": [
       {
         "id": "core",
-        "code": "01 · CORE",
-        "mod": "CORE",
-        "label": "Lang & Frameworks",
+        "code": "01",
+        "mod": "Core",
+        "label": "Core Stack",
         "topRow": [
           { "id": "ts", "name": "TypeScript", "short": "TS", "tier": "daily", "detail": "Strict end-to-end types across React, Next.js, Node, and agent SDKs" },
           { "id": "js", "name": "JavaScript", "short": "JS", "tier": "daily", "detail": "ES2024+, Web Audio synthesis, Canvas 2D physics, zero-dependency DOM craft" },
@@ -28,9 +28,9 @@
       },
       {
         "id": "ai-data",
-        "code": "02 · AI & DATA",
-        "mod": "AI & DATA",
-        "label": "AI/ML & Databases",
+        "code": "02",
+        "mod": "AI & Data",
+        "label": "AI & Data",
         "topRow": [
           { "id": "pytorch", "name": "PyTorch", "short": "PT", "tier": "proficient", "detail": "Model fine-tuning, tensor pipelines, and custom evaluation workflows" },
           { "id": "tf", "name": "TensorFlow", "short": "TF", "tier": "familiar", "detail": "Neural network prototyping and browser/edge model deployment" },
@@ -50,9 +50,9 @@
       },
       {
         "id": "systems",
-        "code": "03 · SYSTEMS",
-        "mod": "SYSTEMS",
-        "label": "OS, Cloud & DevOps",
+        "code": "03",
+        "mod": "Systems",
+        "label": "Systems",
         "topRow": [
           { "id": "linux", "name": "Linux", "short": "LNX", "tier": "daily", "detail": "Kernel namespaces, systemd hardening, permissions, and server administration" },
           { "id": "ubuntu", "name": "Ubuntu", "short": "UBU", "tier": "daily", "detail": "Production cloud instances, container hosts, and automated provisioning" },
@@ -79,9 +79,9 @@
     "layers": [
       {
         "id": "recon-web",
-        "code": "01 · RECON & WEB",
-        "mod": "RECON & WEB",
-        "label": "OSINT & Web AppSec",
+        "code": "01",
+        "mod": "Recon",
+        "label": "Recon & Web",
         "topRow": [
           { "id": "nmap", "name": "Nmap", "short": "NMP", "tier": "daily", "detail": "Service fingerprinting, NSE script auditing, and attack-surface mapping" },
           { "id": "amass", "name": "Amass", "short": "AMS", "tier": "proficient", "detail": "ASN discovery, subdomain enumeration, and external perimeter graphing" },
@@ -101,9 +101,9 @@
       },
       {
         "id": "exploit-net",
-        "code": "02 · EXPLOIT & NET",
-        "mod": "EXPLOIT & NET",
-        "label": "Exploit & Network",
+        "code": "02",
+        "mod": "Exploit",
+        "label": "Exploit & Net",
         "topRow": [
           { "id": "msf", "name": "Metasploit", "short": "MSF", "tier": "proficient", "detail": "Controlled lab exploitation, payload staging, and post-exploitation validation" },
           { "id": "hydra", "name": "Hydra", "short": "HYD", "tier": "proficient", "detail": "Protocol authentication auditing and rate-limit / lockout verification" },
@@ -123,9 +123,9 @@
       },
       {
         "id": "re-labs",
-        "code": "03 · RE & LABS",
-        "mod": "RE & LABS",
-        "label": "Reverse, Forensics & OS",
+        "code": "03",
+        "mod": "RE & Labs",
+        "label": "RE & Labs",
         "topRow": [
           { "id": "ghidra", "name": "Ghidra", "short": "GHD", "tier": "proficient", "detail": "ELF/PE decompilation, control-flow analysis, and binary CTF reversing" },
           { "id": "radare2", "name": "radare2", "short": "R2", "tier": "familiar", "detail": "CLI disassembly, binary patching, and quick string/symbol inspection" },

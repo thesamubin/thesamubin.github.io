@@ -229,63 +229,68 @@
           </div>
         </div>
 
-        <!-- Clear Tech-Stack Category Switcher Pills -->
-        <div class="stack-inspector-bar">
-          <div class="stack-layer-pills" data-stack-pills role="tablist" aria-label="Technology Stack Categories"></div>
-        </div>
-
         <div class="hanging-kb-rig" data-hanging-kb>
-          <!-- Simple, Always-Connected Right Power Cable & Left Hand SVG Stage -->
+          <!-- Dual Power Cables Stage (Both Left & Right identical cables; Left cable unplugs & swings when yanked) -->
           <svg class="kb-cables" data-kb-cables aria-hidden="true">
-            <!-- Ceiling power outlet mount on right -->
-            <rect class="power-mount" data-power-mount x="0" y="0" width="24" height="8" rx="3" />
-            <!-- Right-side Simple Smooth Power Cable (Guaranteed 100% connected to USB plug tip) -->
+            <!-- Ceiling power outlet mounts on left and right -->
+            <rect class="power-mount" data-mount-l x="0" y="0" width="24" height="8" rx="3" />
+            <rect class="power-mount" data-mount-r x="0" y="0" width="24" height="8" rx="3" />
+
+            <!-- Left-side Power Cable (Unplugs on strong pull & swings freely with its USB-C tip) -->
+            <path class="cable-shadow" data-cable-l d="" />
+            <path class="cable-body" data-cable-l d="" />
+            <path class="cable-spec" data-cable-l d="" />
+
+            <!-- Unplugged Left USB-C Connector Tip (Visible at the end of the loose left cable when detached) -->
+            <g class="free-usb-plug" data-free-plug-l transform="translate(0,0)">
+              <rect class="free-usb-boot" x="-5.5" y="-2" width="11" height="8" rx="2" />
+              <rect class="free-usb-collar" x="-8" y="6" width="16" height="5" rx="1" />
+              <rect class="free-usb-housing" x="-12" y="11" width="24" height="12" rx="3" />
+              <rect class="free-usb-pin" x="-5" y="23" width="10" height="5" rx="1.5" />
+            </g>
+
+            <!-- Right-side Power Cable (Always 100% locked to right USB-C plug tip) -->
             <path class="cable-shadow" data-cable-r d="" />
             <path class="cable-body" data-cable-r d="" />
             <path class="cable-spec" data-cable-r d="" />
-
-            <!-- Left-side Boy's Arm & Hand (holds the left side of the keyboard until pulled hard!) -->
-            <g class="kb-arm-group" data-kb-arm>
-              <path class="arm-sleeve-shadow" data-arm-sleeve d="" />
-              <path class="arm-sleeve" data-arm-sleeve d="" />
-              <path class="arm-cuff" data-arm-cuff d="" />
-              <g class="arm-hand" data-arm-hand>
-                <rect class="hand-palm" x="-20" y="-12" width="40" height="24" rx="11" />
-                <g class="hand-open-fingers">
-                  <rect x="-18" y="6" width="8" height="15" rx="4" />
-                  <rect x="-8" y="8" width="8" height="17" rx="4" />
-                  <rect x="2" y="8" width="8" height="16" rx="4" />
-                  <rect x="12" y="5" width="7" height="13" rx="3.5" />
-                </g>
-              </g>
-            </g>
           </svg>
 
-          <!-- Interactive Re-Grab Button when the left hand lets go -->
-          <button class="kb-hand-btn" type="button" data-kb-regrab hidden aria-label="Click hand to grab keyboard again" title="Click to grab the keyboard back!">
-            <span>Grab Back ✋</span>
+          <!-- Interactive Re-Plug Button when the left cable detaches -->
+          <button class="kb-hand-btn" type="button" data-kb-regrab hidden aria-label="Reconnect left power cable" title="Click to plug the left cable back in!">
+            <span>Plug In 🔌</span>
           </button>
 
-          <!-- Realistic 3D Sculpted 40%/60% Mechanical Keyboard (Snug Case Frame like Reference Photo) -->
-          <div class="kb-shell" data-kb-chassis title="Drag or pull hard to slip from hand · Click any 3D keycap to inspect tech stack!">
-            <!-- Left Bezel: Boy's Gripping Fingers wrapped over the top-left edge -->
-            <div class="kb-grip-fingers" data-kb-fingers aria-hidden="true">
-              <span class="grip-tip-anchor" data-grip-tip></span>
-              <span class="grip-thumb"></span>
-              <span class="grip-finger"></span>
-              <span class="grip-finger"></span>
-              <span class="grip-finger"></span>
-              <span class="grip-finger"></span>
+          <!-- Realistic 3D Sculpted Mechanical Keyboard with Integrated Top Stack Extension -->
+          <div class="kb-shell" data-kb-chassis title="Drag or pull hard to unplug left cable · Hover any keycap for tech name!">
+            <!-- Slightly Extended Top Bezel Module with Short, Clean Stack Switcher Buttons -->
+            <div class="kb-top-extension">
+              <div class="kb-top-tabs" data-stack-pills role="tablist" aria-label="Technology Stack Categories"></div>
             </div>
 
-            <!-- Right Bezel: Real Metal USB-C Power Connector Plug (with exact tip anchor for cable) -->
-            <div class="kb-usb-plug" aria-hidden="true">
-              <span class="usb-tip-anchor" data-usb-tip></span>
-              <span class="usb-boot"></span>
-              <span class="usb-collar"></span>
-              <span class="usb-housing">
-                <span class="usb-led"></span>
-              </span>
+            <!-- Left Bezel: Metal USB-C Power Port & Plug (Detaches when pulled hard) -->
+            <div class="kb-usb-port kb-usb-port--left" aria-hidden="true">
+              <div class="kb-usb-plug" data-plug-l>
+                <span class="usb-tip-anchor" data-usb-tip-l></span>
+                <span class="usb-boot"></span>
+                <span class="usb-collar"></span>
+                <span class="usb-housing">
+                  <span class="usb-led"></span>
+                </span>
+              </div>
+              <span class="kb-usb-socket" title="Left USB-C Socket"></span>
+            </div>
+
+            <!-- Right Bezel: Identical Metal USB-C Power Port & Plug (Always connected) -->
+            <div class="kb-usb-port kb-usb-port--right" aria-hidden="true">
+              <div class="kb-usb-plug" data-plug-r>
+                <span class="usb-tip-anchor" data-usb-tip-r></span>
+                <span class="usb-boot"></span>
+                <span class="usb-collar"></span>
+                <span class="usb-housing">
+                  <span class="usb-led"></span>
+                </span>
+              </div>
+              <span class="kb-usb-socket" title="Right USB-C Socket"></span>
             </div>
 
             <div class="kb-plate" data-loadout-board></div>
