@@ -129,7 +129,13 @@ export function initMode() {
     const setBtn = e.target.closest("[data-mode-set]");
     if (setBtn) {
       e.preventDefault();
-      setMode(setBtn.dataset.modeSet, { animate: true });
+      const targetMode = setBtn.dataset.modeSet;
+      if (targetMode === getMode()) {
+        sound.play("down");
+        setTimeout(() => sound.play("up"), 70);
+      } else {
+        setMode(targetMode, { animate: true });
+      }
     }
   });
 

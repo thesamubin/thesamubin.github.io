@@ -564,18 +564,36 @@ html[data-mode="hack"] .mode-switch {
     0 2px 4px -2px rgba(0, 0, 0, 0.35);
 }
 
-.key--accent {
+.key--accent,
+.key[data-mode-set][aria-pressed="true"] {
   --cap-top: #ff7a47;
   --cap-bg: var(--accent);
   --cap-side: var(--accent-side);
   --cap-ink: var(--accent-ink);
 }
 
-html[data-mode="hack"] .key--accent {
+html[data-mode="hack"] .key--accent,
+html[data-mode="hack"] .key[data-mode-set][aria-pressed="true"] {
   --cap-top: #f2483e;
   --cap-bg: var(--accent);
   --cap-side: var(--accent-side);
   --cap-ink: var(--accent-ink);
+}
+
+.key-led {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.55;
+  flex-shrink: 0;
+  transition: background-color 160ms, opacity 160ms, box-shadow 160ms;
+}
+
+.key[data-mode-set][aria-pressed="true"] .key-led {
+  background: currentColor;
+  opacity: 0.95;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.45);
 }
 
 .key--slate {

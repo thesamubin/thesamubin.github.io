@@ -146,33 +146,14 @@
             Operating as <strong>SA Mubin</strong>. I dissect web applications, build live browser exploitation labs for XSS and LFI, audit authentication boundaries, and train engineers to think like an adversary before shipping to production.
           </p>
 
-          <div class="keys" data-show="dev">
-            <a class="key key--accent" href="#loadout">
-              <span>Hanging Stack Keyboard</span>
-              <span class="kbd">↓</span>
-            </a>
-            <a class="key" href="#projects">
-              <span>Explore Projects</span>
-              <span class="kbd">04</span>
-            </a>
-            <button class="key" type="button" data-mode-toggle>
-              <span>Pull Hoodie Up</span>
-              <span class="kbd">H</span>
+          <div class="keys" role="group" aria-label="Switch interface profile">
+            <button class="key" type="button" data-mode-set="dev" aria-pressed="true">
+              <span class="key-led" aria-hidden="true"></span>
+              <span>DevOps Profile</span>
             </button>
-          </div>
-
-          <div class="keys" data-show="hack">
-            <a class="key key--accent" href="#loadout">
-              <span>Hanging Red/Blue Arsenal</span>
-              <span class="kbd">↓</span>
-            </a>
-            <a class="key" href="#projects">
-              <span>Live Exploit Simulators</span>
-              <span class="kbd">↗</span>
-            </a>
-            <button class="key" type="button" data-mode-toggle>
-              <span>Drop Hoodie · Dev Lab</span>
-              <span class="kbd">H</span>
+            <button class="key" type="button" data-mode-set="hack" aria-pressed="false">
+              <span class="key-led" aria-hidden="true"></span>
+              <span>Security Profile</span>
             </button>
           </div>
 
