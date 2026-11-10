@@ -1,321 +1,362 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-02T07:51:00Z",
-  "title": "Design System: Sakib Alam Mubin Portfolio",
+  "generatedAt": "2026-11-10T08:37:00Z",
+  "title": "Design System: Sakib Alam Mubin (SA Mubin) Dual-Mode Portfolio",
   "extensions": {
     "colorMeta": {
-      "ground-dark": {
+      "dev-ground": {
         "role": "neutral",
-        "displayName": "Anodized Graphite Aluminium",
-        "canonical": "#111215",
-        "tonalRamp": ["#090a0c", "#111215", "#17191d", "#1f2227", "#2b2e35", "#434853", "#6d7380", "#a6abb5"]
+        "displayName": "Bead-Blasted Aluminium Ground",
+        "canonical": "#dfe2e6",
+        "tonalRamp": ["#202327", "#3a3f46", "#59606a", "#7e8693", "#a7aeb9", "#c8cdd4", "#dfe2e6", "#f4f5f7"]
       },
-      "ground-dark-surface": {
+      "dev-ground-alt": {
         "role": "neutral",
-        "displayName": "Graphite Bench Surface",
-        "canonical": "#17191d",
-        "tonalRamp": ["#0c0d10", "#17191d", "#22252b", "#2f333b", "#454b56", "#636a78", "#8c93a0", "#c2c6cf"]
+        "displayName": "Recessed Chassis Band",
+        "canonical": "#d5d9df",
+        "tonalRamp": ["#1d2025", "#353a43", "#525965", "#767e8d", "#9ea6b3", "#bec4cd", "#d5d9df", "#eef0f3"]
       },
-      "ground-dark-card": {
+      "dev-surface": {
         "role": "neutral",
-        "displayName": "Recessed Graphite Plate",
-        "canonical": "#1f2227",
-        "tonalRamp": ["#111215", "#1f2227", "#2c3037", "#3d424c", "#565c69", "#757c8a", "#9fa5b2", "#cfd3db"]
+        "displayName": "Studio Polymer Enclosure",
+        "canonical": "#f2f4f7",
+        "tonalRamp": ["#24272c", "#42474f", "#646b77", "#8a929e", "#b3b9c4", "#d6dae1", "#f2f4f7", "#ffffff"]
       },
-      "line-dark": {
+      "dev-surface-inset": {
         "role": "neutral",
-        "displayName": "Machined Hairline",
-        "canonical": "#2b2e35",
-        "tonalRamp": ["#15171b", "#2b2e35", "#3c404a", "#505562", "#6a7080", "#898f9e", "#b0b5c0", "#dadde3"]
+        "displayName": "Inset Studio Pane",
+        "canonical": "#e6e9ef",
+        "tonalRamp": ["#202329", "#3b4049", "#5c6470", "#818997", "#abb1bd", "#cdd2db", "#e6e9ef", "#f7f8fa"]
       },
-      "ink-light": {
+      "dev-ink": {
         "role": "neutral",
-        "displayName": "Warm Bone Ink",
-        "canonical": "#ece8df",
-        "tonalRamp": ["#2d2b26", "#4b4840", "#6c685d", "#8f8a7d", "#b4afa2", "#d4cfc3", "#ece8df", "#faf8f4"]
+        "displayName": "Carbon Chassis Ink",
+        "canonical": "#16171a",
+        "tonalRamp": ["#0a0b0d", "#16171a", "#26282e", "#3d4049", "#5a5e6a", "#7f8492", "#aeb2bd", "#e2e4e9"]
       },
-      "ink-light-muted": {
+      "dev-ink-secondary": {
         "role": "neutral",
-        "displayName": "Secondary Studio Ink",
-        "canonical": "#b8b4ac",
-        "tonalRamp": ["#252420", "#3f3d38", "#5c5952", "#7c7970", "#9c988f", "#b8b4ac", "#d6d3cc", "#f1efec"]
+        "displayName": "Machined Graphite Prose",
+        "canonical": "#363940",
+        "tonalRamp": ["#111215", "#222429", "#363940", "#4f535d", "#6f7481", "#9398a5", "#bcc0ca", "#e7e9ed"]
       },
-      "ink-light-subtle": {
+      "dev-ink-muted": {
         "role": "neutral",
-        "displayName": "Telemetry Muted Ink",
-        "canonical": "#9a968e",
-        "tonalRamp": ["#22201d", "#3a3833", "#55524b", "#757168", "#9a968e", "#bab6ae", "#dad7d1", "#f3f1ee"]
+        "displayName": "Muted Spec Ink",
+        "canonical": "#525660",
+        "tonalRamp": ["#17191d", "#2c2f36", "#40444d", "#525660", "#717683", "#969ba6", "#bfc3cc", "#e8eaee"]
       },
-      "ground-bone": {
+      "dev-line": {
         "role": "neutral",
-        "displayName": "Bone PBT Polymer",
-        "canonical": "#e6e0d2",
-        "tonalRamp": ["#3b372e", "#5c5649", "#827b6a", "#a8a08d", "#cbc3b0", "#e6e0d2", "#f1ede3", "#faf8f3"]
+        "displayName": "Machined Seam Hairline",
+        "canonical": "#bfc5cf",
+        "tonalRamp": ["#1e2126", "#373c44", "#555c68", "#77808f", "#9ca4b1", "#bfc5cf", "#dadee4", "#f3f5f7"]
       },
-      "ground-bone-surface": {
+      "dev-line-strong": {
         "role": "neutral",
-        "displayName": "Recessed Bone Tray",
-        "canonical": "#d8d1c0",
-        "tonalRamp": ["#363229", "#554f42", "#78705f", "#9e9581", "#bfb7a3", "#d8d1c0", "#ebe6da", "#f7f5ef"]
+        "displayName": "Strong Chassis Border",
+        "canonical": "#9fa7b3",
+        "tonalRamp": ["#1b1e23", "#323740", "#4d5561", "#6c7584", "#8a93a1", "#9fa7b3", "#c6ccd4", "#ebeef1"]
       },
-      "bone-side": {
-        "role": "neutral",
-        "displayName": "Sculpted PBT Side Bevel",
-        "canonical": "#b9b19e",
-        "tonalRamp": ["#2e2b23", "#4c473b", "#6e6858", "#948d7a", "#b9b19e", "#d2ccbc", "#e7e3d9", "#f6f4ef"]
-      },
-      "ink-bone": {
-        "role": "neutral",
-        "displayName": "Polymer Charcoal Ink",
-        "canonical": "#1a1a1c",
-        "tonalRamp": ["#0d0d0e", "#1a1a1c", "#2c2c30", "#434349", "#606068", "#85858e", "#b2b2b9", "#e2e2e6"]
-      },
-      "ink-bone-muted": {
-        "role": "neutral",
-        "displayName": "Warm Umber Prose Ink",
-        "canonical": "#48453e",
-        "tonalRamp": ["#1d1b18", "#32302b", "#48453e", "#666258", "#888377", "#ada89c", "#d1cdc4", "#efede9"]
-      },
-      "bone-accent": {
-        "role": "primary",
-        "displayName": "Deep Burnt Signal",
-        "canonical": "#9c2805",
-        "tonalRamp": ["#3d0d00", "#6b1902", "#9c2805", "#c93b10", "#ef5221", "#ff7c52", "#ffab8f", "#ffdcd0"]
-      },
-      "slate-cap": {
-        "role": "neutral",
-        "displayName": "Anodized Slate Keycap",
-        "canonical": "#3d414a",
-        "tonalRamp": ["#16181c", "#252830", "#3d414a", "#555a66", "#717785", "#9399a6", "#bbc0c9", "#e4e6eb"]
-      },
-      "slate-side": {
-        "role": "neutral",
-        "displayName": "Slate Keycap Lip",
-        "canonical": "#252830",
-        "tonalRamp": ["#101216", "#252830", "#383c47", "#4f5563", "#6c7383", "#9096a4", "#b8bcc7", "#e2e4e9"]
-      },
-      "accent-signal": {
+      "dev-signal-accent": {
         "role": "primary",
         "displayName": "Safety Signal Orange",
         "canonical": "#ff5a1f",
         "tonalRamp": ["#541400", "#872404", "#b8380c", "#de4a14", "#ff5a1f", "#ff7d47", "#ffa47c", "#ffd5c2"]
       },
-      "accent-signal-deep": {
+      "dev-signal-side": {
         "role": "primary",
         "displayName": "Signal Keycap Lip",
         "canonical": "#b8380c",
         "tonalRamp": ["#420f00", "#6e1c03", "#942b08", "#b8380c", "#e04d19", "#ff7240", "#ffa17d", "#ffd4c2"]
       },
-      "accent-signal-ink": {
+      "dev-signal-ink": {
         "role": "neutral",
         "displayName": "Signal Espresso Ink",
         "canonical": "#1a0d06",
         "tonalRamp": ["#1a0d06", "#331b0e", "#522d19", "#784429", "#a16242", "#c7896b", "#e3b8a3", "#f6e3da"]
       },
-      "accent-auth": {
+      "dev-signal-text": {
+        "role": "primary",
+        "displayName": "AA Signal Text Orange",
+        "canonical": "#b33205",
+        "tonalRamp": ["#3f0e00", "#6b1b02", "#912703", "#b33205", "#db4715", "#ff6d3d", "#ff9e7d", "#ffd5c7"]
+      },
+      "hack-ground": {
+        "role": "neutral",
+        "displayName": "Darkroom Obsidian Ground",
+        "canonical": "#0b0708",
+        "tonalRamp": ["#060304", "#0b0708", "#160d0e", "#241416", "#392023", "#5a363a", "#896366", "#cbb1ae"]
+      },
+      "hack-ground-alt": {
+        "role": "neutral",
+        "displayName": "Deep Safelight Band",
+        "canonical": "#110a0c",
+        "tonalRamp": ["#080405", "#110a0c", "#1d1114", "#2e1a1e", "#46282e", "#694148", "#966d73", "#d3b9bc"]
+      },
+      "hack-surface": {
+        "role": "neutral",
+        "displayName": "Darkroom Instrument Tray",
+        "canonical": "#160d0e",
+        "tonalRamp": ["#0a0506", "#160d0e", "#241517", "#382124", "#543236", "#784f54", "#a47d81", "#dbc3c5"]
+      },
+      "hack-surface-inset": {
+        "role": "neutral",
+        "displayName": "Inset Darkroom Bay",
+        "canonical": "#1e1214",
+        "tonalRamp": ["#0d0708", "#1e1214", "#2e1c1f", "#45292d", "#633e43", "#885e63", "#b28b90", "#e2cbce"]
+      },
+      "hack-ink": {
+        "role": "neutral",
+        "displayName": "Silver-Gelatin Bone Ink",
+        "canonical": "#e9dcd8",
+        "tonalRamp": ["#2d211f", "#493734", "#6b5450", "#8e736e", "#b19690", "#cfbab5", "#e9dcd8", "#fbf7f6"]
+      },
+      "hack-ink-secondary": {
+        "role": "neutral",
+        "displayName": "Warm Darkroom Prose",
+        "canonical": "#ccb8b2",
+        "tonalRamp": ["#281d1a", "#41302c", "#5e4843", "#7f655f", "#a18680", "#b8a09a", "#ccb8b2", "#f0e7e5"]
+      },
+      "hack-ink-muted": {
+        "role": "neutral",
+        "displayName": "Muted Safelight Telemetry",
+        "canonical": "#a89089",
+        "tonalRamp": ["#221815", "#382824", "#523d37", "#6f554e", "#8d7169", "#a89089", "#cbb8b2", "#eee4e1"]
+      },
+      "hack-line": {
+        "role": "neutral",
+        "displayName": "Burgundy Seam Hairline",
+        "canonical": "#2e1b1e",
+        "tonalRamp": ["#12090b", "#201114", "#2e1b1e", "#44282c", "#623b41", "#86585f", "#b2878d", "#dfc4c7"]
+      },
+      "hack-line-strong": {
+        "role": "neutral",
+        "displayName": "Strong Darkroom Hairline",
+        "canonical": "#46262a",
+        "tonalRamp": ["#190c0e", "#2d171a", "#46262a", "#5f353a", "#7e4b51", "#a26d73", "#c89ca1", "#ebd4d6"]
+      },
+      "hack-safelight-accent": {
+        "role": "primary",
+        "displayName": "Safelight Crimson",
+        "canonical": "#c42018",
+        "tonalRamp": ["#460805", "#720f0b", "#9b1711", "#c42018", "#dc342b", "#f05a51", "#fa8e87", "#ffd2cf"]
+      },
+      "hack-safelight-side": {
+        "role": "primary",
+        "displayName": "Safelight Keycap Lip",
+        "canonical": "#7f130d",
+        "tonalRamp": ["#330503", "#560a06", "#7f130d", "#a51b14", "#cc2a21", "#e6534b", "#f78b85", "#ffd1ce"]
+      },
+      "hack-safelight-ink": {
+        "role": "neutral",
+        "displayName": "Safelight White Ink",
+        "canonical": "#fff8f7",
+        "tonalRamp": ["#3a2a28", "#574340", "#7a6360", "#9e8683", "#c2aca9", "#dfd0ce", "#f3eae9", "#fff8f7"]
+      },
+      "hack-safelight-text": {
+        "role": "primary",
+        "displayName": "Safelight Phosphor Text",
+        "canonical": "#ff6e63",
+        "tonalRamp": ["#58130e", "#8a221a", "#bd3328", "#e54c40", "#ff6e63", "#ff9188", "#ffb8b2", "#ffe2df"]
+      },
+      "oled-ground": {
         "role": "secondary",
-        "displayName": "Verified Green",
-        "canonical": "#4ade80",
-        "tonalRamp": ["#052e16", "#14532d", "#166534", "#15803d", "#22c55e", "#4ade80", "#86efac", "#dcfce7"]
+        "displayName": "Carbon OLED Glass",
+        "canonical": "#141619",
+        "tonalRamp": ["#090a0c", "#141619", "#202429", "#323840", "#4b535f", "#6d7685", "#9da4b0", "#d8dce2"]
       },
-      "kinetic-sky": {
-        "role": "tertiary",
-        "displayName": "Electric Sky Wave",
-        "canonical": "#38bdf8",
-        "tonalRamp": ["#082f49", "#0c4a6e", "#0369a1", "#0284c7", "#0ea5e9", "#38bdf8", "#7dd3fc", "#e0f2fe"]
+      "oled-amber": {
+        "role": "secondary",
+        "displayName": "Warm Amber Phosphor",
+        "canonical": "#f4a83a",
+        "tonalRamp": ["#462903", "#734608", "#a46610", "#d1871d", "#f4a83a", "#f8be64", "#fbd597", "#feefd4"]
       },
-      "kinetic-orchid": {
-        "role": "tertiary",
-        "displayName": "Vivid Orchid Wave",
-        "canonical": "#a855f7",
-        "tonalRamp": ["#3b0764", "#581c87", "#6b21a8", "#7e22ce", "#9333ea", "#a855f7", "#c084fc", "#f3e8ff"]
+      "oled-hack-ground": {
+        "role": "secondary",
+        "displayName": "Darkroom OLED Glass",
+        "canonical": "#080405",
+        "tonalRamp": ["#040202", "#080405", "#14090b", "#261216", "#3d1e23", "#5e333a", "#8e5f66", "#cbaab0"]
       },
-      "kinetic-amber": {
-        "role": "tertiary",
-        "displayName": "Warm Spark Amber",
-        "canonical": "#facc15",
-        "tonalRamp": ["#422006", "#713f12", "#a16207", "#ca8a04", "#eab308", "#facc15", "#fde047", "#fef9c3"]
+      "oled-hack-phosphor": {
+        "role": "secondary",
+        "displayName": "High-Alert Safelight Phosphor",
+        "canonical": "#ff5e52",
+        "tonalRamp": ["#590f0a", "#8c1b13", "#bf2a1f", "#e84033", "#ff5e52", "#ff847a", "#ffb0aa", "#ffdedb"]
       }
     },
     "typographyMeta": {
       "display": {
-        "displayName": "Expanded Studio Display",
-        "purpose": "Hero name and top-level page headers in 125% stretched Archivo 820."
+        "displayName": "Variable Axis Display",
+        "purpose": "Hero name and top-level page headers shifting from 118% expanded (Dev) to 84% condensed (Hack) in Archivo 820."
       },
       "headline": {
         "displayName": "Section Headline",
-        "purpose": "Primary section headings across graphite and bone bands."
+        "purpose": "Primary section titles shifting from 112% expanded (Dev) to 88% condensed (Hack)."
       },
       "title": {
-        "displayName": "Feature & Bench Title",
-        "purpose": "Project titles, craft tabs, and interactive bench headings."
+        "displayName": "Card & Bench Title",
+        "purpose": "Channel cards, project cartridges, and split-pane headings shifting from 106% to 92%."
       },
       "body": {
         "displayName": "Editorial Engineering Copy",
-        "purpose": "Long-form full-stack narratives, descriptions, and form fields (66ch max)."
+        "purpose": "Narrative prose capped at 66ch with text-wrap: pretty."
       },
       "label": {
-        "displayName": "Hardware & Code Readout",
-        "purpose": "Macropad OLED display, spring solver telemetry, middleware code panes, and command palette."
+        "displayName": "Hardware & Telemetry Readout",
+        "purpose": "OLED telemetry strips, keycap legends, keyboard shortcuts, and safelight field notes in JetBrains Mono tabular-nums (>= 11.2px floor)."
       }
     },
     "shadows": [
       {
+        "name": "enclosure-dev",
+        "value": "inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 22px 44px -20px rgba(22, 23, 26, 0.18), 0 4px 12px -4px rgba(22, 23, 26, 0.08)",
+        "purpose": "Single-enclosure machined elevation for Developer mode cards and benches."
+      },
+      {
+        "name": "enclosure-hack",
+        "value": "inset 0 1px 0 rgba(255, 190, 180, 0.08), 0 16px 34px -16px rgba(0, 0, 0, 0.84), 0 4px 12px -4px rgba(0, 0, 0, 0.65)",
+        "purpose": "Tight, focused single-enclosure depth for Darkroom mode trays."
+      },
+      {
         "name": "keycap-resting",
-        "value": "inset 0 1px 0 rgba(255, 255, 255, 0.55), inset 0 -5px 0 var(--cap-side), 0 7px 14px -6px rgba(0, 0, 0, 0.65), 0 2px 4px rgba(0, 0, 0, 0.35)",
-        "purpose": "Resting tactile keycap button elevation and bottom lip."
+        "value": "inset 0 1px 0 rgba(255, 255, 255, 0.55), inset 0 -5px 0 var(--cap-side), 0 7px 14px -6px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2)",
+        "purpose": "Resting tactile keycap elevation with 5px sculpted bottom lip."
       },
       {
         "name": "keycap-depressed",
-        "value": "inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -2px 0 var(--cap-side), 0 2px 4px -2px rgba(0, 0, 0, 0.6)",
+        "value": "inset 0 1px 0 rgba(255, 255, 255, 0.35), inset 0 -2px 0 var(--cap-side), 0 2px 4px -2px rgba(0, 0, 0, 0.35)",
         "purpose": "Active 3px depressed mechanical travel state."
-      },
-      {
-        "name": "stage-enclosure",
-        "value": "inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 28px 56px -24px rgba(0, 0, 0, 0.82)",
-        "purpose": "Single-layer dark anodized stage and interactive bench depth."
       }
     ],
     "motion": [
       {
         "name": "ease-out",
         "value": "cubic-bezier(0.16, 1, 0.3, 1)",
-        "purpose": "Crisp exponential deceleration for keycaps, badges, and view transitions."
+        "purpose": "Crisp exponential deceleration for keycaps, badges, and hoodie transitions."
       },
       {
-        "name": "ease-spring",
+        "name": "ease-smooth",
         "value": "cubic-bezier(0.22, 1, 0.36, 1)",
-        "purpose": "Smooth non-overshooting settle curve for toast notifications."
+        "purpose": "Smooth non-overshooting settle curve for toast notifications and keycap reseat."
       },
       {
         "name": "hooke-spring-solver",
-        "value": "a = -k * x - c * v (k = 210, c = 14 default)",
-        "purpose": "Real-time 60fps JS spring solver driving the spring puck, avatar hop, and footer peeker."
+        "value": "Hooke spring-damper physics on hanging S-A-M-U-B-I-N keypad, 3D keyboard cables, avatar hop, and footer peeker",
+        "purpose": "Real-time 60fps JS spring solver paused cleanly under prefers-reduced-motion: reduce."
       }
     ],
     "breakpoints": [
-      { "name": "sm", "value": "640px" },
-      { "name": "md", "value": "768px" },
-      { "name": "lg", "value": "940px" },
+      { "name": "xs", "value": "360px" },
+      { "name": "sm", "value": "480px" },
+      { "name": "md", "value": "640px" },
+      { "name": "lg", "value": "900px" },
       { "name": "xl", "value": "1120px" }
     ]
   },
   "components": [
     {
-      "name": "Primary Signal Keycap",
+      "name": "Dev Signal Keycap",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Primary safety-orange mechanical keycap CTA with 3px press travel.",
-      "html": "<button class=\"ds-key ds-key--accent\" type=\"button\"><span>Explore Work</span><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"M13 6l6 6-6 6\"/></svg></button>",
-      "css": ".ds-key { display: inline-flex; align-items: center; justify-content: center; gap: 0.58em; min-height: 3.1rem; padding: 0.7rem 1.3rem 1rem; border: 0; border-radius: 11px; font-family: var(--font, 'Archivo', sans-serif); font-weight: 660; font-size: 1rem; font-stretch: 112%; cursor: pointer; transition: transform 90ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 90ms cubic-bezier(0.16, 1, 0.3, 1), filter 150ms; } .ds-key svg { width: 1.08em; height: 1.08em; } .ds-key--accent { color: #1a0d06; background: linear-gradient(180deg, #ff7a45, #ff5a1f 72%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -5px 0 #b8380c, 0 7px 14px -6px rgba(0,0,0,0.65), 0 2px 4px rgba(0,0,0,0.35); } .ds-key:hover { filter: brightness(1.04); } .ds-key:focus-visible { outline: 2px solid #ff5a1f; outline-offset: 3px; } .ds-key:active { transform: translateY(3px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -2px 0 #b8380c, 0 2px 4px -2px rgba(0,0,0,0.6); }"
+      "description": "Developer-mode primary Safety Signal Orange mechanical keycap CTA with 3px press travel.",
+      "html": "<button class=\"ds-key ds-key--accent\" type=\"button\"><span>DevOps Profile</span><span class=\"ds-kbd\">H</span></button>",
+      "css": ".ds-key { display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem; padding: 0.7rem 1.25rem 0.96rem; border: 0; border-radius: 11px; font-family: var(--font, 'Archivo', sans-serif); font-weight: 760; font-size: 0.96rem; line-height: 1.1; cursor: pointer; transition: transform 75ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 75ms, filter 120ms; } .ds-key--accent { color: #1a0d06; background: linear-gradient(180deg, #ff7a47, #ff5a1f 78%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -5px 0 #b8380c, 0 7px 14px -6px rgba(0,0,0,0.35), 0 2px 4px rgba(0,0,0,0.2); } .ds-kbd { font-family: var(--mono, monospace); font-size: 0.75rem; font-weight: 700; padding: 0.08rem 0.34rem; border-radius: 5px; background: rgba(255,255,255,0.24); color: inherit; } .ds-key:hover { filter: brightness(1.03); } .ds-key:focus-visible { outline: 2px solid #ff5a1f; outline-offset: 3px; } .ds-key:active { transform: translateY(3px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -2px 0 #b8380c, 0 2px 4px -2px rgba(0,0,0,0.35); }"
     },
     {
-      "name": "Bone PBT Keycap",
+      "name": "Darkroom Safelight Keycap",
       "kind": "button",
-      "refersTo": "button-bone",
-      "description": "Secondary warm bone PBT keycap button for calm companion actions.",
-      "html": "<button class=\"ds-key-bone\" type=\"button\">Get in Touch</button>",
-      "css": ".ds-key-bone { display: inline-flex; align-items: center; justify-content: center; min-height: 3.1rem; padding: 0.7rem 1.3rem 1rem; border: 0; border-radius: 11px; font-family: var(--font, 'Archivo', sans-serif); font-weight: 660; font-size: 1rem; font-stretch: 112%; color: #1a1a1c; background: linear-gradient(180deg, #efeadf, #e6e0d2 72%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -5px 0 #b9b19e, 0 7px 14px -6px rgba(0,0,0,0.65), 0 2px 4px rgba(0,0,0,0.35); cursor: pointer; transition: transform 90ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 90ms cubic-bezier(0.16, 1, 0.3, 0.1), filter 150ms; } .ds-key-bone:hover { filter: brightness(1.04); } .ds-key-bone:focus-visible { outline: 2px solid #ff5a1f; outline-offset: 3px; } .ds-key-bone:active { transform: translateY(3px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -2px 0 #b9b19e, 0 2px 4px -2px rgba(0,0,0,0.6); }"
+      "refersTo": "button-hack-primary",
+      "description": "Hacker-mode Safelight Crimson mechanical keycap CTA maintaining >= 4.9:1 AA contrast.",
+      "html": "<button class=\"ds-key-hack\" type=\"button\"><span>Launch XSS Lab</span><span class=\"ds-kbd-hack\">↗</span></button>",
+      "css": ".ds-key-hack { display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem; padding: 0.7rem 1.25rem 0.96rem; border: 0; border-radius: 11px; font-family: var(--font, 'Archivo', sans-serif); font-weight: 760; font-stretch: 88%; font-size: 0.96rem; line-height: 1.1; color: #fff8f7; background: linear-gradient(180deg, #d12820, #c42018 78%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -5px 0 #7f130d, 0 7px 14px -6px rgba(0,0,0,0.65); cursor: pointer; transition: transform 75ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 75ms, filter 120ms; } .ds-kbd-hack { font-family: var(--mono, monospace); font-size: 0.75rem; font-weight: 700; padding: 0.08rem 0.34rem; border-radius: 5px; background: rgba(0,0,0,0.24); color: inherit; } .ds-key-hack:hover { filter: brightness(1.04); } .ds-key-hack:focus-visible { outline: 2px solid #c42018; outline-offset: 3px; } .ds-key-hack:active { transform: translateY(3px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -2px 0 #7f130d, 0 2px 4px -2px rgba(0,0,0,0.5); }"
     },
     {
-      "name": "Slate Studio Keycap",
+      "name": "Polymer Secondary Keycap",
       "kind": "button",
-      "refersTo": "button-slate",
-      "description": "Anodized dark slate keycap for expression toggles and secondary links.",
-      "html": "<button class=\"ds-key-slate\" type=\"button\" aria-pressed=\"false\">Shades</button>",
-      "css": ".ds-key-slate { display: inline-flex; align-items: center; justify-content: center; min-height: 2.45rem; padding: 0.48rem 0.9rem 0.72rem; border: 0; border-radius: 9px; font-family: var(--font, 'Archivo', sans-serif); font-weight: 660; font-size: 0.88rem; font-stretch: 112%; color: #ece8df; background: linear-gradient(180deg, #4a4f59, #3d414a 72%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -5px 0 #252830, 0 7px 14px -6px rgba(0,0,0,0.65); cursor: pointer; transition: transform 90ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 90ms; } .ds-key-slate:hover { filter: brightness(1.06); } .ds-key-slate:focus-visible { outline: 2px solid #ff5a1f; outline-offset: 3px; } .ds-key-slate:active, .ds-key-slate[aria-pressed='true'] { transform: translateY(3px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -2px 0 #252830, 0 2px 4px -2px rgba(0,0,0,0.6); }"
+      "refersTo": "button-secondary",
+      "description": "Clean studio polymer mechanical keycap for companion actions in Aluminium Lab.",
+      "html": "<button class=\"ds-key-poly\" type=\"button\"><span>All Projects Archive</span><span>→</span></button>",
+      "css": ".ds-key-poly { display: inline-flex; align-items: center; justify-content: center; gap: 0.55rem; padding: 0.7rem 1.25rem 0.96rem; border: 0; border-radius: 11px; font-family: var(--font, 'Archivo', sans-serif); font-weight: 760; font-size: 0.96rem; color: #16171a; background: linear-gradient(180deg, #f8f9fb, #eaecef 78%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), inset 0 -5px 0 #b4bac4, 0 7px 14px -6px rgba(0,0,0,0.35), 0 2px 4px rgba(0,0,0,0.2); cursor: pointer; transition: transform 75ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 75ms; } .ds-key-poly:hover { filter: brightness(1.03); } .ds-key-poly:focus-visible { outline: 2px solid #ff5a1f; outline-offset: 3px; } .ds-key-poly:active { transform: translateY(3px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -2px 0 #b4bac4; }"
     },
     {
-      "name": "Bench Toggle Chip",
+      "name": "Inquiry Scope Chip",
       "kind": "chip",
-      "refersTo": "button-slate",
-      "description": "Compact monospace toggle chip for switch voices, spring presets, and middleware stages.",
-      "html": "<div class=\"ds-chip-row\"><button class=\"ds-chip\" type=\"button\" aria-pressed=\"true\">Playful Pop</button><button class=\"ds-chip\" type=\"button\" aria-pressed=\"false\">Snappy UI</button></div>",
-      "css": ".ds-chip-row { display: flex; gap: 0.5rem; } .ds-chip { border: 0; cursor: pointer; padding: 0.38rem 0.7rem 0.48rem; border-radius: 8px; font-family: var(--mono, 'JetBrains Mono', monospace); font-size: 0.8125rem; color: #ece8df; background: #1f2227; box-shadow: inset 0 -2px 0 #2b2e35; transition: transform 70ms, background-color 140ms; } .ds-chip[aria-pressed='true'] { background: #ff5a1f; color: #1a0d06; font-weight: 700; box-shadow: inset 0 -2px 0 #b8380c; } .ds-chip:focus-visible { outline: 2px solid #ff5a1f; outline-offset: 2px; } .ds-chip:active { transform: translateY(1px); }"
+      "refersTo": "chip-active",
+      "description": "Monospace scope selector chip for the Direct Dispatch contact composer.",
+      "html": "<div class=\"ds-chip-row\"><button class=\"ds-chip\" type=\"button\" aria-pressed=\"true\">Full-Stack / AI</button><button class=\"ds-chip\" type=\"button\" aria-pressed=\"false\">Security Audit</button></div>",
+      "css": ".ds-chip-row { display: flex; flex-wrap: wrap; gap: 0.45rem; } .ds-chip { border: 1px solid #9fa7b3; background: #dfe2e6; color: #363940; font-family: var(--mono, monospace); font-size: 0.8125rem; font-weight: 600; padding: 0.44rem 0.82rem; min-height: 38px; border-radius: 8px; cursor: pointer; transition: background-color 140ms, color 140ms; } .ds-chip[aria-pressed='true'] { background: #ff5a1f; color: #1a0d06; border-color: #ff5a1f; } .ds-chip:focus-visible { outline: 2px solid #ff5a1f; outline-offset: 3px; }"
+    },
+    {
+      "name": "Hardware Cartridge Card",
+      "kind": "card",
+      "refersTo": "card-enclosure",
+      "description": "Single-enclosure project cartridge housing a borderless OLED viewport and technical metadata.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-vp\"><span>PRJ // 01 · AI ORCHESTRATOR</span><span>FASTAPI · PGVECTOR</span></div><h3>Agentic RAG &amp; Function-Calling Orchestrator</h3><p>Deterministic multi-agent routing pipeline with hybrid search, strict Pydantic schemas, and token telemetry.</p></article>",
+      "css": ".ds-card { border-radius: 20px; background: #f2f4f7; color: #16171a; border: 1px solid #bfc5cf; box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 22px 44px -20px rgba(22,23,26,0.18), 0 4px 12px -4px rgba(22,23,26,0.08); padding: 16px; display: flex; flex-direction: column; gap: 1rem; font-family: var(--font, 'Archivo', sans-serif); transition: border-color 180ms, transform 180ms; } .ds-card:hover { border-color: #ff5a1f; transform: translateY(-2px); } .ds-vp { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-radius: 14px; background: #141619; color: #f4a83a; font-family: var(--mono, monospace); font-size: 0.75rem; box-shadow: inset 0 2px 6px rgba(0,0,0,0.32); } .ds-card h3 { margin: 0; font-size: 1.35rem; font-weight: 800; } .ds-card p { margin: 0; color: #363940; line-height: 1.58; }"
     },
     {
       "name": "Studio Composer Input",
       "kind": "input",
       "refersTo": "input-field",
-      "description": "Dark anodized text input with accessible warm placeholder and signal focus ring.",
-      "html": "<div class=\"ds-field\"><label class=\"ds-label\" for=\"ds-in\">Your name or team</label><input id=\"ds-in\" class=\"ds-input\" type=\"text\" placeholder=\"Alex Rivera · Acme Studio\" /></div>",
-      "css": ".ds-field { display: grid; gap: 0.45rem; } .ds-label { font-family: var(--font, 'Archivo', sans-serif); font-size: 0.9rem; font-weight: 600; color: #ece8df; } .ds-input { width: 100%; padding: 0.82rem 0.95rem; border-radius: 10px; background: #17191d; border: 1px solid #2b2e35; font-family: var(--font, 'Archivo', sans-serif); font-size: 1rem; color: #ece8df; caret-color: #ff5a1f; transition: border-color 0.2s; } .ds-input::placeholder { color: #9c988f; opacity: 1; } .ds-input:focus-visible { outline: 2px solid #ff5a1f; outline-offset: 2px; border-color: #ff5a1f; }"
+      "description": "Anodized aluminium text input with muted carbon placeholder and signal focus outline.",
+      "html": "<div class=\"ds-field\"><label class=\"ds-label\" for=\"ds-name\">Your Name</label><input id=\"ds-name\" class=\"ds-input\" type=\"text\" placeholder=\"Ada Lovelace\" /></div>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 0.4rem; } .ds-label { font-family: var(--font, 'Archivo', sans-serif); font-weight: 700; font-size: 0.9rem; color: #16171a; } .ds-input { width: 100%; padding: 0.78rem 0.95rem; border-radius: 9px; border: 1px solid #9fa7b3; background: #dfe2e6; color: #16171a; font-family: var(--font, 'Archivo', sans-serif); font-size: 1rem; caret-color: #ff5a1f; } .ds-input::placeholder { color: #525660; opacity: 1; } .ds-input:focus-visible { outline: 2px solid #ff5a1f; outline-offset: 3px; }"
     },
     {
-      "name": "Sticky Studio Navigation",
+      "name": "Dual-Mode Sticky Header",
       "kind": "nav",
       "refersTo": "card-enclosure",
-      "description": "Sticky translucent graphite header with SA Mubin emblem, route links, and ⌘K tool key.",
-      "html": "<div class=\"ds-nav-bar\"><a class=\"ds-brand\" href=\"#\"><span class=\"ds-brand-cap\">SA</span><span>SA Mubin</span></a><nav class=\"ds-nav\"><a href=\"#\" aria-current=\"page\">Home</a><a href=\"#\">Work</a><a href=\"#\">About</a><a href=\"#\">Contact</a></nav><button class=\"ds-tool\" type=\"button\">⌘K</button></div>",
-      "css": ".ds-nav-bar { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1.25rem; background: #111215; border-bottom: 1px solid #2b2e35; color: #ece8df; font-family: var(--font, 'Archivo', sans-serif); } .ds-brand { display: inline-flex; align-items: center; gap: 0.55rem; font-weight: 800; color: #ece8df; text-decoration: none; } .ds-brand-cap { display: grid; place-items: center; min-width: 2.1rem; height: 1.95rem; padding: 0 0.38rem; border-radius: 7px; background: linear-gradient(180deg, #ff7d47 0%, #ff5a1f 76%, #d94310 100%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.38), 0 3px 8px -2px rgba(0,0,0,0.6); color: #1a0d06; font-size: 0.82rem; } .ds-nav { display: flex; gap: 0.25rem; margin-left: auto; } .ds-nav a { position: relative; padding: 0.45rem 0.7rem; border-radius: 8px; color: #b8b4ac; text-decoration: none; font-weight: 560; } .ds-nav a:hover { color: #ece8df; background: #1f2227; } .ds-nav a[aria-current='page'] { color: #ece8df; } .ds-nav a[aria-current='page']::after { content: ''; position: absolute; left: 0.7rem; right: 0.7rem; bottom: 0.18rem; height: 2px; border-radius: 2px; background: #ff5a1f; } .ds-tool { height: 2.25rem; padding: 0 0.55rem 3px; border: 0; border-radius: 8px; background: linear-gradient(180deg, #4a4f59, #3d414a 70%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -3px 0 #252830; color: #ece8df; font-family: var(--mono, monospace); font-size: 0.8125rem; font-weight: 600; cursor: pointer; }"
-    },
-    {
-      "name": "Engineering Feature Card",
-      "kind": "card",
-      "refersTo": "card-enclosure",
-      "description": "Single-layer anodized graphite card for engineering highlights and interactive benches.",
-      "html": "<article class=\"ds-card\"><h3>Zero-Build Interactive Studio</h3><p>Built on vanilla ES Modules, 60fps canvas loops, and synthesized Web Audio switches with zero runtime dependencies.</p></article>",
-      "css": ".ds-card { padding: 1.5rem 1.6rem; border-radius: 18px; background: #17191d; color: #ece8df; border: 1px solid #2b2e35; box-shadow: 0 18px 36px -22px rgba(0, 0, 0, 0.7); font-family: var(--font, 'Archivo', sans-serif); } .ds-card h3 { margin: 0 0 0.55rem; font-size: 1.4rem; font-weight: 800; color: #ece8df; } .ds-card p { margin: 0; color: #b8b4ac; line-height: 1.6; }"
-    },
-    {
-      "name": "Desk Macropad Keycap",
-      "kind": "custom",
-      "refersTo": "button-bone",
-      "description": "Spherical-dish PBT keycap inside the SAMUBIN desk macropad enclosure.",
-      "html": "<div class=\"ds-pad\"><button class=\"ds-cap\" type=\"button\">S</button><button class=\"ds-cap\" type=\"button\">A</button><button class=\"ds-cap ds-cap--accent\" type=\"button\" aria-label=\"Chord\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.1\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 3l2.2 5.8L20 11l-5.8 2.2L12 19l-2.2-5.8L4 11l5.8-2.2L12 3z\"/></svg></button></div>",
-      "css": ".ds-pad { display: inline-grid; grid-template-columns: repeat(3, 58px); gap: 9px; padding: 14px; border-radius: 16px; background: #17191e; border: 1px solid #2b2e35; } .ds-cap { height: 58px; border: 0; border-radius: 10px; padding: 0 0 6px; display: grid; place-items: center; font-family: var(--font, 'Archivo', sans-serif); font-weight: 760; font-size: 1.35rem; color: #1a1a1c; background: radial-gradient(70% 55% at 50% 38%, #f2ede3, transparent 75%), linear-gradient(180deg, #f2ede3, #e6e0d2 75%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -6px 0 #b9b19e, 0 5px 8px -3px rgba(0,0,0,0.7); cursor: pointer; transition: transform 70ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 70ms; } .ds-cap svg { width: 42%; height: 42%; } .ds-cap--accent { color: #1a0d06; background: linear-gradient(180deg, #ff8550, #ff5a1f 75%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -6px 0 #b8380c, 0 5px 8px -3px rgba(0,0,0,0.7); } .ds-cap:active { transform: translateY(4px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -2px 0 #b9b19e, 0 1px 2px rgba(0,0,0,0.7); } .ds-cap:focus-visible { outline: 2px solid #ff5a1f; outline-offset: 2px; }"
+      "description": "Sticky Aluminium Lab header with SA Mubin LED emblem, route navigation, and Hoodie Switch.",
+      "html": "<header class=\"ds-header\"><a class=\"ds-brand\" href=\"#\"><span class=\"ds-led\"></span><span>SA Mubin</span></a><nav class=\"ds-nav\"><a href=\"#\" aria-current=\"page\">Workbench</a><a href=\"#\">Work</a><a href=\"#\">About</a><a href=\"#\">Contact</a></nav><button class=\"ds-switch\" type=\"button\">Hoodie Down · Dev <span class=\"ds-mkbd\">H</span></button></header>",
+      "css": ".ds-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem 1.5rem; background: #dfe2e6; border-bottom: 1px solid #bfc5cf; color: #16171a; font-family: var(--font, 'Archivo', sans-serif); } .ds-brand { display: inline-flex; align-items: center; gap: 0.65rem; font-weight: 800; color: #16171a; text-decoration: none; } .ds-led { width: 10px; height: 10px; border-radius: 50%; background: #ff5a1f; } .ds-nav { display: flex; gap: 0.25rem; } .ds-nav a { padding: 0.45rem 0.8rem; border-radius: 8px; color: #363940; font-weight: 650; text-decoration: none; } .ds-nav a:hover { background: #e6e9ef; color: #16171a; } .ds-nav a[aria-current='page'] { color: #16171a; font-weight: 760; text-decoration: underline; text-decoration-color: #ff5a1f; text-decoration-thickness: 2px; text-underline-offset: 0.38em; } .ds-switch { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.44rem 0.85rem 0.62rem; border: 0; border-radius: 10px; font-weight: 740; font-size: 0.84rem; color: #f2f4f7; background: linear-gradient(180deg, #464b55, #353942); box-shadow: inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -4px 0 #1f2228; cursor: pointer; } .ds-mkbd { font-family: var(--mono, monospace); font-size: 0.75rem; padding: 0.08rem 0.36rem; border-radius: 5px; background: rgba(0,0,0,0.26); }"
     }
   ],
   "narrative": {
-    "northStar": "Interactive Developer Studio & Tactile Keycaps",
-    "overview": "The portfolio of Sakib Alam Mubin (SA Mubin) treats the browser as a joyful, physical full-stack developer studio rather than a static résumé or dark \"cyber hacker\" template. Grounded in machined graphite aluminium (#111215) alternating with warm bone PBT keycap fields (#E6E0D2), the world invites visitors to poke, drag, type, and listen from the very first viewport.\n\nAn original 3D-vinyl-shaded developer avatar of SA Mubin anchors the hero over a 360-degree cursor-reactive capsule-stroke canvas and peeks upside-down across the curved bone-to-graphite footer seam. Controls behave like real desk hardware: keycaps depress with physical travel and selectable synthesized Web Audio switch voices (Thock, Clicky, Synth), UI motion runs on real Hooke's-law spring solvers, and a comedic roving production bug mutters developer one-liners when discovered.",
+    "northStar": "Aluminium Lab ⇄ Safelight Darkroom",
+    "overview": "This design system treats the portfolio of Sakib Alam Mubin (SA Mubin) as a single physical hardware-engineering workbench (`html[data-mode=\"dev\"]`) that transforms into a red-team photographic safelight darkroom (`html[data-mode=\"hack\"]`) when the visitor pulls the avatar's hoodie up (`[H]`). Inspired by Teenage Engineering's machined anodized aluminium, Panic/Playdate's tactile whimsy, and Linear/Rauno Freiberg's 60fps spring-damper physics, every control feels weighted, acoustic, and responsive.\n\nThe interface rejects generic \"cyber hacker\" clichés (Matrix green rain, glowing cyber-skulls, blue/purple SaaS gradient blobs, glassmorphism card stacks, infinite logo marquees, and eyebrow/kicker labels above headings) in favor of honest hardware surfaces, synthesized Web Audio switches, and crisp typographic contrast across both rooms.",
     "keyCharacteristics": [
-      "Alternating Physical Grounds: Full-bleed sections alternate strictly between warm anodized graphite (#111215) and matte bone PBT polymer (#E6E0D2).",
-      "Expressive 3D-Clay Avatar & Footer Peeker: Custom multi-gradient SVG character rig with cursor-tracking parallax, Boop / Shades / Say Hi states, kinetic stroke wave, and upside-down footer peek.",
-      "Tactile Switch Acoustics & Physics Toys: Selectable mechanical switch profiles (Thock, Clicky, Synth), SAMUBIN desk macropad, and live 60fps Hooke's-law spring playground with zero external audio or 3D bundle files.",
-      "Disciplined Typographic Voices: Stretched variable Archivo carries display and human narrative; JetBrains Mono stays strictly inside hardware screens, code benches, and the ⌘K terminal."
+      "Dual-mode architectural morph between D1 Aluminium Lab and H1 Safelight Darkroom persisted cleanly via `localStorage` and `#dev`/`#hack` URL fragments.",
+      "Expressive articulated 2.5D character avatar and upside-down footer peeker built on a Rive-compatible state machine with cursor gaze tracking and two-handed hoodie pull.",
+      "Tactile 3D sculpted Loadout/Arsenal keyboard and suspended Hooke's-law S-A-M-U-B-I-N keypad synced with synthesized Web Audio switch acoustics (`Thock`, `Clicky`, `Synth`).",
+      "Variable width-axis typography (`Archivo`) that relaxes into an expanded industrial stance in Developer mode and tightens into a condensed tactical stance in Hacker mode."
     ],
     "rules": [
       {
-        "name": "The Alternating Field Rule",
-        "body": "Full-width page bands alternate between Anodized Graphite (#111215) and Bone PBT (#e6e0d2), terminating in a curved bone wave seam where SA Mubin peeks upside-down into the dark footer.",
-        "section": "colors"
-      },
-      {
-        "name": "The Kinetic Color Containment Rule",
-        "body": "Multi-hue tertiary colors (#38bdf8, #a855f7, #facc15) live exclusively inside dynamic canvas waveforms, oscilloscope traces, and avatar spark accents—never on static page chrome or typography.",
+        "name": "The Safelight Torch Rule",
+        "body": "In Hacker mode, a radial CSS safelight spotlight (`560px` circle tracking `--torch-x` / `--torch-y`) illuminates latent `[data-darkroom-note]` field notes within proximity while keeping all body copy legible at WCAG AA contrast without requiring pointer hover and disabling the overlay under `prefers-reduced-motion: reduce`.",
         "section": "colors"
       },
       {
         "name": "The Reserved Mono Rule",
-        "body": "JetBrains Mono appears strictly inside code panes, hardware telemetry readouts, keyboard <kbd> legends, and the ⌘K command terminal—never as a decorative \"tech\" costume on prose, headings, or navigation.",
-        "section": "typography"
+        "body": "`JetBrains Mono` (`tabular-nums`) stays strictly inside OLED telemetry readouts, keycap legends, `<kbd>` shortcuts, metadata tags, and `[data-darkroom-note]` field traces (`>= 11px` floor across viewports) rather than decorative body prose or headings.",
+        "section": "colors"
       },
       {
         "name": "The No-Kicker Rule",
-        "body": "Headings carry their own visual authority; never place small uppercase eyebrow or kicker labels above <h1>, <h2>, or <h3>.",
+        "body": "Headings carry their own authority; never place small uppercase eyebrow or kicker labels above `<h1>`, `<h2>`, or `<h3>`.",
         "section": "typography"
       },
       {
-        "name": "The Strict Semantic Bevel Rule",
-        "body": "Deep bottom-lip inset bevels (inset 0 -5px/-6px 0) belong exclusively to pressable buttons and keycaps that physically depress on click. Static badges, cards, and containers never mimic keycap lips or single-edge accent stripes.",
+        "name": "The Single-Enclosure Rule",
+        "body": "Major interactive benches (`.avatar-stage`, `.kb-shell`, `.exp-matrix`, `.proj-card`, `.ledger-enclosure`, `.dispatch-console`, `.index-enclosure`, `.split-enclosure`) carry at most one outer bordered enclosure; nested OLED wells (`.proj-viewport`, `.exp-ch-Schematic`, `.freq-readout`) sit borderless inside them using tonal contrast and subtle inset shadow.",
         "section": "elevation"
       },
       {
-        "name": "The Single-Enclosure Rule",
-        "body": "Hardware benches (.macropad-shell, .spring-card, .bench, .composer-box) use one outer bordered/shadowed enclosure divided internally by 1px hairlines—never cards nested inside cards.",
+        "name": "The Semantic Keycap Bevel Rule",
+        "body": "Bottom 3D keycap bevels (`inset 0 -4px/-5px 0`) belong exclusively to pressable buttons and switches (`.key`, `.cap`, `.kb-cap`, `.mode-switch`, `.tool`, `.dock-btn`) that physically depress (`translateY(2px–3px)`) on interaction.",
         "section": "elevation"
       }
     ],
     "dos": [
-      "Do use Sakib Alam Mubin and SA Mubin exclusively as names across all copy, metadata, JSON-LD, and social cards, keeping @thesamubin and @samubin strictly for social/profile handles.",
-      "Do keep the alternating #111215 graphite and #e6e0d2 bone section rhythm and single-layer bench enclosures (>= 13px minimum text size and tabular-nums on telemetry).",
-      "Do respect prefers-reduced-motion: reduce across every canvas loop, spring solver, avatar rig, and roving bug animation, and persist the user's mute preference."
+      "Do use **Sakib Alam Mubin** and **SA Mubin** exclusively in visible copy, metadata, and JSON-LD, keeping `@thesamubin` and `@samubin` naturally scoped to profile links and handles.",
+      "Do maintain >= 4.5:1 WCAG AA contrast across all gradient buttons, chips, stack tabs, and form controls in both `dev` and `hack` modes, and keep interactive UI labels >= `11px` across `360px` phone screens.",
+      "Do honor `prefers-reduced-motion: reduce` across every spring solver, scramble cipher, avatar rig, and darkroom torch overlay."
     ],
     "donts": [
-      "Don't use standalone \"Mubin\", \"Syed\", or visible SEO alias dumps (\"also known as...\") anywhere in user-facing or structured copy.",
-      "Don't place kickers/eyebrows above headings, nest bordered cards inside bordered cards, or put inset 0 -3px/-4px 0 stripes on non-keycap elements.",
-      "Don't let heavy \"cybersecurity hacker\" tropes dominate the portfolio; lead ~80% with full-stack software engineering and interactive UI craft, keeping XSS/LFI labs strictly as 2 launch buttons in /work/#teaching."
+      "Don't use standalone \"Mubin\", \"Syed\", or visible SEO alias dumps anywhere on the site.",
+      "Don't place kickers/eyebrows above headings, nest bordered cards inside bordered enclosures, or apply `inset 0 -4px/-5px 0` keycap bevels to static badges or containers.",
+      "Don't introduce Matrix code rain, neon-green terminal clichés, purple-blue orbs, or glassmorphism overlays."
     ]
   }
 }

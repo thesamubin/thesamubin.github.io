@@ -99,7 +99,7 @@ function buildCharacterSvg(p) {
 
   <g class="av-root" filter="url(#${p}-shadow)">
     <!-- Ground contact shadow -->
-    <ellipse cx="210" cy="396" rx="124" ry="15" fill="rgba(0,0,0,0.28)"/>
+    <path d="M86 396 C86 385, 142 381, 210 381 C278 381, 334 385, 334 396 C334 407, 278 411, 210 411 C142 411, 86 407, 86 396 Z" fill="rgba(0,0,0,0.28)"/>
 
     <!-- Crossed legs / knees base -->
     <g class="av-legs">
@@ -139,11 +139,11 @@ function buildCharacterSvg(p) {
       <g class="av-hood-collar">
         <path d="M138 192 C136 214, 284 214, 282 192 C280 178, 262 174, 250 184 C232 198, 188 198, 170 184 C158 174, 140 178, 138 192 Z" fill="url(#${p}-orange)"/>
         <path d="M148 193 C172 208, 248 208, 272 193" fill="none" stroke="rgba(255,240,228,0.42)" stroke-width="2.4" stroke-linecap="round"/>
-        <!-- Drawstrings -->
+        <!-- Drawstrings & aglets -->
         <path class="av-string-l" d="M182 204 C180 226, 181 242, 183 254" fill="none" stroke="#f5f0e4" stroke-width="3.6" stroke-linecap="round"/>
         <path class="av-string-r" d="M238 204 C240 226, 239 242, 237 254" fill="none" stroke="#f5f0e4" stroke-width="3.6" stroke-linecap="round"/>
-        <circle cx="183" cy="256" r="3.2" fill="#ff5a1f"/>
-        <circle cx="237" cy="256" r="3.2" fill="#ff5a1f"/>
+        <path d="M180 253 C180 250, 186 250, 186 253 L185.5 260 C185.5 262, 180.5 262, 180.5 260 Z" fill="#ff5a1f"/>
+        <path d="M234 253 C234 250, 240 250, 240 253 L239.5 260 C239.5 262, 234.5 262, 234.5 260 Z" fill="#ff5a1f"/>
       </g>
     </g>
 
@@ -174,8 +174,8 @@ function buildCharacterSvg(p) {
 
       <!-- Subtle Cheek Warmth -->
       <g class="av-cheeks">
-        <ellipse cx="170" cy="138" rx="15" ry="10" fill="url(#${p}-blush)"/>
-        <ellipse cx="250" cy="138" rx="15" ry="10" fill="url(#${p}-blush)"/>
+        <path d="M155 138 C155 131, 185 131, 185 138 C185 145, 155 145, 155 138 Z" fill="url(#${p}-blush)"/>
+        <path d="M235 138 C235 131, 265 131, 265 138 C265 145, 235 145, 235 138 Z" fill="url(#${p}-blush)"/>
       </g>
 
       <!-- Parallax Inner Facial Features -->
@@ -222,7 +222,7 @@ function buildCharacterSvg(p) {
 
         <!-- Sculpted Cartoon Nose Bridge & Tip -->
         <path d="M208 112 L206 129 C206 133, 214 134, 216 130" fill="none" stroke="#b56f46" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-        <ellipse cx="211" cy="129" rx="3.2" ry="2" fill="#f9dfc8" opacity="0.55"/>
+        <path d="M208 129 Q211 127 214 129 Q211 131 208 129 Z" fill="#f9dfc8" opacity="0.55"/>
 
         <!-- Calm / Focused Mouth -->
         <path class="av-mouth-calm" d="M197 147 Q210 154 223 147" fill="none" stroke="#4d2518" stroke-width="3.3" stroke-linecap="round"/>
@@ -266,7 +266,7 @@ function buildCharacterSvg(p) {
     <g class="av-arm-l">
       <path class="av-sleeve-l" d="M122 216 C96 244, 98 286, 146 306 C158 310, 166 294, 154 286 C126 272, 126 248, 140 228 Z" fill="url(#${p}-orange)"/>
       <g class="av-hand-l" transform="translate(158 298)">
-        <ellipse cx="0" cy="0" rx="15" ry="10.5" fill="url(#${p}-skin)"/>
+        <path d="M-15 -1 C-15 -8, -6 -11, 2 -10 C11 -9, 16 -4, 14 3 C12 9, 4 11, -5 10 C-12 9, -15 5, -15 -1 Z" fill="url(#${p}-skin)"/>
         <!-- Typing fingers -->
         <path d="M-8 6 L-6 14 M-1 7 L1 15 M6 6 L8 14" stroke="#b5724a" stroke-width="3.2" stroke-linecap="round"/>
       </g>
@@ -276,7 +276,7 @@ function buildCharacterSvg(p) {
     <g class="av-arm-r">
       <path class="av-sleeve-r" d="M298 216 C324 244, 322 286, 274 306 C262 310, 254 294, 266 286 C294 272, 294 248, 280 228 Z" fill="url(#${p}-orange)"/>
       <g class="av-hand-r" transform="translate(262 298)">
-        <ellipse cx="0" cy="0" rx="15" ry="10.5" fill="url(#${p}-skin)"/>
+        <path d="M15 -1 C15 -8, 6 -11, -2 -10 C-11 -9, -16 -4, -14 3 C-12 9, -4 11, 5 10 C12 9, 15 5, 15 -1 Z" fill="url(#${p}-skin)"/>
         <path d="M-6 6 L-8 14 M1 7 L-1 15 M8 6 L6 14" stroke="#b5724a" stroke-width="3.2" stroke-linecap="round"/>
       </g>
     </g>
@@ -286,7 +286,7 @@ function buildCharacterSvg(p) {
       <path d="M292 220 C324 206, 348 168, 340 132 C336 118, 316 122, 318 136 C322 160, 306 186, 282 202 Z" fill="url(#${p}-orange)"/>
       <!-- Open Waving Palm & Fingers -->
       <g transform="translate(330 120)">
-        <ellipse cx="0" cy="4" rx="13" ry="14" fill="url(#${p}-skin)"/>
+        <path d="M-12 4 C-13 -5, -7 -10, 1 -10 C9 -10, 14 -3, 13 6 C12 14, 5 18, -2 18 C-9 18, -12 12, -12 4 Z" fill="url(#${p}-skin)"/>
         <path d="M-11 0 L-16 -12 M-5 -4 L-7 -18 M2 -4 L3 -18 M8 -1 L12 -14 M11 6 L20 2" stroke="url(#${p}-skin)" stroke-width="5.2" stroke-linecap="round"/>
         <!-- Motion wave arcs -->
         <path d="M24 -14 A22 22 0 0 1 30 12" fill="none" stroke="#ff5a1f" stroke-width="3.2" stroke-linecap="round"/>
@@ -296,14 +296,14 @@ function buildCharacterSvg(p) {
     <!-- Sleek Laptop Resting on Lap -->
     <g class="av-laptop">
       <!-- Screen Upward Aura -->
-      <ellipse cx="210" cy="274" rx="92" ry="48" fill="url(#${p}-screen-glow)"/>
+      <path d="M118 274 C118 242, 160 226, 210 226 C260 226, 302 242, 302 274 C302 306, 260 322, 210 322 C160 322, 118 306, 118 274 Z" fill="url(#${p}-screen-glow)"/>
       <!-- Laptop Base Deck -->
       <path d="M118 332 L302 332 L314 344 C316 347, 313 350, 308 350 L112 350 C107 350, 104 347, 106 344 Z" class="av-laptop-base" fill="url(#${p}-laptop-lid)"/>
       <!-- Laptop Lid (back of screen facing viewer) -->
-      <rect x="132" y="254" width="156" height="82" rx="10" class="av-laptop-shell" fill="url(#${p}-laptop-lid)" stroke="rgba(255,255,255,0.28)" stroke-width="1.5"/>
+      <path d="M142 254 L278 254 C284 254, 288 258, 288 264 L288 326 C288 332, 284 336, 278 336 L142 336 C136 336, 132 332, 132 326 L132 264 C132 258, 136 254, 142 254 Z" class="av-laptop-shell" fill="url(#${p}-laptop-lid)" stroke="rgba(255,255,255,0.28)" stroke-width="1.5"/>
       <!-- Glowing Status Emblem on Laptop Lid -->
       <g class="av-laptop-logo" transform="translate(210 295)">
-        <rect x="-16" y="-11" width="32" height="22" rx="5" fill="#16171a"/>
+        <path d="M-11 -11 L11 -11 C14 -11, 16 -9, 16 -6 L16 6 C16 9, 14 11, 11 11 L-11 11 C-14 11, -16 9, -16 6 L-16 -6 C-16 -9, -14 -11, -11 -11 Z" fill="#16171a"/>
         <path d="M-8 -3 L-2 0 L-8 3 M0 4 L7 4" fill="none" stroke="#ff5a1f" class="av-laptop-glyph" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
       </g>
     </g>

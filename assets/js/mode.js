@@ -35,7 +35,7 @@ function syncControls(mode) {
   // Sync theme-color meta for browser chrome
   const metaTheme = document.querySelector('meta[name="theme-color"]');
   if (metaTheme) {
-    metaTheme.setAttribute("content", isHack ? "#0B0708" : "#E4E2DD");
+    metaTheme.setAttribute("content", isHack ? "#0b0708" : "#dfe2e6");
   }
 
   // Sync every mode toggle button (header hoodie switch, hero hoodie button, etc.)

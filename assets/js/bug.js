@@ -1,7 +1,7 @@
 // Funny comic production bug mascot: perches on card/section ledges, eyeballs the cursor,
 // mutters classic dev excuses in a speech bubble, and cycles 5 cartoon gags when poked!
 import { sound } from "./sound.js";
-import { reduceMotion } from "./ui.js";
+import { reduceMotion } from "./mode.js";
 
 const BUG_SVG = `
 <svg viewBox="0 0 24 22" aria-hidden="true">

@@ -1,11 +1,11 @@
 {
   "name": "Sakib Alam Mubin (SA Mubin)",
   "short_name": "SA Mubin",
-  "description": "Portfolio of Sakib Alam Mubin (SA Mubin) — Full-Stack Software Developer.",
+  "description": "Dual-mode portfolio of Sakib Alam Mubin (SA Mubin) — Full-Stack AI Engineer & Ethical Hacker.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#111215",
-  "theme_color": "#111215",
+  "background_color": "#dfe2e6",
+  "theme_color": "#dfe2e6",
   "icons": [
     {
       "src": "/assets/img/favicon.svg",

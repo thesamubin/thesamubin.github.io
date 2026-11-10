@@ -6,6 +6,7 @@
   <title>Keypad — Sakib Alam Mubin</title>
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#111215">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <style>
     @font-face {
       font-family: "Archivo";
@@ -216,6 +217,23 @@
       --cap-ink: var(--signal-ink);
     }
     .cap svg { width: 42%; height: 42%; }
+
+    @media (max-width: 480px) {
+      .pad {
+        --u: clamp(44px, 12vw, 56px);
+        padding: 18px 14px 14px;
+        border-radius: 18px;
+        width: calc(var(--u) * 4 + 8px * 3 + 28px);
+      }
+      .pad-grid {
+        gap: 8px;
+      }
+      .hint {
+        font-size: 0.78rem;
+        padding-inline: 1rem;
+        bottom: 1.25rem;
+      }
+    }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }

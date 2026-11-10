@@ -5,7 +5,8 @@
 // 4. /work/ Web Audio Scope & Edge Pipeline Inspector
 // 5. /contact/ Clipboard Copy & Local Mailto Composer
 import { sound } from "./sound.js";
-import { reduceMotion, toast } from "./ui.js";
+import { toast } from "./ui.js";
+import { reduceMotion } from "./mode.js";
 
 const SWITCH_SPECS = {
   thock: "Lubed PBT linear · 172 Hz housing thock",

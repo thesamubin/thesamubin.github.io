@@ -6,6 +6,7 @@
   <title>Interactive 3D Avatar & Peeker — Sakib Alam Mubin</title>
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#111215">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
   <style>
     @font-face {
       font-family: "Archivo";
@@ -55,21 +56,49 @@
       overflow-x: hidden;
     }
 
-    /* Top utility controls */
+    /* Top utility bar */
+    .avatar-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      max-width: 960px;
+      margin-inline: auto;
+      padding: 1rem 1.5rem 0;
+    }
+
+    .back-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      min-height: 40px;
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink-2);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+    .back-pill:hover {
+      color: var(--ink);
+      border-color: var(--slate);
+    }
+
     .sound-btn {
-      position: fixed;
-      top: 1.15rem;
-      right: 1.15rem;
-      z-index: 50;
-      display: inline-grid;
-      place-items: center;
-      width: 2.6rem;
-      height: 2.6rem;
-      padding: 0 0 3px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.42rem;
+      min-height: 40px;
+      padding: 0.48rem 0.9rem 0.56rem;
       border: 0;
-      border-radius: 10px;
+      border-radius: 999px;
       cursor: pointer;
       color: var(--ink);
+      font-family: var(--font);
+      font-size: 0.84rem;
+      font-weight: 700;
       background: linear-gradient(180deg, #4a4f59, var(--slate) 70%);
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,.14),
@@ -81,7 +110,7 @@
       transform: translateY(2px);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.06), inset 0 -1px 0 var(--slate-side), 0 1px 2px rgba(0,0,0,.5);
     }
-    .sound-btn svg { width: 1.15rem; height: 1.15rem; }
+    .sound-btn svg { width: 1.05rem; height: 1.05rem; }
     .sound-btn[aria-pressed="false"] .ico-on,
     .sound-btn[aria-pressed="true"] .ico-off { display: none; }
 
@@ -91,8 +120,8 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 90vh;
-      padding: 3rem 1.5rem 2rem;
+      min-height: 82vh;
+      padding: 1.5rem 1.5rem 2rem;
       text-align: center;
     }
 
@@ -291,8 +320,15 @@
       box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.26),
         inset 0 -3px 0 var(--signal-side),
-        0 4px 12px -2px rgba(255, 90, 31, 0.45);
-      color: #fff;
+        0 4px 12px -2px rgba(0, 0, 0, 0.55);
+      color: var(--signal-ink);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+      }
     }
 
     /* Middle Scroll Area */
@@ -307,11 +343,11 @@
       text-align: center;
     }
     .scroll-arrow {
-      animation: bounce-arrow 1.6s ease-in-out infinite;
+      animation: pulse-arrow 2.2s var(--ease-smooth) infinite;
     }
-    @keyframes bounce-arrow {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(12px); }
+    @keyframes pulse-arrow {
+      0%, 100% { transform: translateY(0); opacity: 0.7; }
+      50% { transform: translateY(8px); opacity: 1; }
     }
 
     /* ---------- Bottom Footer + Upside-Down Peeker ---------- */
@@ -394,32 +430,43 @@
       text-align: center;
       color: var(--ink-3);
       font-size: 0.92rem;
+      padding-inline: 1.5rem;
     }
 
     @media (max-width: 640px) {
+      .avatar-topbar {
+        padding: 0.85rem 1rem 0;
+      }
       .peeker-note {
         left: 50%;
         top: 96px;
         translate: -50% 0;
+        max-width: calc(100% - 1.5rem);
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Audio Mute/Unmute Toggle -->
-  <button class="sound-btn" type="button" id="soundToggle" aria-pressed="true" aria-label="Mute sound">
-    <svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M11 5L6 9H3v6h3l5 4V5z"/>
-      <path d="M15.5 8.5a5 5 0 0 1 0 7"/>
-      <path d="M18.8 5.8a9 9 0 0 1 0 12.4"/>
-    </svg>
-    <svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M11 5L6 9H3v6h3l5 4V5z"/>
-      <path d="M22 9l-6 6"/>
-      <path d="M16 9l6 6"/>
-    </svg>
-  </button>
+  <!-- Top Bar -->
+  <header class="avatar-topbar">
+    <a class="back-pill" href="/">← Portfolio</a>
+    <button class="sound-btn" type="button" id="soundToggle" aria-pressed="true" aria-label="Mute sound">
+      <svg class="ico-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M11 5L6 9H3v6h3l5 4V5z"/>
+        <path d="M15.5 8.5a5 5 0 0 1 0 7"/>
+        <path d="M18.8 5.8a9 9 0 0 1 0 12.4"/>
+      </svg>
+      <svg class="ico-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M11 5L6 9H3v6h3l5 4V5z"/>
+        <path d="M22 9l-6 6"/>
+        <path d="M16 9l6 6"/>
+      </svg>
+      <span>Audio</span>
+    </button>
+  </header>
 
   <!-- Top Hero Stage -->
   <section class="hero-stage">
@@ -478,7 +525,7 @@
     </div>
 
     <div class="footer-content">
-      <p>Upside-Down Footer Peeker · Hover or click to reveal</p>
+      <p>Upside-Down Footer Peeker · Hover or click to&nbsp;reveal</p>
     </div>
   </footer>
 
@@ -549,8 +596,7 @@
 
       /* ---------- 1. Primary Avatar SVG ---------- */
       function avatarSvg(p) {
-        return `
-<svg class="av-svg" viewBox="0 0 320 310" aria-hidden="true">
+        return '<' + 'svg class="av-svg" viewBox="0 0 320 310" aria-hidden="true">' + `
   <defs>
     <radialGradient id="${p}-skin" cx="38%" cy="30%" r="68%">
       <stop offset="0%" stop-color="#f7d5b9"/>
