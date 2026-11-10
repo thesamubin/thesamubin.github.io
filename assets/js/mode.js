@@ -44,12 +44,12 @@ function syncControls(mode) {
     btn.setAttribute(
       "aria-label",
       isHack
-        ? "Pull hoodie down — switch to Developer Mode (Aluminium Lab)"
-        : "Pull hoodie up — switch to Ethical Hacker Mode (Safelight Darkroom)"
+        ? "Switch to Developer Profile (Aluminium Lab)"
+        : "Switch to Security Profile (Safelight Darkroom)"
     );
     const labelEl = btn.querySelector("[data-mode-label]");
     if (labelEl) {
-      labelEl.textContent = isHack ? "Hood Up · Hacker" : "Hood Down · Dev";
+      labelEl.textContent = isHack ? "Security · Darkroom" : "DevOps · Studio";
     }
   });
 

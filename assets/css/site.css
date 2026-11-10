@@ -789,10 +789,16 @@ kbd {
 }
 
 .hero-grid {
+  display: block;
+  max-width: 860px;
+}
+
+.hero-grid:has(.avatar-col) {
   display: grid;
   grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.96fr);
   align-items: center;
   gap: clamp(2rem, 4vw, 3.5rem);
+  max-width: none;
 }
 
 .hero-role {
@@ -811,7 +817,7 @@ kbd {
   color: var(--ink-2);
   line-height: 1.62;
   margin-bottom: 1.75rem;
-  max-width: 56ch;
+  max-width: 64ch;
 }
 
 .hero-note {
