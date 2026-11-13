@@ -1526,7 +1526,15 @@ html[data-mode="hack"] .power-mount-collar {
 .hanging-kb-rig.is-left-released .free-usb-plug {
   opacity: 1;
   pointer-events: auto;
-  cursor: pointer;
+  cursor: grab;
+}
+
+.hanging-kb-rig.is-plug-dragging .kb-cables {
+  z-index: 4;
+}
+
+.hanging-kb-rig.is-plug-dragging .free-usb-plug {
+  cursor: grabbing;
 }
 
 .hanging-kb-rig.is-left-seating .free-usb-plug {
@@ -1536,6 +1544,11 @@ html[data-mode="hack"] .power-mount-collar {
 
 .hanging-kb-rig.is-left-released .free-usb-plug:hover .free-usb-housing {
   fill: #d0d6e0;
+}
+
+.hanging-kb-rig.is-plug-ready .free-usb-led {
+  fill: var(--accent);
+  opacity: 1;
 }
 
 .free-usb-boot {
