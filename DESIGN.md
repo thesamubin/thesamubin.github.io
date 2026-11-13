@@ -117,7 +117,7 @@ components:
 
 **Creative North Star: "Aluminium Lab ⇄ Safelight Darkroom"**
 
-This design system treats the portfolio of Sakib Alam Mubin (SA Mubin) as a single physical hardware-engineering workbench (`html[data-mode="dev"]`) that transforms into a red-team photographic safelight darkroom (`html[data-mode="hack"]`) when the visitor pulls the avatar's hoodie up (`[H]`). Inspired by Teenage Engineering's machined anodized aluminium, Panic/Playdate's tactile whimsy, and Linear/Rauno Freiberg's 60fps spring-damper physics, every control feels weighted, acoustic, and responsive.
+This design system treats the portfolio of Sakib Alam Mubin (SA Mubin) as a single physical hardware-engineering workbench (`html[data-mode="dev"]`) that transforms into a red-team photographic safelight darkroom (`html[data-mode="hack"]`) when the visitor switches profiles. Inspired by Teenage Engineering's machined anodized aluminium, Panic/Playdate's tactile whimsy, and Linear/Rauno Freiberg's 60fps spring-damper physics, every control feels weighted, acoustic, and responsive.
 
 The interface rejects generic "cyber hacker" clichés (Matrix green rain, glowing cyber-skulls, blue/purple SaaS gradient blobs, glassmorphism card stacks, infinite logo marquees, and eyebrow/kicker labels above headings) in favor of honest hardware surfaces, synthesized Web Audio switches, and crisp typographic contrast across both rooms.
 
@@ -217,7 +217,7 @@ Corners step systematically by scale: compact `<kbd>` pills and tags (`5px–6px
 - **Focus:** `2px solid var(--accent)` focus ring with `3px` offset and `--accent` caret color.
 
 ### Navigation
-- Sticky translucent-free `--ground` header (`4.35rem` min-height desktop) housing the `SA Mubin` LED emblem, mode-morphing nav links, acoustic profile switch (`Thock` / `Clicky` / `Synth`), Hoodie Mode Switch (`[H]`), and dual-icon mute button (`.ico-on` / `.ico-off`). Below `640px`, it reflows into a 2-row grid with a touch-scrollable nav strip.
+- Sticky translucent-free `--ground` header (`4.35rem` min-height desktop) housing the `SA Mubin` LED emblem, mode-morphing nav links, acoustic profile switch (`Thock` / `Clicky` / `Synth`), Profile Mode Switch, and dual-icon mute button (`.ico-on` / `.ico-off`). Below `640px`, it reflows into a 2-row grid with a touch-scrollable nav strip.
 
 ### Signature Interactive Benches
 - **Loadout / Arsenal 3D Keyboard (`#loadout`):** One-piece molded SVG chassis suspended by dual USB-C cables (left plug detaches and swings as a single-cable pendulum on strong pull), top layer tabs (`>= 11.2px` mobile floor), 3D sculpted keycaps that flip row-by-row on mode change, and embedded `S-A-M-U-B-I-N` cipher keys.

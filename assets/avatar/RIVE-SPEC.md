@@ -51,4 +51,4 @@ The live site (`assets/js/avatar.js`) is built against this exact API:
 `assets/js/avatar.js` provides accessible `<button>` hit zones mapped over the stage:
 1. **Hood / Collar Hit Zone (`[data-avatar-hood]`):** Clicking the hood or collar toggles `hoodUp` and fires the site-wide Developer ⇄ Ethical Hacker morph.
 2. **Face Hit Zone (`[data-avatar-face]`):** Clicking the face triggers `boop`.
-3. **Dock Controls:** Explicit tactile buttons below the stage (`Pull Hoodie Up / Down [H]`, `Wave Hi`, `Boop`, `Fast Type`) so every animation is discoverable by mouse, touch, and keyboard.
+3. **Dock Controls:** Explicit tactile buttons below the stage (`Pull Hoodie Up / Down`, `Wave Hi`, `Boop`, `Fast Type`) so every animation is discoverable by mouse, touch, and keyboard.

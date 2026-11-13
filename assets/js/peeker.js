@@ -101,7 +101,7 @@ function peekerSvg(p) {
 const DEV_PEEK_LINES = [
   "Thanks for scrolling all the way down the lab!",
   "Caught me hanging from the aluminium seam!",
-  "Press H anytime to flip the darkroom safelight.",
+  "Use the top profile button anytime to flip the darkroom safelight.",
   "Say hi anytime — hello@samubin.com",
 ];
 

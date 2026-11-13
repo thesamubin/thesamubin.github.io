@@ -5,7 +5,6 @@
     "layers": [
       {
         "id": "core",
-        "code": "01",
         "mod": "Core",
         "label": "Core Stack",
         "topRow": [
@@ -27,7 +26,6 @@
       },
       {
         "id": "ai-data",
-        "code": "02",
         "mod": "AI & Data",
         "label": "AI & Data",
         "topRow": [
@@ -49,7 +47,6 @@
       },
       {
         "id": "systems",
-        "code": "03",
         "mod": "Systems",
         "label": "Systems",
         "topRow": [
@@ -77,7 +74,6 @@
     "layers": [
       {
         "id": "recon-web",
-        "code": "01",
         "mod": "Recon",
         "label": "Recon & Web",
         "topRow": [
@@ -99,7 +95,6 @@
       },
       {
         "id": "exploit-net",
-        "code": "02",
         "mod": "Exploit",
         "label": "Exploit & Net",
         "topRow": [
@@ -121,7 +116,6 @@
       },
       {
         "id": "re-labs",
-        "code": "03",
         "mod": "RE & Labs",
         "label": "RE & Labs",
         "topRow": [

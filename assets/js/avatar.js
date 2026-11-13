@@ -357,7 +357,7 @@ function mountAvatar(stage) {
 
   const DEV_LINES = [
     "Aluminium Lab online — typing at 60fps.",
-    "Click my hoodie (or press H) to cut the lab lights!",
+    "Click my hoodie or the profile button to cut the lab lights!",
     "Try pressing keys on the Loadout keyboard below.",
     "Type S-A-M-U-B-I-N anywhere to test the page cipher!",
   ];

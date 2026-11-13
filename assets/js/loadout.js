@@ -7,99 +7,14 @@
 import { sound } from "./sound.js";
 import { getMode, onModeChange, toggleMode, reduceMotion } from "./mode.js";
 import { triggerSamubinCipher } from "./keyboard.js";
+import { DEV_ICONS } from "./icons-dev.js";
+import { HACK_ICONS } from "./icons-hack.js";
 
 const ICONS = {
-  // --- CORE: Languages ---
-  ts: '<rect x="2.2" y="2.2" width="19.6" height="19.6" rx="3.2" fill="currentColor"/><path d="M6.4 10.2h6M9.4 10.2v8.2M18.4 11.6c-.7-.8-2.2-.9-3-.2-.7.6-.2 1.5 1.3 2 1.6.5 2.3 1.2 1.9 2.4-.4 1.1-2.2 1.5-3.6.4" fill="none" stroke="var(--dish-bg, #ece8df)" stroke-width="2.15" stroke-linecap="round"/>',
-  js: '<polygon points="12,1.8 21,6.9 21,17.1 12,22.2 3,17.1 3,6.9" fill="currentColor"/><path d="M10.4 8.8v6.2c0 1.4-1 2-2.2 1.3M17.2 10.4c-.7-.6-2-.6-2.4.2-.4.7.2 1.4 1.5 1.7 1.3.4 1.8 1 1.5 2.1-.3.9-1.8 1.1-2.9.2" fill="none" stroke="var(--dish-bg, #ece8df)" stroke-width="2.05" stroke-linecap="round"/>',
-  py: '<path d="M11.8 2.2c-3.8 0-4.4 1.6-4.4 3.8v2.6h4.6v1.1H6.1c-2.4 0-3.9 1.5-3.9 4.4 0 2.9 1.5 4.4 3.9 4.4h1.7v-2.2c0-1.7 1.4-3 3.1-3h5c1.5 0 2.7-1.2 2.7-2.8V6c0-2.2-2.8-3.8-6.8-3.8zm.4 19.6c3.8 0 4.4-1.6 4.4-3.8v-2.6H12v-1.1h5.9c2.4 0 3.9-1.5 3.9-4.4 0-2.9-1.5-4.4-3.9-4.4h-1.7v2.2c0 1.7-1.4 3-3.1 3h-5c-1.5 0-2.7 1.2-2.7 2.8V18c0 2.2 2.8 3.8 6.8 3.8z" fill="currentColor"/><circle cx="9.8" cy="5.5" r="1.1" fill="var(--dish-bg, #ece8df)"/><circle cx="14.2" cy="18.5" r="1.1" fill="var(--dish-bg, #ece8df)"/>',
-  go: '<path d="M1.5 9.8h3.6M1 12.4h4.2M2.2 15h2.9" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/><path d="M12.2 9a3.8 3.8 0 1 0 0 6h2.2v-2.6h-1.8M18.6 8.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 1 0 0-6.4z" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>',
-  cpp: '<polygon points="12,1.8 21,6.9 21,17.1 12,22.2 3,17.1 3,6.9" fill="currentColor"/><path d="M10.8 8.2a4.3 4.3 0 1 0 0 7.6M14.7 10.3v3.4M13 12h3.4M18.7 10.3v3.4M17 12h3.4" fill="none" stroke="var(--dish-bg, #ece8df)" stroke-width="2.05" stroke-linecap="round"/>',
-  c: '<circle cx="12" cy="12" r="9.5" fill="currentColor"/><path d="M15.8 7.8a5.2 5.2 0 1 0 0 8.4" fill="none" stroke="var(--dish-bg, #ece8df)" stroke-width="3" stroke-linecap="round"/>',
-
-  // --- CORE: Frameworks ---
-  react: '<circle cx="12" cy="12" r="2.3" fill="currentColor"/><ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" stroke-width="1.95"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)" fill="none" stroke="currentColor" stroke-width="1.95"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)" fill="none" stroke="currentColor" stroke-width="1.95"/>',
-  next: '<circle cx="12" cy="12" r="9.6" fill="currentColor"/><path d="M8.6 16.2V7.8l9.2 11.4M15.4 7.8v5.2" fill="none" stroke="var(--dish-bg, #ece8df)" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"/>',
-  node: '<polygon points="12,2 20.6,7 20.6,17 12,22 3.4,17 3.4,7" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linejoin="round"/><polygon points="12,6.4 16.8,9.2 16.8,14.8 12,17.6 7.2,14.8 7.2,9.2" fill="currentColor"/><path d="M7.2 9.2L12 12l4.8-2.8M12 12v5.6" fill="none" stroke="var(--dish-bg, #ece8df)" stroke-width="1.45" stroke-linejoin="round"/>',
-  express: '<rect x="2.2" y="4.2" width="19.6" height="15.6" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 9h5.2M5.5 12h4M5.5 15h5.2M13.6 9l5 6m0-6l-5 6" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round"/>',
-  fastapi: '<circle cx="12" cy="12" r="9.6" fill="currentColor"/><path d="M13.4 5.4L7.4 13.2h4.6l-1.4 5.4 6-7.8H12z" fill="var(--dish-bg, #ece8df)"/>',
-  tailwind: '<path d="M4.8 10.4c1.5-3 3.6-3.9 6.2-2.8 1.3.5 2.2 1.6 3.3 1.9 1.7.6 3.4 0 4.9-1.9-1.5 3-3.6 3.9-6.2 2.8-1.3-.5-2.2-1.6-3.3-1.9-1.7-.6-3.4 0-4.9 1.9zm0 6.2c1.5-3 3.6-3.9 6.2-2.8 1.3.5 2.2 1.6 3.3 1.9 1.7.6 3.4 0 4.9-1.9-1.5 3-3.6 3.9-6.2 2.8-1.3-.5-2.2-1.6-3.3-1.9-1.7-.6-3.4 0-4.9 1.9z" fill="currentColor"/>',
-
-  // --- AI & DATA: AI/ML ---
-  pytorch: '<path d="M15.2 4.2l-2.2 2.2a7.4 7.4 0 1 0 4.6 6.8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><circle cx="16.2" cy="6.8" r="1.9" fill="currentColor"/>',
-  tf: '<path d="M12 2.4l8.6 4.8v3.6l-5.2-2.9v3.5l3.2 1.8v3.4l-3.2-1.8v6.6L12 19.6V7.4L6.8 10.3V6.7z" fill="currentColor"/>',
-  langchain: '<path d="M9.4 14.6l-2.4 2.4a3.6 3.6 0 0 1-5-5l2.8-2.8a3.6 3.6 0 0 1 5 0M14.6 9.4L17 7a3.6 3.6 0 0 1 5 5l-2.8 2.8a3.6 3.6 0 0 1-5 0M9 15l6-6" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"/>',
-  hf: '<circle cx="12" cy="12" r="9.4" fill="none" stroke="currentColor" stroke-width="2.15"/><circle cx="9" cy="9.8" r="1.4" fill="currentColor"/><circle cx="15" cy="9.8" r="1.4" fill="currentColor"/><path d="M8.2 13.8c1.9 2.4 5.7 2.4 7.6 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
-  openai: '<circle cx="12" cy="12" r="3.2" fill="currentColor"/><path d="M12 2.6a4.8 4.8 0 0 1 4.5 6.5 4.8 4.8 0 0 1 2.3 6.3 4.8 4.8 0 0 1-6 2.8A4.8 4.8 0 0 1 6.8 19.4a4.8 4.8 0 0 1-2.8-6 4.8 4.8 0 0 1 2.3-6.3A4.8 4.8 0 0 1 12 2.6z" fill="none" stroke="currentColor" stroke-width="2.05"/>',
-  rag: '<circle cx="5.8" cy="6.4" r="2.8" fill="currentColor"/><circle cx="18.2" cy="6.4" r="2.8" fill="currentColor"/><circle cx="12" cy="18" r="3" fill="currentColor"/><path d="M7.6 8.4l3 7.2m5.8-7.2l-3 7.2M8.6 6.4h6.8" fill="none" stroke="currentColor" stroke-width="2.1"/>',
-
-  // --- AI & DATA: Databases ---
-  pg: '<path d="M7.2 6C4.8 6.6 3.5 9.3 4 12.6c.4 2.7 2.2 4.5 4.1 4.5.9 0 1.5-.5 1.8-1.3v3.2c0 1.3 1 2.2 2.2 2.2s2.2-.9 2.2-2.2v-2.4c1.3.4 2.8.2 3.9-.9 1.5-1.5 2.2-4.5 1.3-7.3C18.4 4.8 14.8 3.2 11.2 3.8 9.4 4.1 8 4.9 7.2 6z" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"/><circle cx="10" cy="9.6" r="1.25" fill="currentColor"/><path d="M14.2 9.4c1.4-.4 2.6.4 2.6 2 0 1.4-.9 2.4-2 2.7" fill="none" stroke="currentColor" stroke-width="1.95" stroke-linecap="round"/>',
-  mongo: '<path d="M12 1.8S5.8 7 5.8 13.2c0 4.2 2.9 7.2 6.2 8.4 3.3-1.2 6.2-4.2 6.2-8.4C18.2 7 12 1.8 12 1.8z" fill="currentColor"/><path d="M12 6v15.6" stroke="var(--dish-bg, #ece8df)" stroke-width="2" stroke-linecap="round"/>',
-  redis: '<polygon points="12,2.8 20.8,7.2 12,11.6 3.2,7.2" fill="currentColor"/><path d="M3.2 12l8.8 4.4 8.8-4.4M3.2 16.4l8.8 4.4 8.8-4.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
-  prisma: '<path d="M12.8 2.2L4.2 16.4 11.2 21.8l8.6-4.1L12.8 2.2zm0 0L11.2 21.8" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linejoin="round"/>',
-  sqlite: '<path d="M5.5 3.5h9.5l4.5 4.5v12.5a1.2 1.2 0 0 1-1.2 1.2H5.5a1.2 1.2 0 0 1-1.2-1.2V4.7a1.2 1.2 0 0 1 1.2-1.2z" fill="none" stroke="currentColor" stroke-width="2.05"/><path d="M8.5 13.5l2.5-5.5 4.5 8.5-7-3z" fill="currentColor"/>',
-  sql: '<ellipse cx="12" cy="5.8" rx="7.8" ry="3" fill="currentColor"/><path d="M4.2 5.8v12.4c0 1.7 3.5 3 7.8 3s7.8-1.3 7.8-3V5.8M4.2 12c0 1.7 3.5 3 7.8 3s7.8-1.3 7.8-3" fill="none" stroke="currentColor" stroke-width="2.15"/>',
-
-  // --- SYSTEMS: OS & Shell ---
-  linux: '<path d="M12 2.4c-2.8 0-4.6 2.2-4.6 5.2 0 1.8-.9 3.5-2 5.2-1.1 1.6-1.3 3.7-.4 5.2.8 1.3 2.2 1.8 3.5 2.4 1.1.5 2.3.7 3.5.7s2.4-.2 3.5-.7c1.3-.6 2.7-1.1 3.5-2.4.9-1.5.7-3.6-.4-5.2-1.1-1.7-2-3.4-2-5.2 0-3-1.8-5.2-4.6-5.2z" fill="none" stroke="currentColor" stroke-width="2.1"/><path d="M9.8 8.2L12 10l2.2-1.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10.2" cy="6.4" r="1.05" fill="currentColor"/><circle cx="13.8" cy="6.4" r="1.05" fill="currentColor"/>',
-  ubuntu: '<circle cx="12" cy="12" r="5.6" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="12" cy="3.6" r="2.2" fill="currentColor"/><circle cx="4.6" cy="16.2" r="2.2" fill="currentColor"/><circle cx="19.4" cy="16.2" r="2.2" fill="currentColor"/>',
-  arch: '<path d="M12 2L3.5 21.2c2.9-1.6 5.3-2.5 8.5-2.5s5.6.9 8.5 2.5L12 2zm0 7.8c1.7 2.6 2.4 4.9 2.6 6.8-1.7-.5-3.5-.5-5.2 0 .2-1.9.9-4.2 2.6-6.8z" fill="currentColor"/>',
-  win: '<path d="M3 4.8l8-1.1v7.5H3zM12.4 3.5L21 2.2v9h-8.6zM3 12.8h8v7.5l-8-1.1zM12.4 12.8H21v9l-8.6-1.3z" fill="currentColor"/>',
-  wsl: '<rect x="2.5" y="4" width="19" height="16" rx="2.8" fill="none" stroke="currentColor" stroke-width="2.1"/><path d="M6.5 9.2l3.4 2.8-3.4 2.8M11.6 14.8h4" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round"/><circle cx="17.2" cy="9.2" r="1.8" fill="currentColor"/>',
-  bash: '<rect x="2.5" y="3.8" width="19" height="16.4" rx="3" fill="currentColor"/><path d="M6.8 9L11 12l-4.2 3M12.4 15.2h4.8" fill="none" stroke="var(--dish-bg, #ece8df)" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>',
-
-  // --- SYSTEMS: Cloud & DevOps ---
-  git: '<path d="M12 1.8L22.2 12 12 22.2 1.8 12 12 1.8z" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linejoin="round"/><path d="M9 6.5l6 6M12 9.5v6.8" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/><circle cx="12" cy="9.5" r="1.8" fill="currentColor"/><circle cx="15" cy="12.5" r="1.8" fill="currentColor"/><circle cx="12" cy="16.3" r="1.8" fill="currentColor"/>',
-  docker: '<path d="M2.5 13.2h14.4c2 0 3.5-.9 4.6-2.6-1.3-.4-2.4-.2-3 .4-.4-1.5-1.5-2.4-2.8-2.6-.6 1.1-.4 2.4.2 3.4H2.5c-.2 4.1 2.4 7.2 7.2 7.2 5.6 0 9-2.8 10.1-5.8" fill="currentColor"/><path d="M5.8 9.6h2.3v2.3H5.8zm3 0h2.3v2.3H8.8zm3 0h2.3v2.3h-2.3zm-3-3h2.3v2.3H8.8zm3 0h2.3v2.3h-2.3z" fill="currentColor"/>',
-  gha: '<circle cx="6.8" cy="6.8" r="2.6" fill="currentColor"/><circle cx="17.2" cy="17.2" r="2.6" fill="currentColor"/><circle cx="17.2" cy="6.8" r="2.6" fill="currentColor"/><path d="M6.8 9.4v4.2c0 2 1.6 3.6 3.6 3.6h4.2M9.4 6.8h5.2" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round"/>',
-  aws: '<path d="M4.8 15.8c4.2 2.8 10.2 2.8 14.4 0M16.8 14.6l2.8.9-.7 2.8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 11.8l2.2-6 2.2 6M7 10.2h3.4M13 5.8l1.3 6 1.4-4.4 1.4 4.4 1.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
-  cf: '<path d="M6.6 18h11.8a3.8 3.8 0 0 0 .5-7.6 5.6 5.6 0 0 0-10.6-1.5A4.5 4.5 0 0 0 2.6 13.4 4.6 4.6 0 0 0 6.6 18z" fill="currentColor"/>',
-  nginx: '<polygon points="12,1.8 20.8,6.8 20.8,17.2 12,22.2 3.2,17.2 3.2,6.8" fill="currentColor"/><path d="M8.4 15.8V8.2l7.2 7.6V8.2" fill="none" stroke="var(--dish-bg, #ece8df)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>',
-
-  // --- HACK 01: RECON & WEB ---
-  nmap: '<circle cx="12" cy="12" r="8.8" fill="none" stroke="currentColor" stroke-width="2.15"/><circle cx="12" cy="12" r="3.6" fill="currentColor"/><path d="M12 1.6v3.6m0 13.6v3.6M1.6 12h3.6m13.6 0h3.6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
-  amass: '<polygon points="12,2.2 21,7.3 21,16.7 12,21.8 3,16.7 3,7.3" fill="none" stroke="currentColor" stroke-width="2.15"/><path d="M12 2.2v19.6M3 7.3l18 9.4M21 7.3L3 16.7" stroke="currentColor" stroke-width="1.75"/>',
-  subfinder: '<circle cx="10.8" cy="10.8" r="6.8" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.8 15.8L21 21M7.8 10.8h6M10.8 7.8v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
-  httpx: '<rect x="2.6" y="4.5" width="18.8" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="2.05"/><path d="M6.2 9.2l3.2 2.8-3.2 2.8M11.6 14.8h5.8" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16.5" cy="9.2" r="1.5" fill="currentColor"/>',
-  shodan: '<circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="2.1"/><ellipse cx="12" cy="12" rx="9.2" ry="4" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="15.2" cy="9.8" r="2.2" fill="currentColor"/>',
-  dig: '<path d="M3.5 6.8h17M3.5 12h17M3.5 17.2h10.5" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/><circle cx="18.2" cy="17.2" r="2.6" fill="currentColor"/>',
-  burp: '<polygon points="12,2.2 3.4,7.1 3.4,16.9 12,21.8 20.6,16.9 20.6,7.1" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linejoin="round"/><path d="M9.2 7.5h5.6L11 12h4.4l-5 5.8" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>',
-  zap: '<path d="M12 2.4L4.2 5.6v6.2c0 5 3.3 8.5 7.8 10 4.5-1.5 7.8-5 7.8-10V5.6L12 2.4z" fill="currentColor"/><path d="M13.5 6.8L8.4 12.6h3.6l-1.4 4.8 5.1-5.8h-3.6z" fill="var(--dish-bg, #261316)"/>',
-  ffuf: '<path d="M3.5 7.6h10.5M3.5 12h14.5M3.5 16.4h8.5M15.8 6.6l4.6 5.4-4.6 5.4" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>',
-  sqlmap: '<ellipse cx="10.8" cy="6.2" rx="6.8" ry="2.6" fill="currentColor"/><path d="M4 6.2v10.4c0 1.5 3 2.6 6.8 2.6M4 11.4c0 1.5 3 2.6 6.8 2.6M14.8 12.8l5.4 5.4m0-5.4l-5.4 5.4" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round"/>',
-  nuclei: '<circle cx="12" cy="12" r="2.8" fill="currentColor"/><ellipse cx="12" cy="12" rx="9.6" ry="4.2" transform="rotate(35 12 12)" fill="none" stroke="currentColor" stroke-width="2.05"/><ellipse cx="12" cy="12" rx="9.6" ry="4.2" transform="rotate(-35 12 12)" fill="none" stroke="currentColor" stroke-width="2.05"/>',
-  xsstrike: '<path d="M7.2 7.6L2.8 12l4.4 4.4M16.8 7.6l4.4 4.4-4.4 4.4M13.8 5.4l-3.6 13.2" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>',
-
-  // --- HACK 02: EXPLOIT & NET ---
-  msf: '<path d="M4 5L12 2.4 20 5v7.2c0 5-3.4 8.2-8 9.8-4.6-1.6-8-4.8-8-9.8V5z" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linejoin="round"/><path d="M7.8 15.4V8.6l4.2 4 4.2-4v6.8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
-  hydra: '<path d="M12 20v-7.5m0 0L6.6 7m5.4 5.5L17.4 7M12 12.5V4" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"/><circle cx="6.6" cy="5.8" r="2.1" fill="currentColor"/><circle cx="17.4" cy="5.8" r="2.1" fill="currentColor"/><circle cx="12" cy="3.8" r="2.1" fill="currentColor"/>',
-  john: '<circle cx="8.2" cy="12" r="4.4" fill="none" stroke="currentColor" stroke-width="2.25"/><path d="M12.6 12H21.2v3.4m-3.4-3.4v2.8" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>',
-  hashcat: '<path d="M8.2 3.5L6 20.5M16.2 3.5L14 20.5M3.5 9h17M3 15h17" stroke="currentColor" stroke-width="2.35" stroke-linecap="round"/>',
-  impacket: '<rect x="3" y="5.5" width="7.4" height="13" rx="1.8" fill="currentColor"/><rect x="13.6" y="5.5" width="7.4" height="13" rx="1.8" fill="none" stroke="currentColor" stroke-width="2.15"/><path d="M10.4 9.8h3.2m-3.2 4.4h3.2" stroke="currentColor" stroke-width="2.15"/>',
-  lfi: '<path d="M3 6h6.4l2.2 2.2h9.4v10.4a1.6 1.6 0 0 1-1.6 1.6H4.6A1.6 1.6 0 0 1 3 18.6V6z" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linejoin="round"/><path d="M9.2 14.6L12 11.8l2.8 2.8M12 11.8v5.6" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round"/>',
-  wireshark: '<path d="M2.5 17.5h19M6.2 17.5C7.4 10 11.2 5.8 17.5 5.2c-1.5 4.4-1.2 8.2 1.3 12.3" fill="currentColor"/><path d="M2.5 17.5h19" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>',
-  tcpdump: '<path d="M2.5 12h3.8l2.4-6 3.8 12 2.8-8.2 2 2.2h4.2" fill="none" stroke="currentColor" stroke-width="2.35" stroke-linecap="round" stroke-linejoin="round"/>',
-  responder: '<circle cx="12" cy="12" r="2.5" fill="currentColor"/><path d="M7 7a7.2 7.2 0 0 0 0 10M17 7a7.2 7.2 0 0 1 0 10M3.8 3.8a11.6 11.6 0 0 0 0 16.4M20.2 3.8a11.6 11.6 0 0 1 0 16.4" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round"/>',
-  bettercap: '<polygon points="12,3.4 20.4,8.2 20.4,15.8 12,20.6 3.6,15.8 3.6,8.2" fill="none" stroke="currentColor" stroke-width="2.15"/><circle cx="12" cy="12" r="3.6" fill="currentColor"/>',
-  aircrack: '<path d="M3 9.2a12.8 12.8 0 0 1 18 0M6.2 12.8a8.4 8.4 0 0 1 11.6 0M9.4 16.2a4.2 4.2 0 0 1 5.2 0" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round"/><circle cx="12" cy="19.4" r="1.8" fill="currentColor"/>',
-  whois: '<rect x="3" y="4" width="18" height="16" rx="2.8" fill="none" stroke="currentColor" stroke-width="2.15"/><circle cx="8.8" cy="10.8" r="2.4" fill="currentColor"/><path d="M5.8 16.4c.7-1.8 1.8-2.6 3-2.6s2.3.8 3 2.6M14 9.2h4.2M14 13h3.2" fill="none" stroke="currentColor" stroke-width="2.05" stroke-linecap="round"/>',
-
-  // --- HACK 03: RE & LABS ---
-  ghidra: '<path d="M5 19c0-7 3.5-12.6 10-14l-1.8 3.8 5.4 1.3-3.5 4 4.1 1.7C16.2 18.2 12.6 19 5 19z" fill="currentColor"/>',
-  radare2: '<rect x="3.4" y="3.4" width="17.2" height="17.2" rx="2.8" fill="none" stroke="currentColor" stroke-width="2.15"/><path d="M7.6 15.4V8.6H11a2.1 2.1 0 0 1 0 4.2H7.6m2.4 0l2 2.6m2.4-6.8h3a1.7 1.7 0 0 1 0 3.4h-3v3.4h3.4" fill="none" stroke="currentColor" stroke-width="2.05" stroke-linecap="round" stroke-linejoin="round"/>',
-  gdb: '<circle cx="12" cy="12.6" r="5.8" fill="currentColor"/><path d="M9.4 7L7.6 4m7 3L16.4 4M3.5 11h3m11 0h3M4 15.8l2.5-1.2m11 0l2.5 1.2" stroke="currentColor" stroke-width="2.15" stroke-linecap="round"/>',
-  volatility: '<rect x="6.2" y="6.2" width="11.6" height="11.6" rx="2.2" fill="currentColor"/><path d="M9 2.8v3.4m6-3.4v3.4M9 17.8v3.4m6-3.4v3.4M2.8 9h3.4m-3.4 6h3.4M17.8 9h3.4m-3.4 6h3.4" stroke="currentColor" stroke-width="2.15" stroke-linecap="round"/>',
-  autopsy: '<path d="M14.6 4l5.4 5.4L9.4 20H4v-5.4L14.6 4zM12 6.6l5.4 5.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>',
-  maltego: '<circle cx="12" cy="5.5" r="2.8" fill="currentColor"/><circle cx="6" cy="17" r="2.8" fill="currentColor"/><circle cx="18" cy="17" r="2.8" fill="currentColor"/><path d="M12 5.5L6 17h12z" fill="none" stroke="currentColor" stroke-width="2.1"/>',
-  kali: '<path d="M4 8.2c3.8-4.2 8.8-5.2 14.4-2.8-3.4 1.3-5.8 3-6.8 5.2 3-.6 5.8 0 8.2 2-3.8.2-6.6 1.5-8.4 3.8 2 1.3 4 1.7 6.4 1.5-4.5 2.6-9 2.4-12-1.3-.9-2.4-.2-5 2-6.6-1.5-.4-2.8-1-3.8-1.8z" fill="currentColor"/>',
-  parrot: '<path d="M5 18.5C5.2 11.2 9.4 5.4 15.8 3.6c2.6 0 4.6 1.6 4.8 4-2.1.1-3.4 1-4.1 2.4l3.1 2.1-4.2 1.2c-.8 2.8-3.2 5.4-7.4 6.2L5 18.5z" fill="currentColor"/><circle cx="15.2" cy="7.1" r="1.1" fill="var(--dish-bg, #261316)"/>',
-  htb: '<polygon points="12,2.2 20.8,7.2 20.8,16.8 12,21.8 3.2,16.8 3.2,7.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M3.2 7.2L12 12l8.8-4.8M12 12v9.8" fill="none" stroke="currentColor" stroke-width="2.05"/>',
-  thm: '<path d="M6.6 17.5h11.2a3.6 3.6 0 0 0 .4-7.2 5.2 5.2 0 0 0-10-1.3A4.1 4.1 0 0 0 3 13.2a4.3 4.3 0 0 0 3.6 4.3z" fill="none" stroke="currentColor" stroke-width="2.15"/><path d="M9.6 12.6l2.2 2.2 3.8-3.8" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"/>',
-  h1: '<path d="M7.2 4v16M14.8 4v16M7.2 12h7.6M14.8 4l3.4 2.8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
-  bugcrowd: '<polygon points="12,2.4 20.6,7.3 20.6,16.7 12,21.6 3.4,16.7 3.4,7.3" fill="none" stroke="currentColor" stroke-width="2.2"/><circle cx="12" cy="12" r="3.8" fill="currentColor"/>',
-
-  default: '<rect x="4" y="4" width="16" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2.15"/><path d="M9 9h6v6H9z" fill="currentColor"/>',
+  ...DEV_ICONS,
+  ...HACK_ICONS,
+  default:
+    '<rect x="4" y="4" width="16" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2.15"/><path d="M9 9h6v6H9z" fill="currentColor"/>',
 };
 
 function iconFor(id) {
@@ -132,7 +47,7 @@ const SAMUBIN_META = {
   b: { key: "b", label: "B", role: "Sequence 05 // B — Builder & Breaker workbench" },
   i: { key: "i", label: "I", role: "Sequence 06 // I — Interactive 60fps physics rig" },
   n: { key: "n", label: "N", role: "Sequence 07 // N — Complete sequence to unlock cipher!" },
-  enter: { key: "lock", label: "Enter ↵", role: "Enter // Flip Developer Lab ⇄ Ethical Hacker Darkroom [H]" },
+  enter: { key: "enter", label: "Enter ↵", role: "Enter // Tactile return key" },
 };
 
 export async function initLoadout() {
@@ -149,7 +64,6 @@ export async function initLoadout() {
   const caseClipPath = section.querySelector("[data-kb-case-clip]");
   const caseSpecPath = section.querySelector("[data-kb-case-spec]");
   const caseBorderPath = section.querySelector("[data-kb-case-border]");
-  const caseScrewsGroup = section.querySelector("[data-kb-case-screws]");
   const cableSvg = section.querySelector("[data-kb-cables]");
   const mountL = section.querySelector("[data-mount-l]");
   const mountR = section.querySelector("[data-mount-r]");
@@ -319,7 +233,7 @@ export async function initLoadout() {
     tipEl.classList.remove("is-visible");
   }
 
-  // Draws the unified one-piece molded plastic keyboard body + inner seam, corner screws & top tab slot
+  // Draws the unified one-piece molded plastic keyboard body + inner seam & top tab slot
   function updateCaseSvg() {
     if (!chassis || !caseSvg || !pillsWrap) return;
     const W = chassis.offsetWidth;
@@ -412,24 +326,6 @@ export async function initLoadout() {
     if (caseClipPath) caseClipPath.setAttribute("d", bodyPath);
     if (caseSpecPath) caseSpecPath.setAttribute("d", specPath);
     if (caseBorderPath) caseBorderPath.setAttribute("d", fullPath);
-
-    if (caseScrewsGroup) {
-      const insetX = Math.max(4.2, bezel * 0.62);
-      const insetBot = seamY - Math.max(4.5, bezel * 0.65);
-      const pts = [
-        [insetX, Math.max(4.5, bezel * 0.62)],
-        [W - insetX, Math.max(4.5, bezel * 0.62)],
-        [insetX, insetBot],
-        [W - insetX, insetBot],
-      ];
-      const sr = Math.max(1.5, Math.min(2.2, bezel * 0.28));
-      caseScrewsGroup.innerHTML = pts
-        .map(
-          ([sx, sy]) =>
-            `<circle class="kb-screw-ring" cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${sr.toFixed(2)}"/><path class="kb-screw-slot" d="M ${(sx - sr * 0.55).toFixed(1)} ${(sy - sr * 0.55).toFixed(1)} L ${(sx + sr * 0.55).toFixed(1)} ${(sy + sr * 0.55).toFixed(1)}"/>`
-        )
-        .join("");
-    }
   }
 
   function getSingleRest() {
@@ -1250,14 +1146,14 @@ export async function initLoadout() {
     }, duration);
   }
 
-  function createTechCap(item, layerMod, isHack, colRatio, isCreamKey = false) {
+  function createTechCap(item, layerMod, isHack, colRatio) {
     const detailText = item.detail || "";
     const shortLabel = shortHoverName(item);
     const tierName =
       item.tier === "daily" ? "Daily Driver" : item.tier === "proficient" ? "Proficient" : "Familiar";
     const cap = document.createElement("button");
     cap.type = "button";
-    cap.className = `kb-cap kb-cap--icon kb-cap--${item.tier} ${isCreamKey ? "kb-cap--cream" : ""}`;
+    cap.className = `kb-cap kb-cap--icon kb-cap--${item.tier}`;
     cap.dataset.itemId = item.id;
     cap.dataset.letter = item.name[0].toLowerCase();
     cap.dataset.tip = shortLabel;
@@ -1290,10 +1186,8 @@ export async function initLoadout() {
     const item = SAMUBIN_META[metaKey];
     const cap = document.createElement("button");
     cap.type = "button";
-    cap.className = `kb-cap kb-cap--sam ${isWideEnter ? "kb-cap--enter" : ""}`;
+    cap.className = isWideEnter ? "kb-cap kb-cap--enter" : "kb-cap kb-cap--sam";
     cap.dataset.samKey = item.key;
-    // Only Enter has a hidden action label; printed S-A-M-U-B-I-N letters shouldn't spawn noisy tooltips
-    if (isWideEnter) cap.dataset.tip = "Flip Mode";
     cap.setAttribute("aria-label", item.role);
     cap.innerHTML = `
       <span class="kb-cap-dish">
@@ -1309,9 +1203,7 @@ export async function initLoadout() {
       pulseKeyDown(cap);
       impulseKeyboard(colRatio, 3.4);
 
-      if (item.key === "lock") {
-        toggleMode({ animate: true });
-      } else {
+      if (!isWideEnter) {
         samBuffer = (samBuffer + item.key).slice(-10);
         if (samBuffer.endsWith("samubin")) {
           samBuffer = "";
@@ -1334,7 +1226,6 @@ export async function initLoadout() {
       pill.setAttribute("aria-selected", String(isSelected));
       pill.innerHTML = `
         <span class="stack-pill-dot"></span>
-        <span class="stack-pill-code">${layer.code}</span>
         <span class="stack-pill-label">${layer.label}</span>
       `;
       pill.addEventListener("click", () => {
@@ -1367,28 +1258,28 @@ export async function initLoadout() {
     const allTwelveTech = [...(currentLayer.topRow || []), ...(currentLayer.bottomRow || [])];
 
     const row1Spec = [
-      { type: "tech", item: allTwelveTech[0], cream: false },
+      { type: "tech", item: allTwelveTech[0] },
       { type: "sam", key: "a" },
-      { type: "tech", item: allTwelveTech[1], cream: false },
-      { type: "tech", item: allTwelveTech[2], cream: false },
+      { type: "tech", item: allTwelveTech[1] },
+      { type: "tech", item: allTwelveTech[2] },
       { type: "sam", key: "b" },
-      { type: "tech", item: allTwelveTech[3], cream: false },
-      { type: "tech", item: allTwelveTech[4], cream: false },
+      { type: "tech", item: allTwelveTech[3] },
+      { type: "tech", item: allTwelveTech[4] },
     ];
     const row2Spec = [
       { type: "sam", key: "s" },
-      { type: "tech", item: allTwelveTech[5], cream: true },
-      { type: "tech", item: allTwelveTech[6], cream: true },
+      { type: "tech", item: allTwelveTech[5] },
+      { type: "tech", item: allTwelveTech[6] },
       { type: "sam", key: "u" },
-      { type: "tech", item: allTwelveTech[7], cream: true },
+      { type: "tech", item: allTwelveTech[7] },
       { type: "sam", key: "n" },
-      { type: "tech", item: allTwelveTech[8], cream: true },
+      { type: "tech", item: allTwelveTech[8] },
     ];
     const row3Spec = [
-      { type: "tech", item: allTwelveTech[9], cream: false },
-      { type: "tech", item: allTwelveTech[10], cream: false },
+      { type: "tech", item: allTwelveTech[9] },
+      { type: "tech", item: allTwelveTech[10] },
       { type: "sam", key: "m" },
-      { type: "tech", item: allTwelveTech[11], cream: false },
+      { type: "tech", item: allTwelveTech[11] },
       { type: "sam", key: "i" },
       { type: "enter", key: "enter" },
     ];
@@ -1408,8 +1299,6 @@ export async function initLoadout() {
         if (targetLayer) {
           btn.dataset.tip = targetLayer.label;
           btn.setAttribute("aria-label", `Switch keyboard to ${targetLayer.label}`);
-          const idxEl = btn.querySelector(".kb-mod-idx");
-          if (idxEl) idxEl.textContent = targetLayer.code;
         }
         btn.classList.remove("is-punching");
         if (isSelected && flipping && !reduceMotion) {
@@ -1495,9 +1384,9 @@ export async function initLoadout() {
       }
 
       // Update bottom row mode button text/tip if mode changed
-      const modeKey = board.querySelector(".kb-bottom-row .kb-cap--proficient");
+      const modeKey = board.querySelector(".kb-bottom-row .kb-cap--mode");
       if (modeKey) modeKey.dataset.tip = isHack ? "Dev Mode" : "Hack Mode";
-      const devKeyText = board.querySelector(".kb-bottom-row .kb-cap--yellow .kb-bot-main");
+      const devKeyText = board.querySelector(".kb-bottom-row .kb-cap--badge .kb-bot-main");
       if (devKeyText) devKeyText.textContent = isHack ? "Red" : "Dev";
 
       return;
@@ -1511,7 +1400,7 @@ export async function initLoadout() {
     const topGrid = document.createElement("div");
     topGrid.className = "kb-top-grid";
 
-    // Left Bank: 3 Clean Mechanical Modifier Keys (Esc, Tab, Shift) with subtle layer index (01, 02, 03)
+    // Left Bank: 3 Clean Mechanical Modifier Keys (Esc, Tab, Shift)
     const leftBank = document.createElement("div");
     leftBank.className = "kb-layer-bank";
     const modKeyHints = ["Esc", "Tab", "Shift"];
@@ -1529,7 +1418,6 @@ export async function initLoadout() {
             <span class="kb-mod-led" aria-hidden="true"></span>
             <span class="kb-mod-code">${modKeyHints[idx]}</span>
           </span>
-          <span class="kb-mod-idx">${layer.code}</span>
         </span>
       `;
       modBtn.addEventListener("click", () => {
@@ -1555,7 +1443,7 @@ export async function initLoadout() {
       spec.forEach((slot, cIdx) => {
         const colRatio = (cIdx - 3) / 3;
         if (slot.type === "tech" && slot.item) {
-          rowEl.appendChild(createTechCap(slot.item, currentLayer.mod, isHack, colRatio, slot.cream));
+          rowEl.appendChild(createTechCap(slot.item, currentLayer.mod, isHack, colRatio));
         } else if (slot.type === "sam") {
           rowEl.appendChild(createSamCap(slot.key, currentLayer.mod, colRatio, false));
         } else if (slot.type === "enter") {
@@ -1573,10 +1461,10 @@ export async function initLoadout() {
     const bottomRow = document.createElement("div");
     bottomRow.className = "kb-bottom-row";
 
-    // 1. Fn Key (Cream)
+    // 1. Fn Key (Outer Modifier)
     const fnKey = document.createElement("button");
     fnKey.type = "button";
-    fnKey.className = "kb-cap kb-cap--cream";
+    fnKey.className = "kb-cap kb-cap--mod";
     fnKey.dataset.tip = "Next Layer";
     fnKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Fn</span></span>`;
     fnKey.addEventListener("click", () => {
@@ -1587,10 +1475,10 @@ export async function initLoadout() {
       renderBoard(getMode(), { flipping: true, layerIndex: (activeLayerIdx + 1) % layers.length });
     });
 
-    // 2. Win / Dev Key (Warm Mustard Yellow)
+    // 2. Mode Badge Key ("Dev" / "Red")
     const winKey = document.createElement("button");
     winKey.type = "button";
-    winKey.className = "kb-cap kb-cap--yellow";
+    winKey.className = "kb-cap kb-cap--badge";
     winKey.dataset.tip = "36 Stack";
     winKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">${isHack ? "Red" : "Dev"}</span></span>`;
     winKey.addEventListener("click", () => {
@@ -1600,10 +1488,10 @@ export async function initLoadout() {
       impulseKeyboard(-0.55, 2.8);
     });
 
-    // 3. Alt / Cable Detach Test Key (Cream)
+    // 3. Alt / Cable Detach Test Key (Outer Modifier)
     const altKey = document.createElement("button");
     altKey.type = "button";
-    altKey.className = "kb-cap kb-cap--cream";
+    altKey.className = "kb-cap kb-cap--mod";
     altKey.dataset.tip = plugState === "plugged" ? "Unplug Cable" : "Plug Cable";
     altKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Alt</span></span>`;
     altKeyRef = altKey;
@@ -1620,10 +1508,10 @@ export async function initLoadout() {
       }
     });
 
-    // 4. Center Orange Sculpted Spacebar (ONLY says "Space")
+    // 4. Center Sculpted Accent Spacebar (ONLY says "Space")
     const spaceKey = document.createElement("button");
     spaceKey.type = "button";
-    spaceKey.className = "kb-cap kb-cap--sam kb-cap--space";
+    spaceKey.className = "kb-cap kb-cap--space";
     spaceKey.innerHTML = `
       <span class="kb-cap-dish kb-space-dish">
         <span class="kb-space-barline" aria-hidden="true"></span>
@@ -1636,10 +1524,10 @@ export async function initLoadout() {
       impulseKeyboard(0, 3.8);
     });
 
-    // 5. Wide Cream Key ("SAMUBIN")
+    // 5. Wide Cipher Key ("SAMUBIN")
     const backKey = document.createElement("button");
     backKey.type = "button";
-    backKey.className = "kb-cap kb-cap--cream kb-cap--back";
+    backKey.className = "kb-cap kb-cap--mod kb-cap--back";
     backKey.dataset.tip = "Run Cipher";
     backKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">SAMUBIN</span></span>`;
     backKey.addEventListener("click", () => {
@@ -1649,10 +1537,10 @@ export async function initLoadout() {
       triggerSamubinCipher();
     });
 
-    // 6. Bottom-Right Grey Mode Key ("Mode ⇄")
+    // 6. Bottom-Right Mode Toggle Key ("Mode ⇄")
     const modeKey = document.createElement("button");
     modeKey.type = "button";
-    modeKey.className = "kb-cap kb-cap--proficient";
+    modeKey.className = "kb-cap kb-cap--mode";
     modeKey.dataset.tip = isHack ? "Dev Mode" : "Hack Mode";
     modeKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Mode ⇄</span></span>`;
     modeKey.addEventListener("click", () => {
@@ -1683,7 +1571,7 @@ export async function initLoadout() {
   addEventListener("keydown", (e) => {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     const tag = e.target?.tagName;
-    if (tag === "INPUT" || tag === "TEXTAREA" || e.target?.isContentEditable) return;
+    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || e.target?.isContentEditable) return;
     const ch = (e.key || "").toLowerCase();
 
     const r = section.getBoundingClientRect();
@@ -1691,15 +1579,14 @@ export async function initLoadout() {
 
     if (ch === "enter") {
       const enterCap = board.querySelector(".kb-cap--enter");
-      if (enterCap) {
-        enterCap.classList.add("is-down");
-        setTimeout(() => enterCap.classList.remove("is-down"), 145);
-        enterCap.click();
+      if (enterCap && e.target !== enterCap && !e.repeat) {
+        pulseKeyDown(enterCap);
+        impulseKeyboard(0.85, 3.4);
       }
       return;
     }
 
-    if (!/^[a-z0-9]$/.test(ch) || ch === "h") return;
+    if (!/^[a-z0-9]$/.test(ch)) return;
 
     if (ch === "1" || ch === "2" || ch === "3") {
       const targetIdx = Number(ch) - 1;

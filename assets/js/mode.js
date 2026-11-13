@@ -1,6 +1,6 @@
 // Dual-Mode ("Morph") state engine: Developer (D1 Aluminium Lab) ⇄ Ethical Hacker (H1 Safelight Darkroom).
 // Coordinates localStorage persistence, URL hash deep-linking, header hoodie controls,
-// H keyboard shortcut, and the 900ms "Lights Out" choreography.
+// and the 900ms "Lights Out" choreography.
 
 import { sound } from "./sound.js";
 
@@ -136,16 +136,6 @@ export function initMode() {
       } else {
         setMode(targetMode, { animate: true });
       }
-    }
-  });
-
-  // H key toggles the hoodie / mode when not typing in an input
-  document.addEventListener("keydown", (e) => {
-    if (e.repeat || e.metaKey || e.ctrlKey || e.altKey) return;
-    if (e.target.closest?.("input, textarea, select, [contenteditable]")) return;
-    if (e.key.toLowerCase() === "h") {
-      // Wait briefly if the user is mid-way through typing "samubin" (no 'h' in samubin, so safe!)
-      toggleMode({ animate: true });
     }
   });
 
