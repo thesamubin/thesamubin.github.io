@@ -135,7 +135,7 @@ Each mode owns a complete, high-contrast physical palette where structural surfa
 - **Safety Signal Orange** (`dev-signal-accent`): Drives primary action keycaps, active mode toggles, status LEDs, and focus outlines in Developer mode, paired exclusively with deep espresso ink (`dev-signal-ink`) for crisp readability on light-to-mid orange fills.
 - **Signal Deep Lip & Prose Accent** (`dev-signal-side`, `dev-signal-text`): `dev-signal-side` anchors the 3D bottom bevel on orange keycaps; `dev-signal-text` provides WCAG AA high-contrast orange typography on aluminium grounds and studio surfaces.
 - **Safelight Crimson** (`hack-safelight-accent`): Powers active darkroom switches, accent keycaps, selected scope chips, and focus rings in Hacker mode, paired with warm safelight white (`hack-safelight-ink`) to maintain ≥ 4.9:1 contrast across gradients and solid pills.
-- **Darkroom Deep Lip & Phosphor Text** (`hack-safelight-side`, `hack-safelight-text`): `hack-safelight-side` grounds 3D keycap bevels in the darkroom; `hack-safelight-text` renders readable crimson-coral headings, role badges, and field notes over obsidian trays.
+- **Darkroom Deep Lip & Phosphor Text** (`hack-safelight-side`, `hack-safelight-text`): `hack-safelight-side` grounds 3D keycap bevels in the darkroom; `hack-safelight-text` renders readable crimson-coral headings and role badges over obsidian trays.
 
 ### Secondary
 - **OLED Carbon & Amber Telemetry** (`oled-ground`, `oled-amber`): Embedded instrument viewports and frequency readouts inside Developer cards use warm amber phosphor over matte carbon glass.
@@ -146,9 +146,9 @@ Each mode owns a complete, high-contrast physical palette where structural surfa
 - **Darkroom Obsidian Grounds** (`hack-ground`, `hack-ground-alt`, `hack-surface`, `hack-surface-inset`): Full-bleed darkroom bands step subtly from carbon-crimson black (`hack-ground`) and deep trays (`hack-ground-alt`) into dark instrument bays (`hack-surface`, `hack-surface-inset`) divided by burgundy hairlines (`hack-line`, `hack-line-strong`) with silver-gelatin bone inks (`hack-ink`, `hack-ink-secondary`, `hack-ink-muted`).
 
 ### Named Rules
-**The Safelight Torch Rule.** In Hacker mode, a radial CSS safelight spotlight (`560px` circle tracking `--torch-x` / `--torch-y`) illuminates latent `[data-darkroom-note]` field notes within proximity while keeping all body copy legible at WCAG AA contrast without requiring pointer hover and disabling the overlay under `prefers-reduced-motion: reduce`.
+**The Safelight Torch Rule.** In Hacker mode, a radial CSS safelight spotlight (`560px` circle tracking `--torch-x` / `--torch-y`) subtly illuminates darkroom surfaces while keeping all body copy legible at WCAG AA contrast without requiring pointer hover and disabling the overlay under `prefers-reduced-motion: reduce`.
 
-**The Reserved Mono Rule.** `JetBrains Mono` (`tabular-nums`) stays strictly inside OLED telemetry readouts, keycap legends, `<kbd>` shortcuts, metadata tags, and `[data-darkroom-note]` field traces (`>= 11px` floor across viewports) rather than decorative body prose or headings.
+**The Reserved Mono Rule.** `JetBrains Mono` (`tabular-nums`) stays strictly inside OLED telemetry readouts, keycap legends, `<kbd>` shortcuts, and metadata tags (`>= 11px` floor across viewports) rather than decorative body prose or headings.
 
 ## Typography
 

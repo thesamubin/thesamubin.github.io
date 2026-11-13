@@ -204,7 +204,7 @@
       },
       "label": {
         "displayName": "Hardware & Telemetry Readout",
-        "purpose": "OLED telemetry strips, keycap legends, keyboard shortcuts, and safelight field notes in JetBrains Mono tabular-nums (>= 11.2px floor)."
+        "purpose": "OLED telemetry strips, keycap legends, and keyboard shortcuts in JetBrains Mono tabular-nums (>= 11.2px floor)."
       }
     },
     "shadows": [
@@ -324,12 +324,12 @@
     "rules": [
       {
         "name": "The Safelight Torch Rule",
-        "body": "In Hacker mode, a radial CSS safelight spotlight (`560px` circle tracking `--torch-x` / `--torch-y`) illuminates latent `[data-darkroom-note]` field notes within proximity while keeping all body copy legible at WCAG AA contrast without requiring pointer hover and disabling the overlay under `prefers-reduced-motion: reduce`.",
+        "body": "In Hacker mode, a radial CSS safelight spotlight (`560px` circle tracking `--torch-x` / `--torch-y`) subtly illuminates darkroom surfaces while keeping all body copy legible at WCAG AA contrast without requiring pointer hover and disabling the overlay under `prefers-reduced-motion: reduce`.",
         "section": "colors"
       },
       {
         "name": "The Reserved Mono Rule",
-        "body": "`JetBrains Mono` (`tabular-nums`) stays strictly inside OLED telemetry readouts, keycap legends, `<kbd>` shortcuts, metadata tags, and `[data-darkroom-note]` field traces (`>= 11px` floor across viewports) rather than decorative body prose or headings.",
+        "body": "`JetBrains Mono` (`tabular-nums`) stays strictly inside OLED telemetry readouts, keycap legends, `<kbd>` shortcuts, and metadata tags (`>= 11px` floor across viewports) rather than decorative body prose or headings.",
         "section": "colors"
       },
       {

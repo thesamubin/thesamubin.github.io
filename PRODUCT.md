@@ -20,7 +20,7 @@ Static HTML + CSS + vanilla JS, no build step (user decision). Runs unchanged on
 
 The dual-mode ("Morph") personal portfolio of Sakib Alam Mubin (SA Mubin). One site, two complete identities controlled by pulling the character avatar's hoodie up or down:
 1. **Developer Mode (default — Hoodie Down):** "Full-Stack AI Engineer & Developer" set in a bright, precision **Anodized Aluminium Lab** (`#E4E2DD` / `#F4F3EF` ground, `#16171A` ink, `#FF5A1F` signal orange accent).
-2. **Hacker Mode (Hoodie Up):** "Cybersecurity Specialist · Ethical Hacker" set in an atmospheric **Photographic Darkroom** (`#0B0708` / `#160D0E` ground, `#E9DCD8` warm bone ink, `#E0352B` safelight red + `#C98A3A` dim amber, with a cursor-tracked red safelight torch and hidden darkroom developer notes).
+2. **Hacker Mode (Hoodie Up):** "Cybersecurity Specialist · Ethical Hacker" set in an atmospheric **Photographic Darkroom** (`#0B0708` / `#160D0E` ground, `#E9DCD8` warm bone ink, `#E0352B` safelight red + `#C98A3A` dim amber, with a cursor-tracked red safelight torch).
 
 ## Positioning
 

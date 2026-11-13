@@ -1521,13 +1521,21 @@ html[data-mode="hack"] .power-mount-collar {
 .free-usb-plug {
   opacity: 0;
   pointer-events: none;
-  transition: opacity 110ms var(--ease-out);
 }
 
 .hanging-kb-rig.is-left-released .free-usb-plug {
   opacity: 1;
   pointer-events: auto;
   cursor: pointer;
+}
+
+.hanging-kb-rig.is-left-seating .free-usb-plug {
+  opacity: 1;
+  pointer-events: none;
+}
+
+.hanging-kb-rig.is-left-released .free-usb-plug:hover .free-usb-housing {
+  fill: #d0d6e0;
 }
 
 .free-usb-boot {
@@ -1719,11 +1727,19 @@ html[data-mode="hack"] .kb-screw-slot {
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: opacity 110ms var(--ease-out);
 }
 
-.hanging-kb-rig.is-left-released .kb-usb-port--left .kb-usb-plug {
+.kb-usb-port--left .kb-usb-plug {
+  transform: translateY(calc(-1 * var(--plug-slip, 0px)));
+}
+
+.hanging-kb-rig.is-left-released .kb-usb-port--left .kb-usb-plug,
+.hanging-kb-rig.is-left-seating .kb-usb-port--left .kb-usb-plug {
   opacity: 0;
+}
+
+.hanging-kb-rig.is-plug-ready .kb-usb-port--left .kb-usb-socket {
+  border-color: var(--accent);
 }
 
 .usb-tip-anchor {
@@ -3014,35 +3030,6 @@ html[data-mode="hack"] .peeker .pk-hood-canopy {
 .footer-links a:hover {
   color: #ffffff;
   text-decoration: underline;
-}
-
-/* Safelight Photographic Field Notes (Illuminated in darkroom, heightened under torch) */
-.darkroom-note {
-  display: none;
-}
-
-html[data-mode="hack"] .darkroom-note {
-  display: block;
-  font-family: var(--mono);
-  font-size: 0.8125rem;
-  line-height: 1.5;
-  padding: 0.65rem 0.95rem;
-  border-radius: 8px;
-  background: var(--surface-2);
-  border: 1px solid var(--line-strong);
-  color: var(--accent-text);
-  margin-top: 1.15rem;
-  max-width: 62ch;
-  transition: border-color 240ms var(--ease-out), background-color 240ms var(--ease-out);
-  user-select: text;
-}
-
-html[data-mode="hack"] .darkroom-note.is-developed,
-html[data-mode="hack"] .darkroom-note:hover,
-html[data-mode="hack"] .darkroom-note:active,
-html[data-mode="hack"] .darkroom-note:focus-within {
-  border-color: var(--accent);
-  background: #251417;
 }
 
 /* Toast Notification */
