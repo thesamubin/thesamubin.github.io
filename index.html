@@ -172,7 +172,7 @@
           <div>
             <h2 data-loadout-title data-scramble>Key Stack in the Board</h2>
             <p class="section-sub" data-loadout-sub>
-              Every keycap on this 3D mechanical board is a language, framework, AI pipeline, or cloud system I build with. Switch stack layers at the top, type S-A-M-U-B-I-N, or yank the board to test the cable physics.
+              Every keycap on this 3D mechanical board is a language, framework, AI pipeline, or cloud system I build with. Switch stack layers at the top, type S-A-M-U-B-I-N, or drag the board to flex the dual braided cables.
             </p>
           </div>
         </div>
@@ -181,47 +181,75 @@
           <!-- Detached Dynamic Wall Shadow behind the Hanging Board -->
           <div class="kb-wall-shadow" data-kb-shadow aria-hidden="true"></div>
 
-          <!-- Dual Power Cables Stage (Left cable unplugs & swings on strong pull) -->
+          <!-- Dual Braided USB-C Cables Stage -->
           <svg class="kb-cables" data-kb-cables aria-hidden="true">
-            <!-- Wall/Panel Cable Grommet Mounts (Left & Right) -->
+            <defs>
+              <linearGradient id="mountPlateDev" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#4e5563" />
+                <stop offset="45%" stop-color="#2c313a" />
+                <stop offset="100%" stop-color="#191c22" />
+              </linearGradient>
+              <linearGradient id="mountPlateHack" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#3c1b20" />
+                <stop offset="50%" stop-color="#220e11" />
+                <stop offset="100%" stop-color="#120608" />
+              </linearGradient>
+              <linearGradient id="mountGlandGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#121419" />
+                <stop offset="42%" stop-color="#2e3440" />
+                <stop offset="100%" stop-color="#101216" />
+              </linearGradient>
+            </defs>
+
+            <!-- Wall/Panel CNC Cable Grommet Mounts (Left & Right) -->
             <g class="power-mount-group" data-mount-l>
-              <rect class="power-mount-plate" x="-18" y="-4" width="36" height="12" rx="4" />
-              <circle class="power-mount-screw" cx="-12" cy="2" r="1.4" />
-              <circle class="power-mount-screw" cx="12" cy="2" r="1.4" />
-              <rect class="power-mount-collar" x="-6.5" y="4" width="13" height="6" rx="2" />
+              <rect class="power-mount-shadow" x="-19" y="1" width="40" height="14" rx="4.5" />
+              <rect class="power-mount-plate" x="-20" y="-2" width="40" height="13" rx="4" />
+              <rect class="power-mount-bevel" x="-18.5" y="-1" width="37" height="1.8" rx="0.9" />
+              <circle class="power-mount-screw" cx="-13.5" cy="4.5" r="1.7" />
+              <circle class="power-mount-screw" cx="13.5" cy="4.5" r="1.7" />
+              <rect class="power-mount-collar" x="-8" y="4" width="16" height="5" rx="1.6" />
+              <rect class="power-mount-gland" x="-6" y="8" width="12" height="8" rx="2.4" />
+              <line class="power-mount-rib" x1="-4.8" y1="10.4" x2="4.8" y2="10.4" />
+              <line class="power-mount-rib" x1="-4.4" y1="12.9" x2="4.4" y2="12.9" />
             </g>
             <g class="power-mount-group" data-mount-r>
-              <rect class="power-mount-plate" x="-18" y="-4" width="36" height="12" rx="4" />
-              <circle class="power-mount-screw" cx="-12" cy="2" r="1.4" />
-              <circle class="power-mount-screw" cx="12" cy="2" r="1.4" />
-              <rect class="power-mount-collar" x="-6.5" y="4" width="13" height="6" rx="2" />
+              <rect class="power-mount-shadow" x="-19" y="1" width="40" height="14" rx="4.5" />
+              <rect class="power-mount-plate" x="-20" y="-2" width="40" height="13" rx="4" />
+              <rect class="power-mount-bevel" x="-18.5" y="-1" width="37" height="1.8" rx="0.9" />
+              <circle class="power-mount-screw" cx="-13.5" cy="4.5" r="1.7" />
+              <circle class="power-mount-screw" cx="13.5" cy="4.5" r="1.7" />
+              <rect class="power-mount-collar" x="-8" y="4" width="16" height="5" rx="1.6" />
+              <rect class="power-mount-gland" x="-6" y="8" width="12" height="8" rx="2.4" />
+              <line class="power-mount-rib" x1="-4.8" y1="10.4" x2="4.8" y2="10.4" />
+              <line class="power-mount-rib" x1="-4.4" y1="12.9" x2="4.4" y2="12.9" />
             </g>
 
-            <!-- Left-side Power Cable (Unplugs on strong pull & swings freely with its USB-C tip) -->
-            <path class="cable-shadow" data-cable-l d="" />
+            <!-- Left-side Braided USB-C Cable (Permanently connected) -->
+            <path class="kb-cable-wall-shadow" data-cable-l-shadow d="" />
+            <path class="cable-shadow" data-cable-l-contact d="" />
             <path class="cable-body" data-cable-l d="" />
-            <path class="cable-braid" data-cable-l d="" />
-            <path class="cable-spec" data-cable-l d="" />
+            <path class="cable-core" data-cable-l d="" />
+            <path class="cable-sheath" data-cable-l d="" />
+            <path class="cable-weave-a" data-cable-l-weave-a d="" />
+            <path class="cable-weave-b" data-cable-l-weave-b d="" />
+            <path class="cable-spec" data-cable-l-spec d="" />
+            <path class="cable-pulse" data-cable-l-pulse d="" />
 
-            <!-- Unplugged Left USB-C Connector Tip (Visible at the end of the loose left cable when detached) -->
-            <g class="free-usb-plug" data-free-plug-l transform="translate(0,0)">
-              <rect class="free-usb-hit" x="-22" y="-12" width="44" height="52" fill="transparent" />
-              <rect class="free-usb-boot" x="-5.5" y="-3" width="11" height="9" rx="2.5" />
-              <rect class="free-usb-collar" x="-8" y="6" width="16" height="5" rx="1" />
-              <rect class="free-usb-housing" x="-12" y="11" width="24" height="12" rx="3" />
-              <rect class="free-usb-led" x="-4.5" y="15.5" width="9" height="3" rx="1.5" />
-              <rect class="free-usb-pin" x="-5" y="23" width="10" height="5.5" rx="1.5" />
-            </g>
-
-            <!-- Right-side Power Cable (Always 100% locked to right USB-C plug tip) -->
-            <path class="cable-shadow" data-cable-r d="" />
+            <!-- Right-side Braided USB-C Cable (Permanently connected) -->
+            <path class="kb-cable-wall-shadow" data-cable-r-shadow d="" />
+            <path class="cable-shadow" data-cable-r-contact d="" />
             <path class="cable-body" data-cable-r d="" />
-            <path class="cable-braid" data-cable-r d="" />
-            <path class="cable-spec" data-cable-r d="" />
+            <path class="cable-core" data-cable-r d="" />
+            <path class="cable-sheath" data-cable-r d="" />
+            <path class="cable-weave-a" data-cable-r-weave-a d="" />
+            <path class="cable-weave-b" data-cable-r-weave-b d="" />
+            <path class="cable-spec" data-cable-r-spec d="" />
+            <path class="cable-pulse" data-cable-r-pulse d="" />
           </svg>
 
           <!-- Realistic 3D Sculpted Mechanical Keyboard with One-Piece Molded Plastic Top Extension -->
-          <div class="kb-shell" data-kb-chassis title="Drag or pull hard to unplug left cable · Hover any keycap for tech name!">
+          <div class="kb-shell" data-kb-chassis title="Drag or nudge the board to flex the cables · Hover any keycap for tech name">
             <!-- Unified One-Piece Molded Plastic Chassis SVG (Seamless Fillets & Bevel) -->
             <svg class="kb-case-svg" data-kb-case-svg aria-hidden="true">
               <defs>
@@ -262,7 +290,7 @@
               <div class="kb-top-tabs" data-stack-pills role="tablist" aria-label="Technology Stack Categories"></div>
             </div>
 
-            <!-- Left Bezel: Metal USB-C Power Port & Plug (Detaches when pulled hard) -->
+            <!-- Left Bezel: Metal USB-C Power Port & Plug (Permanently connected) -->
             <div class="kb-usb-port kb-usb-port--left" aria-hidden="true">
               <div class="kb-usb-plug" data-plug-l>
                 <span class="usb-tip-anchor" data-usb-tip-l></span>
@@ -277,7 +305,7 @@
               </span>
             </div>
 
-            <!-- Right Bezel: Identical Metal USB-C Power Port & Plug (Always connected) -->
+            <!-- Right Bezel: Identical Metal USB-C Power Port & Plug (Permanently connected) -->
             <div class="kb-usb-port kb-usb-port--right" aria-hidden="true">
               <div class="kb-usb-plug" data-plug-r>
                 <span class="usb-tip-anchor" data-usb-tip-r></span>

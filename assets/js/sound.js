@@ -168,21 +168,6 @@ const voices = {
     burst({ freq: 2100 * r, q: 1.9, dur: 0.016, gain: 0.15 });
     tone({ freq: 260 * r, to: 140, dur: 0.035, gain: 0.1, type: "triangle" });
   },
-  unplug(r) {
-    // High-friction USB-C collar slip followed by hollow cavity pop
-    burst({ freq: 2900 * r, q: 2.6, dur: 0.018, gain: 0.16 });
-    tone({ freq: 340 * r, to: 118, dur: 0.068, gain: 0.24, type: "triangle", when: 0.012 });
-    burst({ freq: 1150 * r, q: 1.4, dur: 0.024, gain: 0.22, when: 0.014 });
-    emitWave(0.85, "unplug");
-  },
-  plug(r) {
-    // Metal sleeve guide slide + sharp mechanical USB-C click-latch & chassis seat thump
-    burst({ freq: 3400 * r, q: 2.2, dur: 0.016, gain: 0.14 });
-    burst({ freq: 1850 * r, q: 2.4, dur: 0.022, gain: 0.3, when: 0.032 });
-    tone({ freq: 520 * r, to: 165, dur: 0.052, gain: 0.28, type: "triangle", when: 0.034 });
-    tone({ freq: 1320 * r, to: 880 * r, dur: 0.04, gain: 0.12, type: "sine", when: 0.048 });
-    emitWave(0.95, "plug");
-  },
   boop(r) {
     tone({ freq: 330 * r, to: 760 * r, dur: 0.095, gain: 0.22, type: "sine" });
     tone({ freq: 988 * r, to: 1318 * r, dur: 0.08, gain: 0.11, type: "triangle", when: 0.055 });

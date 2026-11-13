@@ -1425,25 +1425,25 @@ html[data-mode="hack"] .stack-pill[aria-selected="true"] {
   letter-spacing: -0.01em;
 }
 
-/* Custom Hanging 3D Keyboard Rig: Dual Identical Power Cables (Left unplugs on strong pull!) */
+/* Custom Hanging 3D Keyboard Rig: Dual Permanently-Connected Braided USB-C Cables */
 .hanging-kb-rig {
   position: relative;
   max-width: 780px;
   margin-inline: auto;
-  padding-top: clamp(64px, 10vw, 84px);
-  padding-bottom: clamp(78px, 14vw, 118px);
+  padding-top: clamp(78px, 11.5vw, 108px);
+  padding-bottom: clamp(66px, 11vw, 96px);
 }
 
 .kb-wall-shadow {
   position: absolute;
   left: 10px;
   right: 10px;
-  top: clamp(64px, 10vw, 84px);
-  bottom: clamp(78px, 14vw, 118px);
+  top: clamp(78px, 11.5vw, 108px);
+  bottom: clamp(66px, 11vw, 96px);
   border-radius: 22px;
   background: radial-gradient(ellipse at 50% 42%, rgba(15, 17, 22, 0.34) 0%, rgba(15, 17, 22, 0.16) 66%, transparent 100%);
   filter: blur(18px);
-  transform-origin: 86% 0;
+  transform-origin: 50% 0;
   pointer-events: none;
   z-index: 0;
   will-change: transform;
@@ -1465,118 +1465,176 @@ html[data-mode="hack"] .kb-wall-shadow {
   z-index: 1;
 }
 
-.kb-cables .cable-body {
-  stroke-width: 7.5px;
-}
-
-.kb-cables .cable-braid {
+.kb-cables .kb-cable-wall-shadow {
   fill: none;
-  stroke: rgba(255, 255, 255, 0.14);
-  stroke-width: 5.2px;
-  stroke-dasharray: 2.2 4.4;
-  stroke-linecap: butt;
+  stroke: rgba(12, 14, 19, 0.22);
+  stroke-width: 14px;
+  stroke-linecap: round;
+  filter: blur(4px);
 }
 
-html[data-mode="hack"] .kb-cables .cable-braid {
-  stroke: rgba(220, 68, 58, 0.22);
+html[data-mode="hack"] .kb-cables .kb-cable-wall-shadow {
+  stroke: rgba(0, 0, 0, 0.62);
+  stroke-width: 15.5px;
+}
+
+.kb-cables .cable-shadow {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.22);
+  stroke-width: 9px;
+  stroke-linecap: round;
+  transform: translate(1.6px, 2.4px);
+}
+
+html[data-mode="hack"] .kb-cables .cable-shadow {
+  stroke: rgba(0, 0, 0, 0.54);
+}
+
+.kb-cables .cable-body {
+  fill: none;
+  stroke: #12151b;
+  stroke-width: 7.8px;
+  stroke-linecap: round;
+}
+
+html[data-mode="hack"] .kb-cables .cable-body {
+  stroke: #0b0305;
+}
+
+.kb-cables .cable-core {
+  fill: none;
+  stroke: #242934;
+  stroke-width: 6px;
+  stroke-linecap: round;
+}
+
+html[data-mode="hack"] .kb-cables .cable-core {
+  stroke: #220d11;
+}
+
+.kb-cables .cable-sheath {
+  fill: none;
+  stroke: #343b48;
+  stroke-width: 3.6px;
+  stroke-linecap: round;
+}
+
+html[data-mode="hack"] .kb-cables .cable-sheath {
+  stroke: #36151a;
+}
+
+.kb-cables .cable-weave-a {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.16);
+  stroke-width: 1.7px;
+  stroke-dasharray: 1.4 2.4;
+  stroke-linecap: round;
+}
+
+.kb-cables .cable-weave-b {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.44);
+  stroke-width: 1.7px;
+  stroke-dasharray: 1.4 2.4;
+  stroke-dashoffset: 1.9;
+  stroke-linecap: round;
+}
+
+html[data-mode="hack"] .kb-cables .cable-weave-a {
+  stroke: rgba(255, 102, 92, 0.2);
+}
+
+html[data-mode="hack"] .kb-cables .cable-weave-b {
+  stroke: rgba(0, 0, 0, 0.65);
+}
+
+.kb-cables .cable-spec {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.34);
+  stroke-width: 1.15px;
+  stroke-linecap: round;
+  transform: none;
+}
+
+html[data-mode="hack"] .kb-cables .cable-spec {
+  stroke: rgba(255, 168, 160, 0.21);
+}
+
+.kb-cables .cable-pulse {
+  fill: none;
+  stroke: #60a5fa;
+  stroke-width: 2.1px;
+  stroke-linecap: round;
+  opacity: 0;
+}
+
+html[data-mode="hack"] .kb-cables .cable-pulse {
+  stroke: #ff6b63;
+}
+
+.power-mount-shadow {
+  fill: rgba(10, 12, 16, 0.24);
+  filter: blur(2.2px);
+}
+
+html[data-mode="hack"] .power-mount-shadow {
+  fill: rgba(0, 0, 0, 0.65);
 }
 
 .power-mount-plate {
-  fill: #2f343d;
-  stroke: rgba(0, 0, 0, 0.45);
-  stroke-width: 1.25px;
+  fill: url(#mountPlateDev);
+  stroke: rgba(0, 0, 0, 0.48);
+  stroke-width: 1.15px;
+}
+
+.power-mount-bevel {
+  fill: rgba(255, 255, 255, 0.2);
 }
 
 .power-mount-screw {
-  fill: #8d94a1;
-  stroke: rgba(0, 0, 0, 0.5);
-  stroke-width: 0.7px;
+  fill: #98a0ae;
+  stroke: rgba(0, 0, 0, 0.6);
+  stroke-width: 0.75px;
 }
 
 .power-mount-collar {
-  fill: #181a20;
-  stroke: rgba(255, 255, 255, 0.14);
+  fill: #1b1e24;
+  stroke: rgba(255, 255, 255, 0.16);
   stroke-width: 0.8px;
 }
 
+.power-mount-gland {
+  fill: url(#mountGlandGrad);
+  stroke: rgba(0, 0, 0, 0.65);
+  stroke-width: 0.75px;
+}
+
+.power-mount-rib {
+  stroke: rgba(0, 0, 0, 0.55);
+  stroke-width: 0.9px;
+  stroke-linecap: round;
+}
+
 html[data-mode="hack"] .power-mount-plate {
-  fill: #261215;
-  stroke: rgba(255, 95, 85, 0.22);
+  fill: url(#mountPlateHack);
+  stroke: rgba(255, 95, 85, 0.24);
+}
+
+html[data-mode="hack"] .power-mount-bevel {
+  fill: rgba(255, 110, 99, 0.16);
 }
 
 html[data-mode="hack"] .power-mount-screw {
-  fill: #6a3d42;
+  fill: #784247;
 }
 
 html[data-mode="hack"] .power-mount-collar {
-  fill: #0d0607;
-  stroke: rgba(255, 95, 85, 0.18);
+  fill: #0f0709;
+  stroke: rgba(255, 95, 85, 0.2);
 }
 
-/* Unplugged Left USB-C Connector Tip at the end of the loose left cable */
-.free-usb-plug {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.hanging-kb-rig.is-left-released .free-usb-plug {
-  opacity: 1;
-  pointer-events: auto;
-  cursor: grab;
-}
-
-.hanging-kb-rig.is-plug-dragging .kb-cables {
-  z-index: 4;
-}
-
-.hanging-kb-rig.is-plug-dragging .free-usb-plug {
-  cursor: grabbing;
-}
-
-.hanging-kb-rig.is-left-seating .free-usb-plug {
-  opacity: 1;
-  pointer-events: none;
-}
-
-.hanging-kb-rig.is-left-released .free-usb-plug:hover .free-usb-housing {
-  fill: #d0d6e0;
-}
-
-.hanging-kb-rig.is-plug-ready .free-usb-led {
-  fill: var(--accent);
-  opacity: 1;
-}
-
-.free-usb-boot {
-  fill: #1b1d22;
-}
-
-.free-usb-collar {
-  fill: #7f8693;
-  stroke: #23262d;
-  stroke-width: 1px;
-}
-
-.free-usb-housing {
-  fill: #b8bec9;
-  stroke: #20232a;
-  stroke-width: 1px;
-}
-
-.free-usb-led {
-  fill: #475569;
-  opacity: 0.55;
-}
-
-html[data-mode="hack"] .free-usb-led {
-  fill: #59262a;
-  opacity: 0.65;
-}
-
-.free-usb-pin {
-  fill: #d4af37;
-  stroke: #382f10;
-  stroke-width: 1px;
+html[data-mode="hack"] .power-mount-gland {
+  stroke: rgba(255, 95, 85, 0.16);
 }
 
 /* Real 3D Miniature Mechanical Keyboard Case (Unified One-Piece Injection-Molded SVG Shell) */
@@ -1588,7 +1646,7 @@ html[data-mode="hack"] .free-usb-led {
   background: transparent;
   border: 0;
   overflow: visible;
-  transform-origin: 86% 0;
+  transform-origin: 50% 0;
   will-change: transform;
   cursor: grab;
   user-select: none;
@@ -1710,23 +1768,10 @@ html[data-mode="hack"] .kb-case-border {
 
 .kb-usb-plug {
   position: relative;
-  top: -24px;
+  top: -25px;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.kb-usb-port--left .kb-usb-plug {
-  transform: translateY(calc(-1 * var(--plug-slip, 0px)));
-}
-
-.hanging-kb-rig.is-left-released .kb-usb-port--left .kb-usb-plug,
-.hanging-kb-rig.is-left-seating .kb-usb-port--left .kb-usb-plug {
-  opacity: 0;
-}
-
-.hanging-kb-rig.is-plug-ready .kb-usb-port--left .kb-usb-socket {
-  border-color: var(--accent);
 }
 
 .usb-tip-anchor {
@@ -1737,27 +1782,36 @@ html[data-mode="hack"] .kb-case-border {
 
 .usb-boot {
   width: 11px;
-  height: 8px;
+  height: 9px;
   border-radius: 3px 3px 0 0;
-  background: #1b1d22;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.55) 0 1.4px,
+      transparent 1.4px 3px
+    ),
+    linear-gradient(90deg, #121419, #2f3540 48%, #101216);
+  border-inline: 0.5px solid rgba(255, 255, 255, 0.08);
 }
 
 .usb-collar {
   width: 16px;
   height: 5px;
-  background: linear-gradient(90deg, #525761, #a3a9b5 50%, #525761);
-  border: 1px solid #23262d;
+  background: linear-gradient(90deg, #4b505b, #b6bcc8 48%, #484d57);
+  border: 1px solid #20232a;
 }
 
 .usb-housing {
   width: 24px;
   height: 12px;
   border-radius: 4px 4px 2px 2px;
-  background: linear-gradient(90deg, #7d838f, #cfd4de 48%, #686e7a);
+  background: linear-gradient(90deg, #747a87, #d7dce6 48%, #5e6470);
   border: 1px solid #20232a;
   display: grid;
   place-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .usb-led {
@@ -1765,10 +1819,35 @@ html[data-mode="hack"] .kb-case-border {
   height: 3px;
   border-radius: 2px;
   background: #4ade80;
+  box-shadow: 0 0 5px rgba(74, 222, 128, 0.55);
+}
+
+html[data-mode="hack"] .usb-boot {
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.65) 0 1.4px,
+      transparent 1.4px 3px
+    ),
+    linear-gradient(90deg, #0d0507, #291115 48%, #0a0405);
+}
+
+html[data-mode="hack"] .usb-collar {
+  background: linear-gradient(90deg, #2b1417, #612c32 48%, #251114);
+  border-color: #16090b;
+}
+
+html[data-mode="hack"] .usb-housing {
+  background: linear-gradient(90deg, #34191d, #70353b 48%, #291317);
+  border-color: rgba(255, 95, 85, 0.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 130, 120, 0.22),
+    0 2px 5px rgba(0, 0, 0, 0.72);
 }
 
 html[data-mode="hack"] .usb-led {
   background: var(--accent);
+  box-shadow: 0 0 6px rgba(255, 95, 85, 0.75);
 }
 
 /* Deep Dark Recessed Brushed Switch Plate Cavity (4 Rows Total: Preserves Exact Layout Across All Screen Sizes) */

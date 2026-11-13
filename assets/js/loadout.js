@@ -2,7 +2,7 @@
 // - Realistic 3D beveled keycaps with concave finger scoop + matte PBT chassis + switch plate
 // - Top Stack Category Pill Bar + hover/tap micro-badge + left modifier layer keys (Esc/Tab/Shift)
 // - Scrambled S-A-M-U-B-I-N keys woven across Rows 1-3 + 2u Enter ↵
-// - Braided dual USB-C cables with wall grommet mounts & tangent-aligned pendulum physics when left cable unplugs
+// - Dual permanently-connected braided USB-C cables with machined wall grommets, multi-node wave physics & damped suspension
 
 import { sound } from "./sound.js";
 import { getMode, onModeChange, toggleMode, reduceMotion } from "./mode.js";
@@ -71,15 +71,28 @@ export async function initLoadout() {
   const usbTipR = section.querySelector("[data-usb-tip-r]");
   const portL = section.querySelector(".kb-usb-port--left");
   const portR = section.querySelector(".kb-usb-port--right");
-  const socketL = section.querySelector(".kb-usb-port--left .kb-usb-socket");
-  const plugL = section.querySelector("[data-plug-l]");
-  const freePlugL = section.querySelector("[data-free-plug-l]");
   const board = section.querySelector("[data-loadout-board]");
   const tipEl = section.querySelector("[data-kb-tip]");
   const pillsWrap = section.querySelector("[data-stack-pills]");
   const titleEl = section.querySelector("[data-loadout-title]");
   const subEl = section.querySelector("[data-loadout-sub]");
   if (!board) return;
+
+  // Cached SVG cable stroke layers for 60fps Catmull-Rom updates
+  const cablePathsL = cableSvg ? [...cableSvg.querySelectorAll("[data-cable-l]")] : [];
+  const cablePathsR = cableSvg ? [...cableSvg.querySelectorAll("[data-cable-r]")] : [];
+  const cableShadowL = cableSvg ? cableSvg.querySelector("[data-cable-l-shadow]") : null;
+  const cableShadowR = cableSvg ? cableSvg.querySelector("[data-cable-r-shadow]") : null;
+  const cableContactL = cableSvg ? cableSvg.querySelector("[data-cable-l-contact]") : null;
+  const cableContactR = cableSvg ? cableSvg.querySelector("[data-cable-r-contact]") : null;
+  const cableSpecL = cableSvg ? cableSvg.querySelector("[data-cable-l-spec]") : null;
+  const cableSpecR = cableSvg ? cableSvg.querySelector("[data-cable-r-spec]") : null;
+  const cableWeaveAL = cableSvg ? cableSvg.querySelector("[data-cable-l-weave-a]") : null;
+  const cableWeaveBL = cableSvg ? cableSvg.querySelector("[data-cable-l-weave-b]") : null;
+  const cableWeaveAR = cableSvg ? cableSvg.querySelector("[data-cable-r-weave-a]") : null;
+  const cableWeaveBR = cableSvg ? cableSvg.querySelector("[data-cable-r-weave-b]") : null;
+  const cablePulseL = cableSvg ? cableSvg.querySelector("[data-cable-l-pulse]") : null;
+  const cablePulseR = cableSvg ? cableSvg.querySelector("[data-cable-r-pulse]") : null;
 
   let data = null;
   try {
@@ -92,46 +105,39 @@ export async function initLoadout() {
   let activeLayerIdx = 0;
   let letterCursor = {};
   let samBuffer = "";
-  let altKeyRef = null;
 
-  // --- Coupled Dual-Cable & Single-Cable Pendulum + Magnetic USB-C Seating Physics ---
-  // plugState:
-  //   "plugged"  -> both cables locked; left socket tracks elastic retention & slip tension (--plug-slip)
-  //   "detached" -> left cable hangs as true polar pendulum around wall grommet; board swings from right cable
-  //   "seating"  -> 2-stage magnetic align + axial pin insertion before latch lock
-  let plugState = "plugged";
-  let yankEnergy = 0;
-  let plugSlip = 0;
-  let dragNearSocket = false;
-  let dragAttractAng = 0;
-  let dragAttractStrength = 0;
-
+  // --- Coupled Dual-Cable Damped Suspension & Multi-Node Wave Chain Physics ---
   let x = 0;
   let y = 0;
   let vx = 0;
   let vy = 0;
   let ang = 0;
   let vang = 0;
+  let restCordLen = 58;
 
-  // True polar pendulum state of unplugged left cable (pivoting from wall grommet)
-  let restCordLen = 56;
-  let cordAng = 0;
-  let cordAngVel = 0;
-  let cordLen = 62;
-  let cordLenVel = 0;
-  let headSvgAngle = 0;
-  let headAngVel = 0;
-  let freePlugX = 0;
-  let freePlugY = 68;
+  const WIRE_SEGMENTS = 5;
+  const createWireState = (outSign) => ({
+    outSign,
+    initialized: false,
+    wx: new Float64Array(WIRE_SEGMENTS + 1),
+    wy: new Float64Array(WIRE_SEGMENTS + 1),
+    vx: new Float64Array(WIRE_SEGMENTS + 1),
+    vy: new Float64Array(WIRE_SEGMENTS + 1),
+    baseX: new Float64Array(WIRE_SEGMENTS + 1),
+    baseY: new Float64Array(WIRE_SEGMENTS + 1),
+    ax: 0,
+    ay: 12,
+    px: 0,
+    py: 70,
+    prevPx: 0,
+    prevPy: 70,
+    pulse: 0,
+    pulseT: 0,
+    pulseDir: -1,
+  });
 
-  // Multi-phase seating capture animation state
-  let seatStartMs = 0;
-  let seatDurMs = 235;
-  let seatFromX = 0;
-  let seatFromY = 68;
-  let seatFromAng = 0;
-  let seatFromDrag = false;
-  let seatAudioPlayed = false;
+  const wireL = createWireState(-1);
+  const wireR = createWireState(1);
 
   let raf = 0;
   let lastStepMs = 0;
@@ -140,20 +146,9 @@ export async function initLoadout() {
   let pointerId = null;
   let downClientX = 0;
   let downClientY = 0;
-  let grabNorm = 0.5;
   let startX = 0;
   let startY = 0;
   let suppressClickUntil = 0;
-
-  // Direct mouse/touch dragging of the detached left USB-C plug ([data-free-plug-l])
-  let plugPending = false;
-  let plugDragging = false;
-  let plugPointerId = null;
-  let plugDownX = 0;
-  let plugDownY = 0;
-  let plugGrabOffsetX = 0;
-  let plugGrabOffsetY = 0;
-  let suppressPlugClickUntil = 0;
 
   let portRatio = 0.14;
   let tipHideTimer = 0;
@@ -167,8 +162,6 @@ export async function initLoadout() {
     const cap = Math.min(Math.abs(d), s * 0.92);
     return Math.sign(d) * ((cap * s) / (s - cap));
   };
-  const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
-  const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
   function showCapTip(cap, { autoHideMs = 0 } = {}) {
     if (!tipEl || !chassis || !cap) return;
@@ -262,7 +255,7 @@ export async function initLoadout() {
     portRatio = Math.min(0.14, Math.max(0.065, (cornerR + shoulderSpan * 0.46) / W));
     if (portL) portL.style.left = `${(portRatio * 100).toFixed(2)}%`;
     if (portR) portR.style.left = `${((1 - portRatio) * 100).toFixed(2)}%`;
-    chassis.style.transformOrigin = `${((1 - portRatio) * 100).toFixed(2)}% 0`;
+    chassis.style.transformOrigin = "50% 0";
 
     const topPad = Math.ceil(-hy1 + 12);
     const totalH = H + topPad + 8;
@@ -328,79 +321,6 @@ export async function initLoadout() {
     if (caseBorderPath) caseBorderPath.setAttribute("d", fullPath);
   }
 
-  function getSingleRest() {
-    const narrow = window.innerWidth < 760;
-    return {
-      restX: narrow ? -8 : 6,
-      restY: narrow ? 14 : 22,
-      restAng: narrow ? -0.18 : -0.29,
-    };
-  }
-
-  function getPlugScale() {
-    return window.innerWidth <= 580 ? 0.78 : 1;
-  }
-
-  // Exact live SVG-space target coordinates for aligning freePlugL cleanly into the left USB-C socket
-  function getLeftSocketTarget(svgRect) {
-    const w = svgRect.width || rig?.clientWidth || 740;
-    const plugScale = getPlugScale();
-    if (socketL && svgRect.width > 0) {
-      const r = socketL.getBoundingClientRect();
-      if (r.width > 0 && r.height > 0) {
-        const sockCx = r.left + r.width * 0.5 - svgRect.left;
-        const sockCy = r.top + r.height * 0.5 - svgRect.top;
-        const sinA = Math.sin(ang);
-        const cosA = Math.cos(ang);
-        return {
-          sockCx,
-          sockCy,
-          pinEntryX: sockCx + sinA * (2 * plugScale),
-          pinEntryY: sockCy - cosA * (2 * plugScale),
-          seatX: sockCx + sinA * (24 * plugScale),
-          seatY: sockCy - cosA * (24 * plugScale),
-        };
-      }
-    }
-    const lx = w * portRatio;
-    return {
-      sockCx: lx + x,
-      sockCy: 8 + restCordLen + 24 + y,
-      pinEntryX: lx + x,
-      pinEntryY: 8 + restCordLen + 22 + y,
-      seatX: lx + x,
-      seatY: 8 + restCordLen + y,
-    };
-  }
-
-  // Measure live distance & magnetic alignment between free USB-C gold pins and left socket
-  function evaluatePlugProximity(svgRect) {
-    if (!svgRect || svgRect.width <= 0 || plugState !== "detached") {
-      dragNearSocket = false;
-      dragAttractStrength = 0;
-      rig?.classList.remove("is-plug-ready");
-      return Infinity;
-    }
-    const leftAnchorX = svgRect.width * portRatio;
-    const sc = getPlugScale();
-    const target = getLeftSocketTarget(svgRect);
-    const pinX = freePlugX - Math.sin(headSvgAngle) * (25 * sc);
-    const pinY = freePlugY + Math.cos(headSvgAngle) * (25 * sc);
-    const distToSock = Math.hypot(target.pinEntryX - pinX, target.pinEntryY - pinY);
-
-    dragAttractAng = clamp(Math.atan2(target.seatX - leftAnchorX, Math.max(20, target.seatY - 8)), -0.95, 0.95);
-    if (distToSock < 64) {
-      dragNearSocket = true;
-      dragAttractStrength = clamp((64 - distToSock) / 40, 0, 1);
-      rig?.classList.add("is-plug-ready");
-    } else {
-      dragNearSocket = false;
-      dragAttractStrength = 0;
-      rig?.classList.remove("is-plug-ready");
-    }
-    return distToSock;
-  }
-
   function startPhysicsLoop() {
     if (!raf) {
       lastStepMs = performance.now();
@@ -408,14 +328,277 @@ export async function initLoadout() {
     }
   }
 
+  // Evaluate 6 Hermite + natural compression-bow points along a suspended braided cable
+  function updateWireTargetGeometry(wire, ax, ay, px, py) {
+    wire.ax = ax;
+    wire.ay = ay;
+    wire.px = px;
+    wire.py = py;
+
+    const dx = px - ax;
+    const dy = py - ay;
+    const dist = Math.max(16, Math.hypot(dx, dy));
+    const tx = dx / dist;
+    const ty = dy / dist;
+    // Outward world perpendicular when cable runs top-to-bottom (ty > 0 -> +1 is world right)
+    const nx = ty;
+    const ny = -tx;
+
+    // Subtle natural rest drape lets cables hang realistically vertical and bow outward under upward compression
+    const naturalLen = Math.max(restCordLen + 3.2, 42);
+    const excessSlack = Math.max(0, naturalLen - dist);
+    const stretchTaut = clamp((dist - naturalLen) / 30, 0, 1);
+    const bowAmp = (1.75 * (1 - stretchTaut * 0.85) + Math.sqrt(excessSlack) * 3.8) * wire.outSign;
+
+    // Grommet exit downward tangent & USB-C boot coaxial tangent
+    const tanLen = clamp(dist * 0.52, 18, 42);
+    const m0x = 0;
+    const m0y = tanLen;
+    const m1x = -Math.sin(ang) * tanLen;
+    const m1y = Math.cos(ang) * tanLen;
+
+    for (let i = 0; i <= WIRE_SEGMENTS; i++) {
+      const t = i / WIRE_SEGMENTS;
+      const t2 = t * t;
+      const t3 = t2 * t;
+      const h00 = 2 * t3 - 3 * t2 + 1;
+      const h10 = t3 - 2 * t2 + t;
+      const h01 = -2 * t3 + 3 * t2;
+      const h11 = t3 - t2;
+
+      const bowProfile = Math.sin(Math.PI * t) * Math.pow(Math.sin(Math.PI * t), 0.35);
+      const bx = h00 * ax + h10 * m0x + h01 * px + h11 * m1x + nx * bowAmp * bowProfile;
+      const by = h00 * ay + h10 * m0y + h01 * py + h11 * m1y + ny * bowAmp * bowProfile;
+
+      wire.baseX[i] = bx;
+      wire.baseY[i] = by;
+    }
+
+    if (!wire.initialized || Math.hypot(wire.wx[3] - wire.baseX[3], wire.wy[3] - wire.baseY[3]) > 120) {
+      for (let i = 0; i <= WIRE_SEGMENTS; i++) {
+        wire.wx[i] = wire.baseX[i];
+        wire.wy[i] = wire.baseY[i];
+        wire.vx[i] = 0;
+        wire.vy[i] = 0;
+      }
+      wire.prevPx = px;
+      wire.prevPy = py;
+      wire.initialized = true;
+    } else {
+      wire.wx[0] = ax;
+      wire.wy[0] = ay;
+      wire.wx[WIRE_SEGMENTS] = px;
+      wire.wy[WIRE_SEGMENTS] = py;
+    }
+  }
+
+  // Integrate physical transverse wave propagation & inertial whip along wire interior nodes
+  function stepWirePhysics(wire, h) {
+    if (!wire.initialized) return 0;
+
+    // True port endpoint velocity relative to last step injects natural cord lag/whip
+    const portVelX = (wire.px - wire.prevPx) / Math.max(0.25, h);
+    const portVelY = (wire.py - wire.prevPy) / Math.max(0.25, h);
+    wire.prevPx = wire.px;
+    wire.prevPy = wire.py;
+
+    const kBase = 0.24;
+    const kNeighbor = 0.28;
+    const damp = Math.pow(0.84, h);
+    let maxEnergy = 0;
+
+    for (let i = 1; i < WIRE_SEGMENTS; i++) {
+      const t = i / WIRE_SEGMENTS;
+      const devX = wire.wx[i] - wire.baseX[i];
+      const devY = wire.wy[i] - wire.baseY[i];
+
+      const leftDevX = wire.wx[i - 1] - wire.baseX[i - 1];
+      const leftDevY = wire.wy[i - 1] - wire.baseY[i - 1];
+      const rightDevX = wire.wx[i + 1] - wire.baseX[i + 1];
+      const rightDevY = wire.wy[i + 1] - wire.baseY[i + 1];
+
+      // End nodes stiffer to keep grommet & USB-C strain-relief collars crisp
+      const endStiff = i === 1 || i === WIRE_SEGMENTS - 1 ? 1.38 : 0.92;
+      const fx =
+        -devX * kBase * endStiff +
+        (leftDevX + rightDevX - 2 * devX) * kNeighbor -
+        portVelX * t * 0.042;
+      const fy =
+        -devY * kBase * endStiff +
+        (leftDevY + rightDevY - 2 * devY) * kNeighbor -
+        portVelY * t * 0.028;
+
+      wire.vx[i] = clamp((wire.vx[i] + fx * h) * damp, -24, 24);
+      wire.vy[i] = clamp((wire.vy[i] + fy * h) * damp, -24, 24);
+    }
+
+    for (let i = 1; i < WIRE_SEGMENTS; i++) {
+      wire.wx[i] = wire.baseX[i] + clamp(wire.wx[i] + wire.vx[i] * h - wire.baseX[i], -34, 34);
+      wire.wy[i] = wire.baseY[i] + clamp(wire.wy[i] + wire.vy[i] * h - wire.baseY[i], -28, 28);
+      maxEnergy += Math.abs(wire.vx[i]) + Math.abs(wire.vy[i]) + Math.abs(wire.wx[i] - wire.baseX[i]) * 0.14 + Math.abs(wire.wy[i] - wire.baseY[i]) * 0.14;
+    }
+
+    if (wire.pulse > 0.005) {
+      wire.pulseT += 0.048 * h;
+      wire.pulse *= Math.pow(0.925, h);
+      if (wire.pulseT >= 1.15 || wire.pulse <= 0.012) {
+        wire.pulse = 0;
+        wire.pulseT = 0;
+      } else {
+        maxEnergy += 0.25;
+      }
+    }
+
+    return maxEnergy;
+  }
+
+  function catmullChainToPath(pts, tanStartX, tanStartY, tanEndX, tanEndY) {
+    const n = pts.length - 1;
+    let d = `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
+    for (let i = 0; i < n; i++) {
+      const p0 = i === 0 ? { x: pts[0].x - tanStartX, y: pts[0].y - tanStartY } : pts[i - 1];
+      const p1 = pts[i];
+      const p2 = pts[i + 1];
+      const p3 = i + 1 === n ? { x: pts[n].x + tanEndX, y: pts[n].y + tanEndY } : pts[i + 2];
+
+      const cp1x = p1.x + (p2.x - p0.x) / 6;
+      const cp1y = p1.y + (p2.y - p0.y) / 6;
+      const cp2x = p2.x - (p3.x - p1.x) / 6;
+      const cp2y = p2.y - (p3.y - p1.y) / 6;
+      d += ` C ${cp1x.toFixed(1)} ${cp1y.toFixed(1)}, ${cp2x.toFixed(1)} ${cp2y.toFixed(1)}, ${p2.x.toFixed(1)} ${p2.y.toFixed(1)}`;
+    }
+    return d;
+  }
+
+  function drawWire(wire, pathsMain, shadowEl, contactEl, specEl, weaveAEl, weaveBEl, pulseEl) {
+    if (!wire.initialized) return;
+
+    const mainPts = [];
+    const shadowPts = [];
+    const specPts = [];
+    const weaveAPts = [];
+    const weaveBPts = [];
+
+    const liftX = 2.6 + x * 0.12 - ang * 14;
+    const liftY = 4.6 + y * 0.08 + Math.abs(ang) * 10;
+    const cosA = Math.cos(ang);
+    const sinA = Math.sin(ang);
+
+    for (let i = 0; i <= WIRE_SEGMENTS; i++) {
+      const t = i / WIRE_SEGMENTS;
+      const px = wire.wx[i];
+      const py = wire.wy[i];
+      mainPts.push({ x: px, y: py });
+
+      // Depth-projected wall shadow: flush at top grommet (t=0), separated cleanly down at USB-C port (t=1)
+      const wScale = 0.25 + t * 0.75;
+      shadowPts.push({ x: px + liftX * wScale, y: py + liftY * wScale });
+
+      const nx = (1 - t) + cosA * t;
+      const ny = sinA * t;
+
+      // Specular rim & fine staggered herringbone paracord weave tracks along cylindrical sides
+      specPts.push({ x: px - nx * 1.5, y: py - ny * 1.5 - 0.15 });
+      weaveAPts.push({ x: px - nx * 1.05, y: py - ny * 1.05 });
+      weaveBPts.push({ x: px + nx * 1.05, y: py + ny * 1.05 });
+    }
+
+    const startTanX = 0;
+    const startTanY = 16;
+    const endTanX = -Math.sin(ang) * 16;
+    const endTanY = Math.cos(ang) * 16;
+
+    const dMain = catmullChainToPath(mainPts, startTanX, startTanY, endTanX, endTanY);
+    const dShadow = catmullChainToPath(shadowPts, startTanX, startTanY, endTanX, endTanY);
+    const dSpec = catmullChainToPath(specPts, startTanX, startTanY, endTanX, endTanY);
+    const dWeaveA = catmullChainToPath(weaveAPts, startTanX, startTanY, endTanX, endTanY);
+    const dWeaveB = catmullChainToPath(weaveBPts, startTanX, startTanY, endTanX, endTanY);
+
+    for (let i = 0; i < pathsMain.length; i++) pathsMain[i].setAttribute("d", dMain);
+    if (shadowEl) shadowEl.setAttribute("d", dShadow);
+    if (contactEl) contactEl.setAttribute("d", dMain);
+    if (specEl) specEl.setAttribute("d", dSpec);
+    if (weaveAEl) weaveAEl.setAttribute("d", dWeaveA);
+    if (weaveBEl) weaveBEl.setAttribute("d", dWeaveB);
+
+    if (pulseEl) {
+      if (wire.pulse > 0.02) {
+        const estLen = Math.hypot(wire.px - wire.ax, wire.py - wire.ay) * 1.14;
+        const segLen = clamp(estLen * 0.28, 13, 22);
+        const travel = wire.pulseDir < 0 ? 1 - clamp(wire.pulseT, 0, 1) : clamp(wire.pulseT, 0, 1);
+        const dashOff = -(travel * (estLen + segLen) - segLen);
+        const op = clamp(wire.pulse * Math.sin(clamp(wire.pulseT, 0, 1) * Math.PI), 0, 0.92);
+        pulseEl.setAttribute("d", dMain);
+        pulseEl.style.strokeDasharray = `${segLen.toFixed(1)} ${(estLen * 2.4).toFixed(1)}`;
+        pulseEl.style.strokeDashoffset = `${dashOff.toFixed(1)}`;
+        pulseEl.style.opacity = op.toFixed(3);
+      } else {
+        pulseEl.style.opacity = "0";
+      }
+    }
+  }
+
+  function triggerWireWave(strengthL = 1, strengthR = 1, { xImpulse = 0, dir = -1 } = {}) {
+    if (reduceMotion) return;
+    if (wireL.initialized) {
+      wireL.vx[4] += (-1.35 * strengthL + xImpulse * 0.65);
+      wireL.vx[3] += (0.85 * strengthL - xImpulse * 0.3);
+      wireL.vy[4] += 0.9 * strengthL;
+      wireL.pulse = Math.max(wireL.pulse, clamp(0.45 + strengthL * 0.42, 0, 0.95));
+      wireL.pulseT = 0.04;
+      wireL.pulseDir = dir;
+    }
+    if (wireR.initialized) {
+      wireR.vx[4] += (1.35 * strengthR + xImpulse * 0.65);
+      wireR.vx[3] += (-0.85 * strengthR - xImpulse * 0.3);
+      wireR.vy[4] += 0.9 * strengthR;
+      wireR.pulse = Math.max(wireR.pulse, clamp(0.45 + strengthR * 0.42, 0, 0.95));
+      wireR.pulseT = 0.04;
+      wireR.pulseDir = dir;
+    }
+  }
+
+  function measureAndSyncWires() {
+    if (!cableSvg || !rig) return;
+    const svgRect = cableSvg.getBoundingClientRect();
+    const w = svgRect.width || rig.clientWidth || 740;
+    const h = svgRect.height || 155;
+    cableSvg.setAttribute("viewBox", `0 0 ${w.toFixed(1)} ${h.toFixed(1)}`);
+
+    const leftAnchorX = w * portRatio;
+    const rightAnchorX = w * (1 - portRatio);
+    const grommetY = 12;
+
+    if (mountL) mountL.setAttribute("transform", `translate(${leftAnchorX.toFixed(1)}, 0)`);
+    if (mountR) mountR.setAttribute("transform", `translate(${rightAnchorX.toFixed(1)}, 0)`);
+
+    let rightPortX = rightAnchorX;
+    let rightPortY = grommetY + restCordLen + y;
+    if (usbTipR && svgRect.width > 0) {
+      const tipR = usbTipR.getBoundingClientRect();
+      rightPortX = tipR.left + tipR.width * 0.5 - svgRect.left;
+      rightPortY = tipR.top + tipR.height * 0.5 - svgRect.top + 3;
+      if (!dragging && Math.abs(y) < 0.8 && Math.abs(ang) < 0.015) {
+        restCordLen = clamp(rightPortY - grommetY, 38, 86);
+      }
+    }
+
+    let leftPortX = leftAnchorX;
+    let leftPortY = grommetY + restCordLen + y;
+    if (usbTipL && svgRect.width > 0) {
+      const tipL = usbTipL.getBoundingClientRect();
+      leftPortX = tipL.left + tipL.width * 0.5 - svgRect.left;
+      leftPortY = tipL.top + tipL.height * 0.5 - svgRect.top + 3;
+    }
+
+    updateWireTargetGeometry(wireL, leftAnchorX, grommetY, leftPortX, leftPortY);
+    updateWireTargetGeometry(wireR, rightAnchorX, grommetY, rightPortX, rightPortY);
+  }
+
   function drawHanging() {
     if (!chassis) return;
     const deg = (ang * 180) / Math.PI;
     chassis.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) rotate(${deg.toFixed(2)}deg)`;
-
-    if (plugL) {
-      plugL.style.setProperty("--plug-slip", `${plugSlip.toFixed(2)}px`);
-    }
 
     if (wallShadow) {
       const shX = x * 0.72 + 4 - ang * 18;
@@ -424,312 +607,9 @@ export async function initLoadout() {
       wallShadow.style.transform = `translate3d(${shX.toFixed(1)}px, ${shY.toFixed(1)}px, 0) rotate(${(deg * 0.88).toFixed(2)}deg) scale(${shScale.toFixed(3)})`;
     }
 
-    if (!cableSvg || !rig) return;
-    const svgRect = cableSvg.getBoundingClientRect();
-    const w = svgRect.width || rig.clientWidth || 740;
-    const h = svgRect.height || 145;
-    cableSvg.setAttribute("viewBox", `0 0 ${w.toFixed(1)} ${h.toFixed(1)}`);
-
-    const leftAnchorX = w * portRatio;
-    const rightAnchorX = w * (1 - portRatio);
-    const grommetY = 8;
-
-    if (mountL) mountL.setAttribute("transform", `translate(${leftAnchorX.toFixed(1)}, 0)`);
-    if (mountR) mountR.setAttribute("transform", `translate(${rightAnchorX.toFixed(1)}, 0)`);
-
-    // 1. Right Power Cable: measure live USB-C plug tip + align Bezier tangent cleanly along plug tilt
-    let rightPortX = rightAnchorX;
-    let rightPortY = grommetY + restCordLen + y;
-    if (usbTipR && svgRect.width > 0) {
-      const tipR = usbTipR.getBoundingClientRect();
-      rightPortX = tipR.left + tipR.width * 0.5 - svgRect.left;
-      rightPortY = tipR.top + tipR.height * 0.5 - svgRect.top + 2;
-      if (plugState === "plugged" && !dragging && Math.abs(y) < 0.8 && plugSlip < 0.2) {
-        restCordLen = clamp(rightPortY - grommetY, 36, 76);
-      }
-    }
-
-    const rSpan = Math.max(24, rightPortY - grommetY);
-    const rSag = rSpan * 0.48;
-    const rRestSlack = plugState === "plugged" ? -2.2 : 0;
-    const rc1x = rightAnchorX + rRestSlack + vx * 0.35;
-    const rc1y = grommetY + rSag * 0.85;
-    const rc2x = rightPortX + Math.sin(ang) * rSag + vx * 0.28;
-    const rc2y = rightPortY - Math.cos(ang) * rSag;
-    const dR = `M ${rightAnchorX.toFixed(1)} ${grommetY} C ${rc1x.toFixed(1)} ${rc1y.toFixed(1)}, ${rc2x.toFixed(1)} ${rc2y.toFixed(1)}, ${rightPortX.toFixed(1)} ${rightPortY.toFixed(1)}`;
-    cableSvg.querySelectorAll("[data-cable-r]").forEach((p) => p.setAttribute("d", dR));
-
-    // 2. Left Power Cable: connected usbTipL (with slip creep), polar detached pendulum, or seating capture
-    let leftPortX = leftAnchorX;
-    let leftPortY = grommetY + restCordLen;
-    let plugAngleRad = ang;
-
-    if (plugState === "plugged") {
-      if (usbTipL && svgRect.width > 0) {
-        const tipL = usbTipL.getBoundingClientRect();
-        leftPortX = tipL.left + tipL.width * 0.5 - svgRect.left;
-        leftPortY = tipL.top + tipL.height * 0.5 - svgRect.top + 2;
-      } else {
-        leftPortY += y - plugSlip;
-      }
-      freePlugX = leftPortX;
-      freePlugY = leftPortY;
-    } else if (plugState === "detached") {
-      leftPortX = leftAnchorX + Math.sin(cordAng) * cordLen;
-      leftPortY = grommetY + Math.cos(cordAng) * cordLen;
-      freePlugX = leftPortX;
-      freePlugY = leftPortY;
-      plugAngleRad = headSvgAngle;
-    } else {
-      // "seating": freePlugX, freePlugY, headSvgAngle driven smoothly by stepPhysics()
-      leftPortX = freePlugX;
-      leftPortY = freePlugY;
-      plugAngleRad = headSvgAngle;
-    }
-
-    const lSpan = Math.max(24, leftPortY - grommetY);
-    const lSag = lSpan * 0.48;
-    const lRestSlack = plugState === "plugged" ? 2.2 : clamp(-(leftPortX - leftAnchorX) * 0.14, -8, 8);
-    const lVelX = plugState === "plugged" ? vx * 0.35 : -cordAngVel * 14;
-    const lc1x = leftAnchorX + lRestSlack + lVelX;
-    const lc1y = grommetY + lSag * 0.85;
-    const lc2x = leftPortX + Math.sin(plugAngleRad) * lSag * 0.88;
-    const lc2y = leftPortY - Math.cos(plugAngleRad) * lSag * 0.88;
-    const dL = `M ${leftAnchorX.toFixed(1)} ${grommetY} C ${lc1x.toFixed(1)} ${lc1y.toFixed(1)}, ${lc2x.toFixed(1)} ${lc2y.toFixed(1)}, ${leftPortX.toFixed(1)} ${leftPortY.toFixed(1)}`;
-    cableSvg.querySelectorAll("[data-cable-l]").forEach((p) => p.setAttribute("d", dL));
-
-    if (freePlugL) {
-      const plugDeg = (plugAngleRad * 180) / Math.PI;
-      const sc = getPlugScale();
-      freePlugL.setAttribute(
-        "transform",
-        `translate(${leftPortX.toFixed(1)}, ${leftPortY.toFixed(1)}) rotate(${plugDeg.toFixed(1)}) scale(${sc})`
-      );
-    }
-  }
-
-  function releaseLeftHand({ fromAlt = false } = {}) {
-    if (plugState !== "plugged") return;
-
-    // Capture exact SVG coords of the mounted left plug BEFORE switching state
-    let curTipX = (cableSvg?.clientWidth || rig?.clientWidth || 740) * portRatio;
-    let curTipY = 8 + restCordLen + y - plugSlip;
-    if (cableSvg && usbTipL) {
-      const svgRect = cableSvg.getBoundingClientRect();
-      if (svgRect.width > 0) {
-        const leftAnchorX = svgRect.width * portRatio;
-        const tipL = usbTipL.getBoundingClientRect();
-        curTipX = tipL.left + tipL.width * 0.5 - svgRect.left;
-        curTipY = tipL.top + tipL.height * 0.5 - svgRect.top + 2;
-        const relX = curTipX - leftAnchorX;
-        const relY = Math.max(18, curTipY - 8);
-        cordAng = clamp(Math.atan2(relX, relY), -0.9, 0.9);
-        cordLen = Math.max(24, Math.hypot(relX, relY));
-      }
-    }
-
-    plugState = "detached";
-    yankEnergy = 0;
-    plugSlip = 0;
-    dragNearSocket = false;
-    rig?.classList.remove("is-left-seating", "is-plug-ready");
-    rig?.classList.add("is-left-released");
-    if (altKeyRef) altKeyRef.dataset.tip = "Plug Cable";
-
-    if (reduceMotion) {
-      const eq = getSingleRest();
-      x = eq.restX;
-      y = eq.restY;
-      ang = eq.restAng;
-      cordAng = -0.05;
-      cordLen = restCordLen + 6;
-      headSvgAngle = -cordAng;
-      drawHanging();
-      return;
-    }
-
-    sound.play("unplug");
-
-    // Elastic snap-back recoil: stretched cord pulls connector sharply back & whips into gravity pendulum
-    const extraStretch = Math.max(0, cordLen - restCordLen);
-    cordLenVel = fromAlt ? -4.2 : -extraStretch * 0.52 - 3.8;
-    cordAngVel = fromAlt ? -0.058 : clamp(vx * 0.0025 - 0.048, -0.14, 0.14);
-    headSvgAngle = ang;
-    headAngVel = vang - cordAngVel * 0.7;
-
-    // Immediate weight transfer onto the single right USB-C cable
-    vy += 5.4;
-    vx += 1.6;
-    vang -= 0.052;
-    if (dragging) {
-      startX = downClientX - invResist(x, 82);
-      startY = downClientY - invResist(y, y < 0 ? 34 : 76);
-    }
-    startPhysicsLoop();
-  }
-
-  function regrabLeftHand({ fromDrag = false } = {}) {
-    if (plugState !== "detached") return;
-
-    plugPending = false;
-    plugDragging = false;
-    plugPointerId = null;
-    if (fromDrag && dragging) {
-      dragging = false;
-      pendingDrag = false;
-      try {
-        if (pointerId !== null) chassis?.releasePointerCapture(pointerId);
-      } catch {}
-      pointerId = null;
-      chassis?.classList.remove("is-dragging");
-    }
-
-    if (reduceMotion) {
-      plugState = "plugged";
-      x = 0;
-      y = 0;
-      vx = 0;
-      vy = 0;
-      ang = 0;
-      vang = 0;
-      plugSlip = 0;
-      rig?.classList.remove("is-left-released", "is-left-seating", "is-plug-ready", "is-plug-dragging");
-      if (altKeyRef) altKeyRef.dataset.tip = "Unplug Cable";
-      drawHanging();
-      return;
-    }
-
-    plugState = "seating";
-    yankEnergy = 0;
-    dragNearSocket = false;
-    dragAttractStrength = 0;
-    seatFromDrag = fromDrag;
-    seatAudioPlayed = false;
-    seatStartMs = performance.now();
-    seatDurMs = fromDrag ? 170 : 240;
-    seatFromX = freePlugX;
-    seatFromY = freePlugY;
-    seatFromAng = headSvgAngle;
-
-    rig?.classList.remove("is-left-released", "is-plug-ready", "is-plug-dragging");
-    rig?.classList.add("is-left-seating");
-    if (altKeyRef) altKeyRef.dataset.tip = "Unplug Cable";
-
-    startPhysicsLoop();
-  }
-
-  if (freePlugL) {
-    freePlugL.addEventListener("click", () => {
-      if (performance.now() < suppressPlugClickUntil) {
-        suppressPlugClickUntil = 0;
-        return;
-      }
-      regrabLeftHand({ fromDrag: false });
-    });
-
-    freePlugL.addEventListener("pointerdown", (e) => {
-      if (e.button && e.button !== 0) return;
-      if (plugState !== "detached" || reduceMotion || !cableSvg) return;
-      e.stopPropagation();
-      plugPointerId = e.pointerId;
-      plugPending = true;
-      plugDragging = false;
-      plugDownX = e.clientX;
-      plugDownY = e.clientY;
-      const svgRect = cableSvg.getBoundingClientRect();
-      plugGrabOffsetX = e.clientX - svgRect.left - freePlugX;
-      plugGrabOffsetY = e.clientY - svgRect.top - freePlugY;
-    });
-
-    addEventListener("pointermove", (e) => {
-      if (e.pointerId !== plugPointerId || plugState !== "detached" || !cableSvg) return;
-      if (plugPending && !plugDragging) {
-        if (Math.hypot(e.clientX - plugDownX, e.clientY - plugDownY) > 5) {
-          plugPending = false;
-          plugDragging = true;
-          suppressPlugClickUntil = performance.now() + 450;
-          rig?.classList.add("is-plug-dragging");
-          try {
-            freePlugL.setPointerCapture(plugPointerId);
-          } catch {}
-          startPhysicsLoop();
-        } else {
-          return;
-        }
-      }
-      if (!plugDragging) return;
-
-      const svgRect = cableSvg.getBoundingClientRect();
-      if (svgRect.width <= 0) return;
-      const leftAnchorX = svgRect.width * portRatio;
-      const grommetY = 8;
-      const freeRestLen = Math.max(42, restCordLen + 6);
-      const maxFreeLen = 285;
-
-      const cursorX = e.clientX - svgRect.left - plugGrabOffsetX;
-      const cursorY = Math.max(grommetY + 16, e.clientY - svgRect.top - plugGrabOffsetY);
-      const rawDx = cursorX - leftAnchorX;
-      const rawDy = cursorY - grommetY;
-      const rawDist = Math.hypot(rawDx, rawDy);
-
-      const targetAng = clamp(Math.atan2(rawDx, Math.max(12, rawDy)), -1.18, 1.18);
-      const targetLen =
-        rawDist <= freeRestLen
-          ? Math.max(24, rawDist)
-          : rawDist <= maxFreeLen
-            ? freeRestLen + (rawDist - freeRestLen) * 0.96
-            : maxFreeLen + resist(rawDist - maxFreeLen, 42);
-
-      cordAngVel = (targetAng - cordAng) * 0.42;
-      cordLenVel = (targetLen - cordLen) * 0.42;
-      cordAng = targetAng;
-      cordLen = targetLen;
-      freePlugX = leftAnchorX + Math.sin(cordAng) * cordLen;
-      freePlugY = grommetY + Math.cos(cordAng) * cordLen;
-
-      const distToSock = evaluatePlugProximity(svgRect);
-      if (dragNearSocket) {
-        const target = getLeftSocketTarget(svgRect);
-        const pull = dragAttractStrength * 0.22;
-        const aimDx = target.seatX - leftAnchorX;
-        const aimDy = Math.max(16, target.seatY - grommetY);
-        const aimAng = clamp(Math.atan2(aimDx, aimDy), -1.18, 1.18);
-        const aimLen = Math.hypot(aimDx, aimDy);
-        cordAng = cordAng * (1 - pull) + aimAng * pull;
-        cordLen = cordLen * (1 - pull) + aimLen * pull;
-        freePlugX = leftAnchorX + Math.sin(cordAng) * cordLen;
-        freePlugY = grommetY + Math.cos(cordAng) * cordLen;
-        headSvgAngle = -cordAng * (1 - dragAttractStrength * 0.85) + ang * (dragAttractStrength * 0.85);
-      } else {
-        headSvgAngle = -cordAng * 0.85;
-      }
-
-      if (distToSock < 24) {
-        regrabLeftHand({ fromDrag: true });
-        return;
-      }
-      drawHanging();
-    });
-
-    const endFreePlugDrag = (e) => {
-      if (e.pointerId !== undefined && e.pointerId !== plugPointerId) return;
-      const wasDragging = plugDragging;
-      plugPending = false;
-      plugDragging = false;
-      plugPointerId = null;
-      rig?.classList.remove("is-plug-dragging");
-      if (!wasDragging) return;
-      if (plugState === "detached" && dragNearSocket) {
-        regrabLeftHand({ fromDrag: true });
-        return;
-      }
-      dragNearSocket = false;
-      dragAttractStrength = 0;
-      rig?.classList.remove("is-plug-ready");
-      startPhysicsLoop();
-    };
-    addEventListener("pointerup", endFreePlugDrag);
-    addEventListener("pointercancel", endFreePlugDrag);
+    measureAndSyncWires();
+    drawWire(wireL, cablePathsL, cableShadowL, cableContactL, cableSpecL, cableWeaveAL, cableWeaveBL, cablePulseL);
+    drawWire(wireR, cablePathsR, cableShadowR, cableContactR, cableSpecR, cableWeaveAR, cableWeaveBR, cablePulseR);
   }
 
   function stepPhysics(now = performance.now()) {
@@ -740,180 +620,71 @@ export async function initLoadout() {
     const sub = dt > 1.05 ? 2 : 1;
     const h = dt / sub;
 
-    const svgRect = cableSvg ? cableSvg.getBoundingClientRect() : null;
-    const w = svgRect?.width || rig?.clientWidth || 740;
-    const leftAnchorX = w * portRatio;
-    const freeRestLen = Math.max(42, restCordLen + 6);
+    let wireEnergy = 0;
 
     for (let s = 0; s < sub; s++) {
-      if (plugState === "detached" && !plugDragging) {
-        // 1. Dangling left cable polar pendulum around (leftAnchorX, grommetY)
-        const gTorque = -0.03 * Math.sin(cordAng) - 0.008 * cordAng;
-        const mTorque = dragNearSocket ? (dragAttractAng - cordAng) * 0.08 * dragAttractStrength : 0;
-        cordAngVel = (cordAngVel + (gTorque + mTorque) * h) * Math.pow(0.955, h);
-        cordAng = clamp(cordAng + cordAngVel * h, -1.05, 1.05);
+      if (!dragging) {
+        vx = (vx + (-x * 0.145) * h) * Math.pow(0.835, h);
+        vy = (vy + (-y * 0.16) * h) * Math.pow(0.835, h);
+        x += vx * h;
+        y += vy * h;
 
-        const targetLen = dragNearSocket ? freeRestLen + dragAttractStrength * 4 : freeRestLen;
-        cordLenVel = (cordLenVel + (targetLen - cordLen) * 0.22 * h) * Math.pow(0.79, h);
-        cordLen = Math.max(24, cordLen + cordLenVel * h);
-
-        // Connector head angle trails cord swing (positive cordAng right -> CCW SVG rotation -cordAng)
-        const desiredSvgHead = dragNearSocket
-          ? -cordAng * (1 - dragAttractStrength * 0.72) + ang * (dragAttractStrength * 0.72)
-          : -cordAng;
-        headAngVel = (headAngVel + ((desiredSvgHead - headSvgAngle) * 0.26 + cordAngVel * 0.08) * h) * Math.pow(0.81, h);
-        headSvgAngle += headAngVel * h;
+        const targetAng = clamp(x * 0.0013 + vx * 0.0036, -0.1, 0.1);
+        vang = (vang + (targetAng - ang) * 0.2 * h) * Math.pow(0.825, h);
+        ang += vang * h;
       }
 
-      if (plugState === "seating") {
-        const u = clamp((now - seatStartMs) / seatDurMs, 0, 1);
-
-        // Level the keyboard smoothly back up toward connected position (if user is not actively holding/dragging)
-        if (!dragging) {
-          const targetBoardY = u < 0.62 ? -2.5 : 1.5;
-          vx = (vx + (-x * 0.22) * h) * Math.pow(0.8, h);
-          vy = (vy + ((targetBoardY - y) * 0.24) * h) * Math.pow(0.8, h);
-          x += vx * h;
-          y += vy * h;
-          vang = (vang + (-ang * 0.24) * h) * Math.pow(0.8, h);
-          ang += vang * h;
-        }
-      } else if (!dragging) {
-        if (plugState === "plugged") {
-          vx = (vx + (-x * 0.13) * h) * Math.pow(0.83, h);
-          vy = (vy + (-y * 0.15) * h) * Math.pow(0.83, h);
-          x += vx * h;
-          y += vy * h;
-
-          const targetAng = clamp(x * 0.0012 + vx * 0.0032, -0.09, 0.09);
-          vang = (vang + (targetAng - ang) * 0.19 * h) * Math.pow(0.82, h);
-          ang += vang * h;
-          yankEnergy *= Math.pow(0.9, h);
-          plugSlip *= Math.pow(0.74, h);
-          if (plugSlip < 0.05) plugSlip = 0;
-        } else {
-          // Single-cable pendulum suspended strictly from Right USB-C cable
-          const { restX, restY, restAng } = getSingleRest();
-          const swingDelta = ang - restAng;
-          const angAccel = -0.082 * Math.sin(swingDelta) - vx * 0.0022;
-          vang = (vang + angAccel * h) * Math.pow(0.93, h);
-          ang += vang * h;
-
-          const coupledX = restX + Math.sin(swingDelta) * 14;
-          const coupledY = restY + Math.abs(Math.sin(swingDelta)) * 5;
-          vx = (vx + (coupledX - x) * 0.09 * h) * Math.pow(0.89, h);
-          vy = (vy + (coupledY - y) * 0.11 * h) * Math.pow(0.87, h);
-          x += vx * h;
-          y += vy * h;
-        }
+      if (chassis) {
+        const deg = (ang * 180) / Math.PI;
+        chassis.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) rotate(${deg.toFixed(2)}deg)`;
       }
-    }
-
-    // Update 2-stage seating trajectory AFTER board transform step so target socket stays pixel-exact
-    if (plugState === "seating") {
-      const u = clamp((now - seatStartMs) / seatDurMs, 0, 1);
-      const target = getLeftSocketTarget(svgRect || { width: w, left: 0, top: 0 });
-      const scale = getPlugScale();
-      const poiseDist = 9 * scale;
-      const poiseX = target.seatX + Math.sin(ang) * poiseDist;
-      const poiseY = target.seatY - Math.cos(ang) * poiseDist;
-
-      if (u < 0.56) {
-        const p = easeOutCubic(u / 0.56);
-        const arcLift = Math.sin(p * Math.PI) * -6;
-        freePlugX = seatFromX + (poiseX - seatFromX) * p;
-        freePlugY = seatFromY + (poiseY - seatFromY) * p + arcLift;
-        headSvgAngle = seatFromAng + (ang - seatFromAng) * p;
-      } else {
-        if (!seatAudioPlayed) {
-          seatAudioPlayed = true;
-          sound.play("plug");
-        }
-        const p = easeInOutCubic((u - 0.56) / 0.44);
-        const bottomOut = p > 0.8 ? Math.sin(((p - 0.8) / 0.2) * Math.PI) * (1.8 * scale) : 0;
-        const insDist = (1 - p) * poiseDist - bottomOut;
-        freePlugX = target.seatX + Math.sin(ang) * insDist;
-        freePlugY = target.seatY - Math.cos(ang) * insDist;
-        headSvgAngle = ang;
-      }
-
-      if (u >= 1) {
-        plugState = "plugged";
-        plugSlip = 0;
-        rig?.classList.remove("is-left-released", "is-left-seating", "is-plug-ready");
-        if (altKeyRef) altKeyRef.dataset.tip = "Unplug Cable";
-        // Crisp latch insertion recoil thump onto the board
-        vy += 3.2;
-        vang -= 0.018;
-      }
+      measureAndSyncWires();
+      wireEnergy = stepWirePhysics(wireL, h) + stepWirePhysics(wireR, h);
     }
 
     drawHanging();
 
-    if (plugState === "seating") {
-      raf = requestAnimationFrame(stepPhysics);
-      return;
-    }
-
-    const single = getSingleRest();
-    const restX = plugState === "plugged" ? 0 : single.restX;
-    const restY = plugState === "plugged" ? 0 : single.restY;
-    const restAng = plugState === "plugged" ? 0 : single.restAng;
-    const plugEnergy =
-      plugState === "plugged"
-        ? plugSlip * 0.05
-        : Math.abs(cordAngVel) * 18 +
-          Math.abs(cordLenVel) * 0.35 +
-          Math.abs(headAngVel) * 8 +
-          Math.abs(cordAng) * 0.35 +
-          Math.abs(cordLen - freeRestLen) * 0.04;
-    const energy =
-      plugEnergy +
+    const boardEnergy =
       Math.abs(vx) +
       Math.abs(vy) +
       Math.abs(vang) * 26 +
-      Math.abs(x - restX) * 0.03 +
-      Math.abs(y - restY) * 0.03 +
-      Math.abs(ang - restAng) * 2.2;
+      Math.abs(x) * 0.03 +
+      Math.abs(y) * 0.03 +
+      Math.abs(ang) * 2.2;
 
-    if (dragging || plugDragging || energy > 0.015) {
+    if (dragging || boardEnergy + wireEnergy > 0.025) {
       raf = requestAnimationFrame(stepPhysics);
     } else {
-      x = restX;
-      y = restY;
-      ang = restAng;
+      x = 0;
+      y = 0;
+      ang = 0;
       vx = 0;
       vy = 0;
       vang = 0;
-      plugSlip = 0;
-      if (plugState === "detached") {
-        cordAng = 0;
-        cordAngVel = 0;
-        cordLen = freeRestLen;
-        cordLenVel = 0;
-        headSvgAngle = 0;
-        headAngVel = 0;
-        freePlugX = leftAnchorX;
-        freePlugY = 8 + freeRestLen;
+      wireL.pulse = 0;
+      wireR.pulse = 0;
+      for (let i = 0; i <= WIRE_SEGMENTS; i++) {
+        wireL.wx[i] = wireL.baseX[i];
+        wireL.wy[i] = wireL.baseY[i];
+        wireL.vx[i] = 0;
+        wireL.vy[i] = 0;
+        wireR.wx[i] = wireR.baseX[i];
+        wireR.wy[i] = wireR.baseY[i];
+        wireR.vx[i] = 0;
+        wireR.vy[i] = 0;
       }
       drawHanging();
     }
   }
 
-  function impulseKeyboard(colRatio = 0, downForce = 3.0) {
+  function impulseKeyboard(colRatio = 0, downForce = 3.0, { waveDir = -1 } = {}) {
     if (reduceMotion) return;
     vy += downForce;
-    vx += colRatio * 1.05;
-    if (plugState === "plugged") {
-      vang += colRatio * 0.009;
-      if (colRatio < -0.2) yankEnergy += 0.14;
-      if (yankEnergy > 1.35) {
-        releaseLeftHand({ fromAlt: false });
-        return;
-      }
-    } else if (plugState === "detached") {
-      vang += (colRatio - 0.45) * 0.018;
-    }
+    vx += colRatio * 1.15;
+    vang += colRatio * 0.01;
+    const biasL = clamp(1 - colRatio * 0.45, 0.45, 1.45);
+    const biasR = clamp(1 + colRatio * 0.45, 0.45, 1.45);
+    triggerWireWave(biasL, biasR, { xImpulse: colRatio * 0.9, dir: waveDir });
     startPhysicsLoop();
   }
 
@@ -968,14 +739,8 @@ export async function initLoadout() {
       pointerId = e.pointerId;
       downClientX = e.clientX;
       downClientY = e.clientY;
-      const rigRect = rig?.getBoundingClientRect();
-      grabNorm =
-        rigRect && rigRect.width > 0
-          ? clamp(((e.clientX - rigRect.left) / rigRect.width - (1 - portRatio)) / (2 * portRatio - 1), -0.25, 1.15)
-          : 0.5;
-      const sxScale = plugState === "plugged" ? 72 : 82;
-      const syScale = plugState === "plugged" ? (y < 0 ? 28 : 58) : (y < 0 ? 44 : 76);
-      startX = e.clientX - invResist(x, sxScale);
+      const syScale = y < 0 ? 32 : 58;
+      startX = e.clientX - invResist(x, 76);
       startY = e.clientY - invResist(y, syScale);
 
       const onBtn = Boolean(e.target.closest("button"));
@@ -1018,66 +783,25 @@ export async function initLoadout() {
       const rawDx = e.clientX - startX;
       const rawDy = e.clientY - startY;
 
-      if (plugState === "plugged") {
-        const dx = resist(rawDx, 72);
-        const dy = rawDy < 0 ? resist(rawDy, 28) : resist(rawDy, 58);
-        const speed = Math.hypot(dx - x, dy - y);
-        vx = (dx - x) * 0.45;
-        vy = (dy - y) * 0.45;
-        x = dx;
-        y = dy;
-        ang = clamp(dx * 0.0014 - dy * 0.0022, -0.15, 0.12);
-
-        yankEnergy += speed * 0.018;
-        const pullDist = Math.hypot(dx, Math.max(0, dy));
-        // Left USB-C connector begins creeping visibly up out of the socket right before friction release
-        plugSlip = clamp((pullDist - 12) * 0.2 + Math.max(0, dy - 14) * 0.16 + yankEnergy * 1.4, 0, 5.5);
-
-        if (pullDist > 37 || dy > 29 || yankEnergy > 1.08) {
-          releaseLeftHand({ fromAlt: false });
-        }
-      } else if (plugState === "detached") {
-        const dx = resist(rawDx, 82);
-        const dy = rawDy < 0 ? resist(rawDy, 44) : resist(rawDy, 76);
-        vx = (dx - x) * 0.45;
-        vy = (dy - y) * 0.45;
-        x = dx;
-        y = dy;
-        const single = getSingleRest();
-        const restRawY = invResist(single.restY, 76);
-        const liftStroke = Math.max(0, restRawY - rawDy);
-        const levelBoost = liftStroke * 0.0052 * (0.58 + Math.max(0, grabNorm) * 0.52);
-        const prevAng = ang;
-        ang = clamp(single.restAng + levelBoost + dx * 0.0022 - Math.max(0, dy - single.restY) * 0.0024, -0.58, 0.14);
-        vang = (ang - prevAng) * 0.65;
-
-        // Real geometric socket-to-plug proximity for magnetic capture & pre-latch readiness
-        if (cableSvg) {
-          const svgRect = cableSvg.getBoundingClientRect();
-          const distToSock = evaluatePlugProximity(svgRect);
-          if (distToSock < 24) {
-            regrabLeftHand({ fromDrag: true });
-          }
-        }
-      }
+      const dx = resist(rawDx, 76);
+      const dy = rawDy < 0 ? resist(rawDy, 32) : resist(rawDy, 58);
+      vx = (dx - x) * 0.48;
+      vy = (dy - y) * 0.48;
+      x = dx;
+      y = dy;
+      ang = clamp(dx * 0.0014 - dy * 0.0016 + vx * 0.0022, -0.14, 0.14);
+      startPhysicsLoop();
       drawHanging();
     });
 
     const endDrag = (e) => {
       if (e.pointerId !== undefined && e.pointerId !== pointerId) return;
-      const shouldSnap = dragging && plugState === "detached" && dragNearSocket;
       pendingDrag = false;
       pointerId = null;
-      dragNearSocket = false;
-      dragAttractStrength = 0;
-      rig?.classList.remove("is-plug-ready");
       if (!dragging) return;
       dragging = false;
       chassis.classList.remove("is-dragging");
-      if (shouldSnap) {
-        regrabLeftHand({ fromDrag: true });
-        return;
-      }
+      triggerWireWave(0.8, 0.8, { xImpulse: clamp(vx * 0.25, -2.5, 2.5), dir: 1 });
       startPhysicsLoop();
     };
     addEventListener("pointerup", endDrag);
@@ -1488,20 +1212,17 @@ export async function initLoadout() {
       impulseKeyboard(-0.55, 2.8);
     });
 
-    // 3. Alt / Cable Detach Test Key (Outer Modifier)
+    // 3. Alt / Cable Wave Impulse Key (Outer Modifier)
     const altKey = document.createElement("button");
     altKey.type = "button";
     altKey.className = "kb-cap kb-cap--mod";
-    altKey.dataset.tip = plugState === "plugged" ? "Unplug Cable" : "Plug Cable";
+    altKey.dataset.tip = "Flex Cables";
     altKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Alt</span></span>`;
-    altKeyRef = altKey;
     altKey.addEventListener("click", (e) => {
+      sound.play("down");
+      setTimeout(() => sound.play("up"), 70);
       pulseKeyDown(altKey);
-      if (plugState === "plugged") {
-        releaseLeftHand({ fromAlt: true });
-      } else if (plugState === "detached") {
-        regrabLeftHand({ fromDrag: false });
-      }
+      impulseKeyboard(-0.35, 3.6, { waveDir: -1 });
       const isTouchLike = e.pointerType === "touch" || lastPointerType === "touch";
       if (isTouchLike || tipEl?.classList.contains("is-visible")) {
         showCapTip(altKey, isTouchLike ? { autoHideMs: 1600 } : undefined);
@@ -1617,13 +1338,18 @@ export async function initLoadout() {
 
   onModeChange(({ mode }) => {
     renderBoard(mode, { flipping: true, layerIndex: activeLayerIdx });
-    impulseKeyboard(0, 4.8);
+    impulseKeyboard(0, 4.8, { waveDir: 1 });
   });
 
   renderBoard(getMode(), { flipping: false, layerIndex: 0 });
   if (!reduceMotion) {
-    vy = -2.8;
-    ang = 0.014;
-    raf = requestAnimationFrame(stepPhysics);
+    requestAnimationFrame(() => {
+      updateCaseSvg();
+      drawHanging();
+      vy = -2.8;
+      ang = 0.014;
+      triggerWireWave(0.65, 0.65, { xImpulse: 0.55, dir: 1 });
+      startPhysicsLoop();
+    });
   }
 }
