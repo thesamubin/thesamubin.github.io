@@ -115,6 +115,22 @@ const voices = {
     (switchDown[profile] || switchDown.thock)(r);
     emitWave(0.95, profile);
   },
+  space(r) {
+    if (profile === "clicky") {
+      burst({ freq: 2600 * r, q: 2.2, dur: 0.02, gain: 0.34 });
+      tone({ freq: 270 * r, to: 118, dur: 0.048, gain: 0.22, type: "triangle" });
+    } else if (profile === "synth") {
+      const base = PENTA[noteIdx % PENTA.length] * 0.5;
+      noteIdx++;
+      tone({ freq: base, to: base * 0.99, dur: 0.16, gain: 0.26, type: "triangle" });
+      burst({ freq: 1500, q: 1.4, dur: 0.018, gain: 0.14 });
+    } else {
+      // Deeper stabilized spacebar cavity resonance
+      burst({ freq: 1050 * r, q: 0.95, dur: 0.032, gain: 0.34 });
+      tone({ freq: 126 * r, to: 58, dur: 0.095, gain: 0.4, type: "triangle" });
+    }
+    emitWave(1.0, profile);
+  },
   up(r) {
     (switchUp[profile] || switchUp.thock)(r);
   },

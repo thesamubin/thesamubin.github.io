@@ -1,10 +1,8 @@
 // 3D Sculpted Compact Mechanical Keyboard ("Key Stack in the Board"):
-// - Realistic 3D trapezoidal keycaps with recessed inner dish + beveled 3D skirts (inspired by custom 40%/60% DSA/SA keycaps)
-// - Every tech keycap shows BOTH its recognizable vector icon AND its tech name so visitors immediately see it is SA Mubin's Tech Stack
-// - Top Stack Category Pill Bar + Live Spacebar & Inspector Readout
-// - Scrambled S-A-M-U-B-I-N keys woven across Rows 1-3 (Middle S -> Top A -> Bottom M -> Middle U -> Top B -> Bottom I -> Middle N) + 2u ENTER ↵
-// - Simple, smooth, 100% connected Right Power Cable (locked to USB plug via getBoundingClientRect — never detaches!)
-// - Left-side Boy's Hand grip with breakaway pendulum physics when pulled hard ("tanatani")
+// - Realistic 3D beveled keycaps with concave finger scoop + matte PBT chassis + switch plate
+// - Top Stack Category Pill Bar + hover/tap micro-badge + left modifier layer keys (Esc/Tab/Shift)
+// - Scrambled S-A-M-U-B-I-N keys woven across Rows 1-3 + 2u Enter ↵
+// - Braided dual USB-C cables with wall grommet mounts & tangent-aligned pendulum physics when left cable unplugs
 
 import { sound } from "./sound.js";
 import { getMode, onModeChange, toggleMode, reduceMotion } from "./mode.js";
@@ -22,7 +20,7 @@ const ICONS = {
   // --- CORE: Frameworks ---
   react: '<circle cx="12" cy="12" r="2.3" fill="currentColor"/><ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" stroke-width="1.95"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)" fill="none" stroke="currentColor" stroke-width="1.95"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)" fill="none" stroke="currentColor" stroke-width="1.95"/>',
   next: '<circle cx="12" cy="12" r="9.6" fill="currentColor"/><path d="M8.6 16.2V7.8l9.2 11.4M15.4 7.8v5.2" fill="none" stroke="var(--dish-bg, #ece8df)" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"/>',
-  node: '<polygon points="12,1.8 20.8,6.8 20.8,17.2 12,22.2 3.2,17.2 3.2,6.8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M9.6 9v5.6c0 1.1-.9 1.6-1.8 1M16 10.2c-.6-.5-1.8-.5-2.1.2-.3.6.2 1.2 1.3 1.5 1.1.3 1.5.9 1.2 1.8-.3.8-1.6.9-2.4.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  node: '<polygon points="12,2 20.6,7 20.6,17 12,22 3.4,17 3.4,7" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linejoin="round"/><polygon points="12,6.4 16.8,9.2 16.8,14.8 12,17.6 7.2,14.8 7.2,9.2" fill="currentColor"/><path d="M7.2 9.2L12 12l4.8-2.8M12 12v5.6" fill="none" stroke="var(--dish-bg, #ece8df)" stroke-width="1.45" stroke-linejoin="round"/>',
   express: '<rect x="2.2" y="4.2" width="19.6" height="15.6" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 9h5.2M5.5 12h4M5.5 15h5.2M13.6 9l5 6m0-6l-5 6" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round"/>',
   fastapi: '<circle cx="12" cy="12" r="9.6" fill="currentColor"/><path d="M13.4 5.4L7.4 13.2h4.6l-1.4 5.4 6-7.8H12z" fill="var(--dish-bg, #ece8df)"/>',
   tailwind: '<path d="M4.8 10.4c1.5-3 3.6-3.9 6.2-2.8 1.3.5 2.2 1.6 3.3 1.9 1.7.6 3.4 0 4.9-1.9-1.5 3-3.6 3.9-6.2 2.8-1.3-.5-2.2-1.6-3.3-1.9-1.7-.6-3.4 0-4.9 1.9zm0 6.2c1.5-3 3.6-3.9 6.2-2.8 1.3.5 2.2 1.6 3.3 1.9 1.7.6 3.4 0 4.9-1.9-1.5 3-3.6 3.9-6.2 2.8-1.3-.5-2.2-1.6-3.3-1.9-1.7-.6-3.4 0-4.9 1.9z" fill="currentColor"/>',
@@ -63,11 +61,11 @@ const ICONS = {
   nmap: '<circle cx="12" cy="12" r="8.8" fill="none" stroke="currentColor" stroke-width="2.15"/><circle cx="12" cy="12" r="3.6" fill="currentColor"/><path d="M12 1.6v3.6m0 13.6v3.6M1.6 12h3.6m13.6 0h3.6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
   amass: '<polygon points="12,2.2 21,7.3 21,16.7 12,21.8 3,16.7 3,7.3" fill="none" stroke="currentColor" stroke-width="2.15"/><path d="M12 2.2v19.6M3 7.3l18 9.4M21 7.3L3 16.7" stroke="currentColor" stroke-width="1.75"/>',
   subfinder: '<circle cx="10.8" cy="10.8" r="6.8" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M15.8 15.8L21 21M7.8 10.8h6M10.8 7.8v6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>',
-  httpx: '<path d="M13.8 2.6L5.8 13.2h5.6l-1.2 8.2 8-10.6h-5.6z" fill="currentColor"/>',
+  httpx: '<rect x="2.6" y="4.5" width="18.8" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="2.05"/><path d="M6.2 9.2l3.2 2.8-3.2 2.8M11.6 14.8h5.8" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16.5" cy="9.2" r="1.5" fill="currentColor"/>',
   shodan: '<circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="2.1"/><ellipse cx="12" cy="12" rx="9.2" ry="4" fill="none" stroke="currentColor" stroke-width="1.9"/><circle cx="15.2" cy="9.8" r="2.2" fill="currentColor"/>',
   dig: '<path d="M3.5 6.8h17M3.5 12h17M3.5 17.2h10.5" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/><circle cx="18.2" cy="17.2" r="2.6" fill="currentColor"/>',
   burp: '<polygon points="12,2.2 3.4,7.1 3.4,16.9 12,21.8 20.6,16.9 20.6,7.1" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linejoin="round"/><path d="M9.2 7.5h5.6L11 12h4.4l-5 5.8" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>',
-  zap: '<path d="M14.2 2.2L4.8 13.6h6.6L9.6 21.8l9.6-11.4h-6.6z" fill="currentColor"/>',
+  zap: '<path d="M12 2.4L4.2 5.6v6.2c0 5 3.3 8.5 7.8 10 4.5-1.5 7.8-5 7.8-10V5.6L12 2.4z" fill="currentColor"/><path d="M13.5 6.8L8.4 12.6h3.6l-1.4 4.8 5.1-5.8h-3.6z" fill="var(--dish-bg, #261316)"/>',
   ffuf: '<path d="M3.5 7.6h10.5M3.5 12h14.5M3.5 16.4h8.5M15.8 6.6l4.6 5.4-4.6 5.4" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>',
   sqlmap: '<ellipse cx="10.8" cy="6.2" rx="6.8" ry="2.6" fill="currentColor"/><path d="M4 6.2v10.4c0 1.5 3 2.6 6.8 2.6M4 11.4c0 1.5 3 2.6 6.8 2.6M14.8 12.8l5.4 5.4m0-5.4l-5.4 5.4" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round"/>',
   nuclei: '<circle cx="12" cy="12" r="2.8" fill="currentColor"/><ellipse cx="12" cy="12" rx="9.6" ry="4.2" transform="rotate(35 12 12)" fill="none" stroke="currentColor" stroke-width="2.05"/><ellipse cx="12" cy="12" rx="9.6" ry="4.2" transform="rotate(-35 12 12)" fill="none" stroke="currentColor" stroke-width="2.05"/>',
@@ -95,7 +93,7 @@ const ICONS = {
   autopsy: '<path d="M14.6 4l5.4 5.4L9.4 20H4v-5.4L14.6 4zM12 6.6l5.4 5.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>',
   maltego: '<circle cx="12" cy="5.5" r="2.8" fill="currentColor"/><circle cx="6" cy="17" r="2.8" fill="currentColor"/><circle cx="18" cy="17" r="2.8" fill="currentColor"/><path d="M12 5.5L6 17h12z" fill="none" stroke="currentColor" stroke-width="2.1"/>',
   kali: '<path d="M4 8.2c3.8-4.2 8.8-5.2 14.4-2.8-3.4 1.3-5.8 3-6.8 5.2 3-.6 5.8 0 8.2 2-3.8.2-6.6 1.5-8.4 3.8 2 1.3 4 1.7 6.4 1.5-4.5 2.6-9 2.4-12-1.3-.9-2.4-.2-5 2-6.6-1.5-.4-2.8-1-3.8-1.8z" fill="currentColor"/>',
-  parrot: '<path d="M14.8 3.4L5.6 13.6l6 1.6-2.2 5.4 9.6-10.2-6-1.6z" fill="currentColor"/>',
+  parrot: '<path d="M5 18.5C5.2 11.2 9.4 5.4 15.8 3.6c2.6 0 4.6 1.6 4.8 4-2.1.1-3.4 1-4.1 2.4l3.1 2.1-4.2 1.2c-.8 2.8-3.2 5.4-7.4 6.2L5 18.5z" fill="currentColor"/><circle cx="15.2" cy="7.1" r="1.1" fill="var(--dish-bg, #261316)"/>',
   htb: '<polygon points="12,2.2 20.8,7.2 20.8,16.8 12,21.8 3.2,16.8 3.2,7.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><path d="M3.2 7.2L12 12l8.8-4.8M12 12v9.8" fill="none" stroke="currentColor" stroke-width="2.05"/>',
   thm: '<path d="M6.6 17.5h11.2a3.6 3.6 0 0 0 .4-7.2 5.2 5.2 0 0 0-10-1.3A4.1 4.1 0 0 0 3 13.2a4.3 4.3 0 0 0 3.6 4.3z" fill="none" stroke="currentColor" stroke-width="2.15"/><path d="M9.6 12.6l2.2 2.2 3.8-3.8" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"/>',
   h1: '<path d="M7.2 4v16M14.8 4v16M7.2 12h7.6M14.8 4l3.4 2.8" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>',
@@ -142,13 +140,16 @@ export async function initLoadout() {
   if (!section) return;
 
   const rig = section.querySelector("[data-hanging-kb]");
+  const wallShadow = section.querySelector("[data-kb-shadow]");
   const chassis = section.querySelector("[data-kb-chassis]");
   const caseSvg = section.querySelector("[data-kb-case-svg]");
   const caseLipPath = section.querySelector("[data-kb-case-lip]");
   const caseBodyPath = section.querySelector("[data-kb-case-body]");
+  const caseSeamPath = section.querySelector("[data-kb-case-seam]");
   const caseClipPath = section.querySelector("[data-kb-case-clip]");
   const caseSpecPath = section.querySelector("[data-kb-case-spec]");
   const caseBorderPath = section.querySelector("[data-kb-case-border]");
+  const caseScrewsGroup = section.querySelector("[data-kb-case-screws]");
   const cableSvg = section.querySelector("[data-kb-cables]");
   const mountL = section.querySelector("[data-mount-l]");
   const mountR = section.querySelector("[data-mount-r]");
@@ -160,8 +161,6 @@ export async function initLoadout() {
   const board = section.querySelector("[data-loadout-board]");
   const tipEl = section.querySelector("[data-kb-tip]");
   const pillsWrap = section.querySelector("[data-stack-pills]");
-  const readoutTag = section.querySelector("[data-loadout-tag]");
-  const readoutText = section.querySelector("[data-loadout-oled]");
   const titleEl = section.querySelector("[data-loadout-title]");
   const subEl = section.querySelector("[data-loadout-sub]");
   if (!board) return;
@@ -177,10 +176,11 @@ export async function initLoadout() {
   let activeLayerIdx = 0;
   let letterCursor = {};
   let samBuffer = "";
+  let altKeyRef = null;
 
   // --- Dual-Cable & Single-Cable Pendulum Physics ---
   // State A (isLeftHeld = true): Both Left & Right USB-C power cables connected.
-  // State B (isLeftHeld = false): Left power cable unplugs & recoils; keyboard swings realistically on the Right power cable.
+  // State B (isLeftHeld = false): Left power cable unplugs & swings; keyboard hangs from Right USB-C cable.
   let isLeftHeld = true;
   let yankEnergy = 0;
   let x = 0;
@@ -190,9 +190,9 @@ export async function initLoadout() {
   let ang = 0;
   let vang = 0;
 
-  // Free-hanging unplugged left cable connector physics
+  // Free-hanging unplugged left cable connector physics (preserves natural cable length)
   let freePlugOffsetX = 0;
-  let freePlugOffsetY = 36;
+  let freePlugOffsetY = 72;
   let freePlugVx = 0;
   let freePlugVy = 0;
 
@@ -206,20 +206,18 @@ export async function initLoadout() {
   let startY = 0;
   let suppressClickUntil = 0;
   let portRatio = 0.14;
+  let tipHideTimer = 0;
 
-  function setReadout(badgeText, detailText) {
-    if (readoutTag && badgeText) readoutTag.textContent = badgeText;
-    if (readoutText && detailText) readoutText.textContent = detailText;
-  }
-
-  function showCapTip(cap) {
+  function showCapTip(cap, { autoHideMs = 0 } = {}) {
     if (!tipEl || !chassis || !cap) return;
     const text = cap.dataset.tip;
     if (!text) {
       hideCapTip();
       return;
     }
+    clearTimeout(tipHideTimer);
     tipEl.textContent = text;
+
     let ox = 0;
     let oy = 0;
     let el = cap;
@@ -228,21 +226,52 @@ export async function initLoadout() {
       oy += el.offsetTop;
       el = el.offsetParent;
     }
+
     const W = chassis.offsetWidth || 600;
-    const halfTip = Math.min(72, (tipEl.offsetWidth || 64) * 0.5 + 4);
+    const halfTip = Math.min(76, (tipEl.offsetWidth || 68) * 0.5 + 6);
     const cx = Math.max(halfTip, Math.min(W - halfTip, ox + cap.offsetWidth * 0.5));
-    const cy = oy - 6;
+
+    const inBottomRow = Boolean(cap.closest(".kb-bottom-row"));
+    const firstMatrixRow = board.querySelector(".kb-caps");
+    const inTopRow = cap.classList.contains("kb-mod--esc") || (firstMatrixRow && cap.parentElement === firstMatrixRow);
+
+    let cy = oy - 2;
+    let place = "mid";
+
+    if (inBottomRow) {
+      cy = oy + cap.offsetHeight + 8;
+      place = "below";
+    } else if (inTopRow) {
+      const tabsW = pillsWrap?.offsetWidth || 280;
+      const tabsH = pillsWrap?.offsetHeight || 30;
+      const bezel = parseFloat(getComputedStyle(chassis).paddingTop) || 7;
+      const tabsLeft = W * 0.5 - tabsW * 0.5 - bezel - 6;
+      const tabsRight = W * 0.5 + tabsW * 0.5 + bezel + 6;
+      cy = cx + halfTip > tabsLeft && cx - halfTip < tabsRight ? -tabsH - bezel - 8 : -8;
+      place = "above";
+    } else {
+      // Middle rows: sit cleanly in the inter-row bevel gap so the icon above remains visible
+      cy = oy - 1;
+      place = "mid";
+    }
+
+    tipEl.dataset.place = place;
     tipEl.style.left = `${cx.toFixed(1)}px`;
     tipEl.style.top = `${cy.toFixed(1)}px`;
     tipEl.classList.add("is-visible");
+
+    if (autoHideMs > 0) {
+      tipHideTimer = setTimeout(() => hideCapTip(), autoHideMs);
+    }
   }
 
   function hideCapTip() {
+    clearTimeout(tipHideTimer);
     if (!tipEl) return;
     tipEl.classList.remove("is-visible");
   }
 
-  // Draws the unified one-piece molded plastic keyboard body + subtle tight fillets around the top button slot
+  // Draws the unified one-piece molded plastic keyboard body + inner seam, corner screws & top tab slot
   function updateCaseSvg() {
     if (!chassis || !caseSvg || !pillsWrap) return;
     const W = chassis.offsetWidth;
@@ -251,8 +280,8 @@ export async function initLoadout() {
 
     const cs = getComputedStyle(chassis);
     const bezel = parseFloat(cs.paddingTop) || 7;
-    const padBot = parseFloat(cs.paddingBottom) || 11;
-    const lipH = Math.max(2.5, padBot - bezel);
+    const padBot = parseFloat(cs.paddingBottom) || 14;
+    const lipH = Math.max(4, padBot - bezel);
     const cornerR = Math.max(9, Math.min(15, bezel * 2.1));
     const topR = Math.max(7, Math.min(9.5, bezel * 1.35));
 
@@ -263,12 +292,10 @@ export async function initLoadout() {
     const hx2 = W * 0.5 + tabsW * 0.5 + bezel;
     const hy1 = -tabsH - bezel;
 
-    // Tight, crisp industrial fillet at the two shoulder corners (much smaller & cleaner radius)
     const filletH = Math.min(7.5, Math.max(4.5, -hy1 - topR - 2));
     const maxFilletW = Math.max(3.5, (hx1 - cornerR) * 0.25);
     const filletW = Math.min(8.5, maxFilletW);
 
-    // Center Left & Right USB-C ports cleanly on the flat left/right shoulders at every resolution
     const shoulderSpan = Math.max(16, hx1 - filletW - cornerR);
     portRatio = Math.min(0.14, Math.max(0.065, (cornerR + shoulderSpan * 0.46) / W));
     if (portL) portL.style.left = `${(portRatio * 100).toFixed(2)}%`;
@@ -286,14 +313,12 @@ export async function initLoadout() {
       return [
         `M ${f(cornerR)} 0`,
         `L ${f(hx1 - filletW)} 0`,
-        // Subtle, tight concave corner softening at left shoulder
         `Q ${f(hx1)} 0, ${f(hx1)} ${f(-filletH)}`,
         `L ${f(hx1)} ${f(hy1 + topR)}`,
         `Q ${f(hx1)} ${f(hy1)}, ${f(hx1 + topR)} ${f(hy1)}`,
         `L ${f(hx2 - topR)} ${f(hy1)}`,
         `Q ${f(hx2)} ${f(hy1)}, ${f(hx2)} ${f(hy1 + topR)}`,
         `L ${f(hx2)} ${f(-filletH)}`,
-        // Subtle, tight concave corner softening at right shoulder
         `Q ${f(hx2)} 0, ${f(hx2 + filletW)} 0`,
         `L ${f(W - cornerR)} 0`,
         `Q ${f(W)} 0, ${f(W)} ${f(cornerR)}`,
@@ -326,21 +351,59 @@ export async function initLoadout() {
       ].join(" ");
     };
 
+    const seamY = H - lipH;
+    const seamPath = `M 2 ${(seamY - 3).toFixed(2)} Q 2 ${seamY.toFixed(2)} ${cornerR.toFixed(2)} ${seamY.toFixed(2)} L ${(W - cornerR).toFixed(2)} ${seamY.toFixed(2)} Q ${(W - 2).toFixed(2)} ${seamY.toFixed(2)} ${(W - 2).toFixed(2)} ${(seamY - 3).toFixed(2)}`;
+
     const fullPath = buildClosedCase(H);
-    const bodyPath = buildClosedCase(H - lipH);
+    const bodyPath = buildClosedCase(seamY);
     const specPath = buildTopSpec();
 
     if (caseLipPath) caseLipPath.setAttribute("d", fullPath);
     if (caseBodyPath) caseBodyPath.setAttribute("d", bodyPath);
+    if (caseSeamPath) caseSeamPath.setAttribute("d", seamPath);
     if (caseClipPath) caseClipPath.setAttribute("d", bodyPath);
     if (caseSpecPath) caseSpecPath.setAttribute("d", specPath);
     if (caseBorderPath) caseBorderPath.setAttribute("d", fullPath);
+
+    if (caseScrewsGroup) {
+      const insetX = Math.max(4.2, bezel * 0.62);
+      const insetBot = seamY - Math.max(4.5, bezel * 0.65);
+      const pts = [
+        [insetX, Math.max(4.5, bezel * 0.62)],
+        [W - insetX, Math.max(4.5, bezel * 0.62)],
+        [insetX, insetBot],
+        [W - insetX, insetBot],
+      ];
+      const sr = Math.max(1.5, Math.min(2.2, bezel * 0.28));
+      caseScrewsGroup.innerHTML = pts
+        .map(
+          ([sx, sy]) =>
+            `<circle class="kb-screw-ring" cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" r="${sr.toFixed(2)}"/><path class="kb-screw-slot" d="M ${(sx - sr * 0.55).toFixed(1)} ${(sy - sr * 0.55).toFixed(1)} L ${(sx + sr * 0.55).toFixed(1)} ${(sy + sr * 0.55).toFixed(1)}"/>`
+        )
+        .join("");
+    }
+  }
+
+  function getSingleRest() {
+    const narrow = window.innerWidth < 760;
+    return {
+      restX: narrow ? -16 : 10,
+      restY: narrow ? 20 : 28,
+      restAng: narrow ? -0.19 : -0.31,
+    };
   }
 
   function drawHanging() {
     if (!chassis) return;
     const deg = (ang * 180) / Math.PI;
     chassis.style.transform = `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) rotate(${deg.toFixed(2)}deg)`;
+
+    if (wallShadow) {
+      const shX = x * 0.72 + 4 - ang * 18;
+      const shY = y * 0.78 + 20 + Math.abs(ang) * 14;
+      const shScale = 0.96 + Math.min(0.06, Math.abs(y) * 0.0012);
+      wallShadow.style.transform = `translate3d(${shX.toFixed(1)}px, ${shY.toFixed(1)}px, 0) rotate(${(deg * 0.88).toFixed(2)}deg) scale(${shScale.toFixed(3)})`;
+    }
 
     if (!cableSvg || !rig) return;
     const svgRect = cableSvg.getBoundingClientRect();
@@ -350,17 +413,12 @@ export async function initLoadout() {
 
     const leftAnchorX = w * portRatio;
     const rightAnchorX = w * (1 - portRatio);
+    const grommetY = 8;
 
-    if (mountL) {
-      mountL.setAttribute("x", (leftAnchorX - 12).toFixed(1));
-      mountL.setAttribute("y", "0");
-    }
-    if (mountR) {
-      mountR.setAttribute("x", (rightAnchorX - 12).toFixed(1));
-      mountR.setAttribute("y", "0");
-    }
+    if (mountL) mountL.setAttribute("transform", `translate(${leftAnchorX.toFixed(1)}, 0)`);
+    if (mountR) mountR.setAttribute("transform", `translate(${rightAnchorX.toFixed(1)}, 0)`);
 
-    // 1. Measure exact real-time pixel position of the Right USB-C plug tip so it NEVER detaches!
+    // 1. Right Power Cable: measure real-time USB-C plug tip + align Bezier tangent to plug tilt angle
     let rightPortX = rightAnchorX;
     let rightPortY = 74 + y;
     if (usbTipR && svgRect.width > 0) {
@@ -369,12 +427,17 @@ export async function initLoadout() {
       rightPortY = tipR.top + tipR.height * 0.5 - svgRect.top + 2;
     }
 
-    const rMidX = (rightAnchorX + rightPortX) * 0.5 + vx * 0.45;
-    const rMidY = (4 + rightPortY) * 0.54;
-    const dR = `M ${rightAnchorX.toFixed(1)} 4 C ${rightAnchorX.toFixed(1)} ${rMidY.toFixed(1)}, ${rMidX.toFixed(1)} ${rMidY.toFixed(1)}, ${rightPortX.toFixed(1)} ${rightPortY.toFixed(1)}`;
+    const rSpan = Math.max(24, rightPortY - grommetY);
+    const rSag = rSpan * 0.48;
+    const rRestSlack = isLeftHeld ? -2.2 : 0;
+    const rc1x = rightAnchorX + rRestSlack + vx * 0.35;
+    const rc1y = grommetY + rSag * 0.85;
+    const rc2x = rightPortX + Math.sin(ang) * rSag + vx * 0.28;
+    const rc2y = rightPortY - Math.cos(ang) * rSag;
+    const dR = `M ${rightAnchorX.toFixed(1)} ${grommetY} C ${rc1x.toFixed(1)} ${rc1y.toFixed(1)}, ${rc2x.toFixed(1)} ${rc2y.toFixed(1)}, ${rightPortX.toFixed(1)} ${rightPortY.toFixed(1)}`;
     cableSvg.querySelectorAll("[data-cable-r]").forEach((p) => p.setAttribute("d", dR));
 
-    // 2. Left Power Cable: Connected to Left USB-C plug when attached, or hanging loose with unplugged USB-C tip when detached
+    // 2. Left Power Cable: connected to Left USB-C plug when attached, or hanging at full cable length when unplugged
     let leftPortX = leftAnchorX + freePlugOffsetX;
     let leftPortY = freePlugOffsetY;
     if (isLeftHeld && usbTipL && svgRect.width > 0) {
@@ -383,16 +446,24 @@ export async function initLoadout() {
       leftPortY = tipL.top + tipL.height * 0.5 - svgRect.top + 2;
     }
 
-    const lMidX = (leftAnchorX + leftPortX) * 0.5 + (isLeftHeld ? vx * 0.45 : freePlugVx * 0.6);
-    const lMidY = (4 + leftPortY) * 0.54;
-    const dL = `M ${leftAnchorX.toFixed(1)} 4 C ${leftAnchorX.toFixed(1)} ${lMidY.toFixed(1)}, ${lMidX.toFixed(1)} ${lMidY.toFixed(1)}, ${leftPortX.toFixed(1)} ${leftPortY.toFixed(1)}`;
+    const lSpan = Math.max(24, leftPortY - grommetY);
+    const lSag = lSpan * 0.48;
+    const plugAngleRad = isLeftHeld
+      ? ang
+      : Math.max(-0.48, Math.min(0.48, -freePlugOffsetX * 0.014 - freePlugVx * 0.045));
+    const lRestSlack = isLeftHeld ? 2.2 : -freePlugOffsetX * 0.15;
+    const lc1x = leftAnchorX + lRestSlack + (isLeftHeld ? vx * 0.35 : freePlugVx * 0.45);
+    const lc1y = grommetY + lSag * 0.85;
+    const lc2x = leftPortX + Math.sin(plugAngleRad) * lSag * 0.85 + (isLeftHeld ? vx * 0.25 : freePlugVx * 0.35);
+    const lc2y = leftPortY - Math.cos(plugAngleRad) * lSag * 0.85;
+    const dL = `M ${leftAnchorX.toFixed(1)} ${grommetY} C ${lc1x.toFixed(1)} ${lc1y.toFixed(1)}, ${lc2x.toFixed(1)} ${lc2y.toFixed(1)}, ${leftPortX.toFixed(1)} ${leftPortY.toFixed(1)}`;
     cableSvg.querySelectorAll("[data-cable-l]").forEach((p) => p.setAttribute("d", dL));
 
     if (freePlugL) {
-      const plugAngle = isLeftHeld ? deg : Math.max(-28, Math.min(28, -freePlugOffsetX * 0.65 - freePlugVx * 2.2));
+      const plugDeg = (plugAngleRad * 180) / Math.PI;
       freePlugL.setAttribute(
         "transform",
-        `translate(${leftPortX.toFixed(1)}, ${leftPortY.toFixed(1)}) rotate(${plugAngle.toFixed(1)})`
+        `translate(${leftPortX.toFixed(1)}, ${leftPortY.toFixed(1)}) rotate(${plugDeg.toFixed(1)})`
       );
     }
   }
@@ -402,18 +473,18 @@ export async function initLoadout() {
     isLeftHeld = false;
     yankEnergy = 0;
     rig?.classList.add("is-left-released");
+    if (altKeyRef) altKeyRef.dataset.tip = "Plug Cable";
     sound.play("flip");
 
-    // Initialize the unplugged left cable tip at the exact port position and recoil it upward!
-    freePlugOffsetX = x * 0.6;
-    freePlugOffsetY = Math.max(28, 66 + y);
-    freePlugVx = -2.6;
-    freePlugVy = -8.5;
+    // Preserve realistic full cable length when detached: recoil briefly, then hang down naturally
+    freePlugOffsetX = x * 0.55;
+    freePlugOffsetY = Math.max(46, 70 + y);
+    freePlugVx = -3.8;
+    freePlugVy = -5.2;
 
-    // Realistic downward drop & counter-clockwise torque as the left support vanishes
-    vy += 6.4;
-    vx += 2.2;
-    vang -= 0.052;
+    vy += 6.2;
+    vx += 2.0;
+    vang -= 0.048;
     if (!raf) raf = requestAnimationFrame(stepPhysics);
   }
 
@@ -422,9 +493,10 @@ export async function initLoadout() {
     isLeftHeld = true;
     yankEnergy = 0;
     rig?.classList.remove("is-left-released");
+    if (altKeyRef) altKeyRef.dataset.tip = "Unplug Cable";
     sound.play("auth");
-    vy -= 4.2;
-    vang += 0.038;
+    vy -= 4.0;
+    vang += 0.036;
     if (!raf) raf = requestAnimationFrame(stepPhysics);
   }
 
@@ -437,21 +509,20 @@ export async function initLoadout() {
   function stepPhysics() {
     raf = 0;
 
-    // Step the loose left cable plug whenever unplugged
+    // Step the loose left cable plug whenever unplugged (natural full-length pendulum hang)
     if (!isLeftHeld) {
-      const restPlugX = -2;
-      const restPlugY = 34;
-      const pfx = (restPlugX - freePlugOffsetX) * 0.12;
-      const pfy = (restPlugY - freePlugOffsetY) * 0.14;
-      freePlugVx = (freePlugVx + pfx) * 0.86;
-      freePlugVy = (freePlugVy + pfy) * 0.85;
+      const restPlugX = -5;
+      const restPlugY = 74;
+      const pfx = (restPlugX - freePlugOffsetX) * 0.095;
+      const pfy = (restPlugY - freePlugOffsetY) * 0.115;
+      freePlugVx = (freePlugVx + pfx) * 0.885;
+      freePlugVy = (freePlugVy + pfy) * 0.87;
       freePlugOffsetX += freePlugVx;
       freePlugOffsetY += freePlugVy;
     }
 
     if (!dragging) {
       if (isLeftHeld) {
-        // Dual-Cable Coupled Spring-Damper Physics
         const fx = -x * 0.11;
         const fy = -y * 0.135;
         vx = (vx + fx) * 0.84;
@@ -464,14 +535,7 @@ export async function initLoadout() {
         ang += vang;
         yankEnergy *= 0.92;
       } else {
-        // Single-Cable Rigid-Body Pendulum Physics (Suspended from Right USB-C Cable at 86%):
-        // Center of mass hangs to the left of the right cable, producing natural pendulum oscillations
-        // coupled with horizontal sway of the right tether.
-        const narrow = window.innerWidth < 760;
-        const restX = narrow ? -28 : 11;
-        const restY = narrow ? 20 : 28;
-        const restAng = narrow ? -0.21 : -0.35;
-
+        const { restX, restY, restAng } = getSingleRest();
         const swingDelta = ang - restAng;
         const fx = (restX - x) * 0.075 + Math.sin(swingDelta) * 1.45;
         const fy = (restY - y) * 0.088 + Math.abs(Math.sin(swingDelta)) * 0.45;
@@ -480,7 +544,6 @@ export async function initLoadout() {
         x += vx;
         y += vy;
 
-        // Gravitational restoring torque + translational inertia coupling
         const torque = -Math.sin(swingDelta) * 0.092 - vx * 0.0024;
         vang = (vang + torque) * 0.915;
         ang += vang;
@@ -489,10 +552,13 @@ export async function initLoadout() {
 
     drawHanging();
 
-    const restX = isLeftHeld ? 0 : 11;
-    const restY = isLeftHeld ? 0 : 28;
-    const restAng = isLeftHeld ? 0 : -0.35;
-    const plugEnergy = isLeftHeld ? 0 : Math.abs(freePlugVx) + Math.abs(freePlugVy);
+    const single = getSingleRest();
+    const restX = isLeftHeld ? 0 : single.restX;
+    const restY = isLeftHeld ? 0 : single.restY;
+    const restAng = isLeftHeld ? 0 : single.restAng;
+    const plugEnergy = isLeftHeld
+      ? 0
+      : Math.abs(freePlugVx) + Math.abs(freePlugVy) + Math.abs(freePlugOffsetX + 5) * 0.02 + Math.abs(freePlugOffsetY - 74) * 0.02;
     const energy =
       plugEnergy +
       Math.abs(vx) +
@@ -508,6 +574,10 @@ export async function initLoadout() {
       x = restX;
       y = restY;
       ang = restAng;
+      if (!isLeftHeld) {
+        freePlugOffsetX = -5;
+        freePlugOffsetY = 74;
+      }
       drawHanging();
     }
   }
@@ -529,7 +599,12 @@ export async function initLoadout() {
     if (!raf) raf = requestAnimationFrame(stepPhysics);
   }
 
+  let lastPointerType = "mouse";
+
   if (board) {
+    board.addEventListener("pointerdown", (e) => {
+      lastPointerType = e.pointerType || "mouse";
+    });
     board.addEventListener("pointerover", (e) => {
       if (dragging || e.pointerType === "touch") return;
       const cap = e.target.closest(".kb-cap[data-tip]");
@@ -745,26 +820,17 @@ export async function initLoadout() {
     cap._layerMod = layerMod;
     cap._colRatio = colRatio;
 
-    const inspect = (fromClick = false) => {
-      board.querySelectorAll(".kb-cap--icon[data-inspected='true']").forEach((el) => {
-        delete el.dataset.inspected;
-      });
-      cap.dataset.inspected = "true";
-      const it = cap._item || item;
-      const lm = cap._layerMod || layerMod;
-      const tn = it.tier === "daily" ? "Daily Driver" : it.tier === "proficient" ? "Proficient" : "Familiar";
-      setReadout(`${lm} // ${it.short}`, `${it.name} · ${tn} — ${it.detail || ""}`);
-      if (fromClick) {
-        sound.play("down");
-        setTimeout(() => sound.play("up"), 70);
-        pulseKeyDown(cap);
-        impulseKeyboard(cap._colRatio ?? colRatio, 2.8);
-      }
-    };
-
-    cap.addEventListener("pointerenter", () => inspect(false));
-    cap.addEventListener("focus", () => inspect(false));
-    cap.addEventListener("click", () => inspect(true));
+    cap.addEventListener("click", (e) => {
+      sound.play("down");
+      setTimeout(() => sound.play("up"), 70);
+      pulseKeyDown(cap);
+      impulseKeyboard(cap._colRatio ?? colRatio, 2.8);
+      const isTouchLike =
+        e.pointerType === "touch" ||
+        lastPointerType === "touch" ||
+        (typeof matchMedia === "function" && matchMedia("(hover: none)").matches);
+      if (isTouchLike) showCapTip(cap, { autoHideMs: 1800 });
+    });
     return cap;
   }
 
@@ -774,7 +840,8 @@ export async function initLoadout() {
     cap.type = "button";
     cap.className = `kb-cap kb-cap--sam ${isWideEnter ? "kb-cap--enter" : ""}`;
     cap.dataset.samKey = item.key;
-    cap.dataset.tip = isWideEnter ? "Flip Mode" : `Key ${item.label}`;
+    // Only Enter has a hidden action label; printed S-A-M-U-B-I-N letters shouldn't spawn noisy tooltips
+    if (isWideEnter) cap.dataset.tip = "Flip Mode";
     cap.setAttribute("aria-label", item.role);
     cap.innerHTML = `
       <span class="kb-cap-dish">
@@ -784,10 +851,6 @@ export async function initLoadout() {
 
     cap._layerMod = layerMod;
 
-    cap.addEventListener("pointerenter", () => {
-      const lm = cap._layerMod || layerMod;
-      setReadout(`${lm} // KEY [${item.label}]`, item.role);
-    });
     cap.addEventListener("click", () => {
       sound.play("down");
       setTimeout(() => sound.play("up"), 75);
@@ -850,7 +913,6 @@ export async function initLoadout() {
     renderPills(layers);
 
     const allTwelveTech = [...(currentLayer.topRow || []), ...(currentLayer.bottomRow || [])];
-    const firstTool = allTwelveTech[0];
 
     const row1Spec = [
       { type: "tech", item: allTwelveTech[0], cream: false },
@@ -889,7 +951,14 @@ export async function initLoadout() {
       const modBtns = board.querySelectorAll(".kb-layer-bank .kb-mod");
       modBtns.forEach((btn, idx) => {
         const isSelected = idx === activeLayerIdx;
+        const targetLayer = layers[idx];
         btn.setAttribute("aria-pressed", String(isSelected));
+        if (targetLayer) {
+          btn.dataset.tip = targetLayer.label;
+          btn.setAttribute("aria-label", `Switch keyboard to ${targetLayer.label}`);
+          const idxEl = btn.querySelector(".kb-mod-idx");
+          if (idxEl) idxEl.textContent = targetLayer.code;
+        }
         btn.classList.remove("is-punching");
         if (isSelected && flipping && !reduceMotion) {
           void btn.offsetWidth;
@@ -898,12 +967,6 @@ export async function initLoadout() {
           flipTimers.push(pTimer);
         }
       });
-
-      // Update OLED readout to new layer's first tool
-      if (firstTool) {
-        const tn = firstTool.tier === "daily" ? "Daily Driver" : firstTool.tier === "proficient" ? "Proficient" : "Familiar";
-        setReadout(`${currentLayer.mod} // ${firstTool.short}`, `${firstTool.name} · ${tn} — ${firstTool.detail || ""}`);
-      }
 
       const rowEls = existingMatrix.querySelectorAll(".kb-caps");
       rowSpecs.forEach((spec, rIdx) => {
@@ -996,7 +1059,7 @@ export async function initLoadout() {
     const topGrid = document.createElement("div");
     topGrid.className = "kb-top-grid";
 
-    // Left Bank: 3 Clean Mechanical Modifier Keys (Esc, Tab, Shift)
+    // Left Bank: 3 Clean Mechanical Modifier Keys (Esc, Tab, Shift) with subtle layer index (01, 02, 03)
     const leftBank = document.createElement("div");
     leftBank.className = "kb-layer-bank";
     const modKeyHints = ["Esc", "Tab", "Shift"];
@@ -1014,6 +1077,7 @@ export async function initLoadout() {
             <span class="kb-mod-led" aria-hidden="true"></span>
             <span class="kb-mod-code">${modKeyHints[idx]}</span>
           </span>
+          <span class="kb-mod-idx">${layer.code}</span>
         </span>
       `;
       modBtn.addEventListener("click", () => {
@@ -1090,16 +1154,21 @@ export async function initLoadout() {
     altKey.className = "kb-cap kb-cap--cream";
     altKey.dataset.tip = isLeftHeld ? "Unplug Cable" : "Plug Cable";
     altKey.innerHTML = `<span class="kb-cap-dish"><span class="kb-bot-main">Alt</span></span>`;
-    altKey.addEventListener("click", () => {
+    altKeyRef = altKey;
+    altKey.addEventListener("click", (e) => {
       pulseKeyDown(altKey);
       if (isLeftHeld) {
         releaseLeftHand();
       } else {
         regrabLeftHand();
       }
+      const isTouchLike = e.pointerType === "touch" || lastPointerType === "touch";
+      if (isTouchLike || tipEl?.classList.contains("is-visible")) {
+        showCapTip(altKey, isTouchLike ? { autoHideMs: 1600 } : undefined);
+      }
     });
 
-    // 4. Center Orange Sculpted Spacebar (ONLY says "Space"!)
+    // 4. Center Orange Sculpted Spacebar (ONLY says "Space")
     const spaceKey = document.createElement("button");
     spaceKey.type = "button";
     spaceKey.className = "kb-cap kb-cap--sam kb-cap--space";
@@ -1110,15 +1179,9 @@ export async function initLoadout() {
       </span>
     `;
     spaceKey.addEventListener("click", () => {
-      sound.play("down");
-      setTimeout(() => sound.play("up"), 75);
+      sound.play("space");
       pulseKeyDown(spaceKey);
-      impulseKeyboard(0, 3.6);
-      const icons = [...matrixEl.querySelectorAll(".kb-cap--icon")];
-      if (!icons.length) return;
-      const curIdx = icons.findIndex((el) => el.dataset.inspected === "true");
-      const next = icons[(curIdx + 1) % icons.length];
-      next?.click();
+      impulseKeyboard(0, 3.8);
     });
 
     // 5. Wide Cream Key ("SAMUBIN")
@@ -1157,14 +1220,6 @@ export async function initLoadout() {
 
     board.appendChild(topGrid);
     board.appendChild(bottomRow);
-
-    const firstCap = matrixEl.querySelector(".kb-cap--icon");
-    if (firstCap && firstTool) {
-      firstCap.dataset.inspected = "true";
-      const tierName =
-        firstTool.tier === "daily" ? "Daily Driver" : firstTool.tier === "proficient" ? "Proficient" : "Familiar";
-      setReadout(`${currentLayer.mod} // ${firstTool.short}`, `${firstTool.name} · ${tierName} — ${firstTool.detail}`);
-    }
 
     requestAnimationFrame(() => {
       updateCaseSvg();

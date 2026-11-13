@@ -72,6 +72,7 @@ html[data-mode="dev"] {
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --morph-t: 180ms var(--ease-out);
   --torch-x: 50vw;
   --torch-y: 35vh;
 
@@ -164,8 +165,8 @@ body {
   color: var(--ink);
   overflow-x: clip;
   transition:
-    background-color 480ms var(--ease-out),
-    color 360ms var(--ease-out);
+    background-color var(--morph-t),
+    color var(--morph-t);
 }
 
 main {
@@ -307,7 +308,7 @@ h2,
 h3 {
   color: var(--ink);
   text-wrap: balance;
-  transition: font-stretch 520ms var(--ease-out), color 320ms var(--ease-out);
+  transition: font-stretch 480ms var(--ease-out), color var(--morph-t);
 }
 
 h1,
@@ -365,7 +366,10 @@ p {
   z-index: 45;
   background: var(--ground);
   border-bottom: 1px solid var(--line);
-  transition: background-color 360ms var(--ease-out), border-color 360ms var(--ease-out);
+  transition:
+    background-color var(--morph-t),
+    border-color var(--morph-t),
+    color var(--morph-t);
 }
 
 .site-header .wrap {
@@ -380,11 +384,13 @@ p {
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
+  color: var(--ink);
   font-weight: 800;
   font-stretch: var(--stretch-head);
   font-size: 1.05rem;
   letter-spacing: -0.02em;
   text-decoration: none;
+  transition: font-stretch 480ms var(--ease-out), color var(--morph-t);
 }
 
 .brand-led {
@@ -393,6 +399,7 @@ p {
   border-radius: 50%;
   background: var(--accent);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  transition: background-color var(--morph-t);
 }
 
 .site-nav {
@@ -408,7 +415,7 @@ p {
   font-size: 0.95rem;
   color: var(--ink-2);
   text-decoration: none;
-  transition: color 150ms, background-color 150ms;
+  transition: color var(--morph-t), background-color 150ms var(--ease-out);
 }
 
 .site-nav a:hover {
@@ -785,7 +792,9 @@ kbd {
 .hero {
   position: relative;
   padding: 52px 0 44px;
+  background-color: var(--ground);
   border-bottom: 1px solid var(--line);
+  transition: background-color var(--morph-t), border-color var(--morph-t);
 }
 
 .hero-grid {
@@ -810,6 +819,7 @@ kbd {
   color: var(--accent-text);
   text-wrap: balance;
   margin-bottom: 0.9rem;
+  transition: color var(--morph-t);
 }
 
 .hero-lead {
@@ -818,12 +828,14 @@ kbd {
   line-height: 1.62;
   margin-bottom: 1.75rem;
   max-width: 64ch;
+  transition: color var(--morph-t);
 }
 
 .hero-note {
   margin-top: 1.35rem;
   font-size: 0.88rem;
   color: var(--ink-3);
+  transition: color var(--morph-t);
 }
 
 /* Avatar Stage Column */
@@ -847,7 +859,7 @@ kbd {
   place-items: center;
   overflow: hidden;
   user-select: none;
-  transition: background-color 420ms var(--ease-out), border-color 420ms var(--ease-out);
+  transition: background-color var(--morph-t), border-color var(--morph-t);
 }
 
 /* Subtle anodized studio grid inside stage */
@@ -1298,11 +1310,13 @@ html[data-mode="hack"] .cap--accent {
 /* ---------- 10. Signature "Loadout / Arsenal" Mechanical Keyboard Section ---------- */
 .section {
   padding: 72px 0;
+  background-color: var(--ground);
   border-bottom: 1px solid var(--line);
+  transition: background-color var(--morph-t), border-color var(--morph-t);
 }
 
 .section-alt {
-  background: var(--ground-alt);
+  background-color: var(--ground-alt);
 }
 
 .section-head {
@@ -1318,6 +1332,7 @@ html[data-mode="hack"] .cap--accent {
   color: var(--ink-2);
   font-size: 1.04rem;
   max-width: 62ch;
+  transition: color var(--morph-t);
 }
 
 /* Recessed Upper Slot for Stack Layer Buttons (Molded Inside the Unified One-Piece Plastic Case) */
@@ -1423,6 +1438,26 @@ html[data-mode="hack"] .stack-pill[aria-selected="true"] {
   padding-bottom: clamp(78px, 14vw, 118px);
 }
 
+.kb-wall-shadow {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: clamp(64px, 10vw, 84px);
+  bottom: clamp(78px, 14vw, 118px);
+  border-radius: 22px;
+  background: radial-gradient(ellipse at 50% 42%, rgba(15, 17, 22, 0.34) 0%, rgba(15, 17, 22, 0.16) 66%, transparent 100%);
+  filter: blur(18px);
+  transform-origin: 86% 0;
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+}
+
+html[data-mode="hack"] .kb-wall-shadow {
+  background: radial-gradient(ellipse at 50% 42%, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.5) 68%, transparent 100%);
+  filter: blur(22px);
+}
+
 .kb-cables {
   position: absolute;
   top: 0;
@@ -1434,10 +1469,52 @@ html[data-mode="hack"] .stack-pill[aria-selected="true"] {
   z-index: 1;
 }
 
-.power-mount {
-  fill: #2d3139;
+.kb-cables .cable-body {
+  stroke-width: 7.5px;
+}
+
+.kb-cables .cable-braid {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 5.2px;
+  stroke-dasharray: 2.2 4.4;
+  stroke-linecap: butt;
+}
+
+html[data-mode="hack"] .kb-cables .cable-braid {
+  stroke: rgba(220, 68, 58, 0.22);
+}
+
+.power-mount-plate {
+  fill: #2f343d;
   stroke: rgba(0, 0, 0, 0.45);
-  stroke-width: 1.5px;
+  stroke-width: 1.25px;
+}
+
+.power-mount-screw {
+  fill: #8d94a1;
+  stroke: rgba(0, 0, 0, 0.5);
+  stroke-width: 0.7px;
+}
+
+.power-mount-collar {
+  fill: #181a20;
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 0.8px;
+}
+
+html[data-mode="hack"] .power-mount-plate {
+  fill: #261215;
+  stroke: rgba(255, 95, 85, 0.22);
+}
+
+html[data-mode="hack"] .power-mount-screw {
+  fill: #6a3d42;
+}
+
+html[data-mode="hack"] .power-mount-collar {
+  fill: #0d0607;
+  stroke: rgba(255, 95, 85, 0.18);
 }
 
 /* Unplugged Left USB-C Connector Tip at the end of the loose left cable */
@@ -1469,6 +1546,16 @@ html[data-mode="hack"] .stack-pill[aria-selected="true"] {
   stroke-width: 1px;
 }
 
+.free-usb-led {
+  fill: #475569;
+  opacity: 0.55;
+}
+
+html[data-mode="hack"] .free-usb-led {
+  fill: #59262a;
+  opacity: 0.65;
+}
+
 .free-usb-pin {
   fill: #d4af37;
   stroke: #382f10;
@@ -1479,7 +1566,7 @@ html[data-mode="hack"] .stack-pill[aria-selected="true"] {
 .kb-shell {
   position: relative;
   z-index: 2;
-  padding: clamp(4.5px, 0.9vw, 7px) clamp(4.5px, 0.9vw, 7px) clamp(7.5px, 1.4vw, 11px);
+  padding: clamp(5px, 0.9vw, 8px) clamp(5px, 0.9vw, 8px) clamp(10px, 1.9vw, 15px);
   border-radius: 15px;
   background: transparent;
   border: 0;
@@ -1504,15 +1591,15 @@ html[data-mode="hack"] .stack-pill[aria-selected="true"] {
   overflow: visible;
   pointer-events: none;
   z-index: 1;
-  filter: drop-shadow(0 22px 26px rgba(0, 0, 0, 0.32)) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.26));
 }
 
 html[data-mode="hack"] .kb-case-svg {
-  filter: drop-shadow(0 26px 32px rgba(0, 0, 0, 0.72)) drop-shadow(0 8px 14px rgba(0, 0, 0, 0.45));
+  filter: drop-shadow(0 5px 8px rgba(0, 0, 0, 0.65));
 }
 
 .kb-case-lip {
-  fill: #9c978b;
+  fill: #989285;
 }
 
 html[data-mode="hack"] .kb-case-lip {
@@ -1525,6 +1612,17 @@ html[data-mode="hack"] .kb-case-lip {
 
 html[data-mode="hack"] .kb-case-body {
   fill: url(#kbCaseGradHack);
+}
+
+.kb-case-seam {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.22);
+  stroke-width: 1.15px;
+  stroke-linejoin: round;
+}
+
+html[data-mode="hack"] .kb-case-seam {
+  stroke: rgba(255, 95, 85, 0.16);
 }
 
 .kb-case-spec {
@@ -1550,6 +1648,28 @@ html[data-mode="hack"] .kb-case-border {
   stroke: rgba(229, 57, 45, 0.36);
 }
 
+.kb-screw-ring {
+  fill: #b4afa4;
+  stroke: rgba(0, 0, 0, 0.34);
+  stroke-width: 0.85px;
+}
+
+.kb-screw-slot {
+  fill: none;
+  stroke: rgba(24, 26, 30, 0.68);
+  stroke-width: 1.05px;
+  stroke-linecap: round;
+}
+
+html[data-mode="hack"] .kb-screw-ring {
+  fill: #321a1d;
+  stroke: rgba(255, 95, 85, 0.28);
+}
+
+html[data-mode="hack"] .kb-screw-slot {
+  stroke: rgba(255, 140, 130, 0.42);
+}
+
 /* Dual Left & Right Metal USB-C Power Ports & Connectors */
 .kb-usb-port {
   position: absolute;
@@ -1572,12 +1692,25 @@ html[data-mode="hack"] .kb-case-border {
 
 .kb-usb-socket {
   position: absolute;
-  top: -4px;
-  width: 26px;
-  height: 5px;
-  border-radius: 3px 3px 0 0;
-  background: #20232a;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  top: -6px;
+  width: 28px;
+  height: 8px;
+  border-radius: 3.5px 3.5px 1px 1px;
+  background: #0d0f13;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow:
+    inset 0 3px 4px rgba(0, 0, 0, 0.95),
+    0 1px 0 rgba(255, 255, 255, 0.35);
+  display: grid;
+  place-items: center;
+}
+
+.kb-usb-socket-tongue {
+  width: 14px;
+  height: 2px;
+  border-radius: 1px;
+  background: #c8a234;
+  opacity: 0.72;
 }
 
 .kb-usb-plug {
@@ -1635,26 +1768,31 @@ html[data-mode="hack"] .usb-led {
   background: var(--accent);
 }
 
-/* Deep Dark Recessed Switch Plate Cavity (4 Rows Total: Preserves Exact Layout Across All Screen Sizes) */
+/* Deep Dark Recessed Brushed Switch Plate Cavity (4 Rows Total: Preserves Exact Layout Across All Screen Sizes) */
 .kb-plate {
   position: relative;
   z-index: 3;
-  padding: clamp(3px, 0.75vw, 6px);
+  padding: clamp(4px, 0.8vw, 6.5px);
   border-radius: clamp(6px, 1.3vw, 10px);
-  background: #1a1c20;
+  background: linear-gradient(180deg, #21242b 0%, #16181d 68%, #111317 100%);
+  border: 1px solid rgba(0, 0, 0, 0.42);
   box-shadow:
-    inset 0 3px 8px rgba(0, 0, 0, 0.88),
-    0 1px 0 rgba(255, 255, 255, 0.45);
+    inset 0 4px 10px rgba(0, 0, 0, 0.9),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.48);
   display: flex;
   flex-direction: column;
-  gap: clamp(2.5px, 0.65vw, 5px);
+  gap: clamp(3px, 0.65vw, 5px);
   perspective: 1100px;
+  transition: background-color var(--morph-t), border-color var(--morph-t);
 }
 
 html[data-mode="hack"] .kb-plate {
-  background: #080405;
+  background: linear-gradient(180deg, #0f0708 0%, #070304 75%, #050202 100%);
+  border-color: rgba(255, 95, 85, 0.14);
   box-shadow:
-    inset 0 3px 8px rgba(0, 0, 0, 0.95),
+    inset 0 4px 10px rgba(0, 0, 0, 0.96),
+    inset 0 -1px 0 rgba(255, 95, 85, 0.1),
     0 1px 0 rgba(255, 110, 99, 0.14);
 }
 
@@ -1788,7 +1926,7 @@ html[data-mode="hack"] .kb-plate {
    - Inner .kb-cap-dish forms the recessed concave top surface with icon + tech name
    ========================================================================== */
 .kb-cap {
-  /* Default Cool Machined Grey Keycap (like Q W E R T Y alphas in the reference photo) */
+  /* Default Cool Machined Grey Keycap */
   --dish-top: #aeb4bb;
   --dish-bg: #999fa6;
   --skirt-top: #7f858c;
@@ -1802,34 +1940,36 @@ html[data-mode="hack"] .kb-plate {
   outline: none;
   cursor: pointer;
   touch-action: pan-y;
-  min-height: clamp(34px, 7.6vw, 62px);
-  padding: clamp(2px, 0.4vw, 3px) clamp(2px, 0.6vw, 5px) clamp(4px, 1vw, 8px);
+  min-height: clamp(36px, 7.8vw, 64px);
+  padding: clamp(2px, 0.4vw, 3.5px) clamp(2.5px, 0.65vw, 5.5px) clamp(5px, 1.15vw, 9.5px);
   border-radius: clamp(5px, 1vw, 8px);
   color: var(--cap-ink);
-  background: linear-gradient(180deg, var(--skirt-top) 0%, var(--skirt-bot) 100%);
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0%, transparent 15%, transparent 85%, rgba(0, 0, 0, 0.24) 100%),
+    linear-gradient(180deg, var(--skirt-top) 0%, var(--skirt-bot) 100%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.32),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.42),
-    0 3px 4px rgba(0, 0, 0, 0.72);
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.36),
+    0 3px 4px rgba(0, 0, 0, 0.74);
   display: flex;
   align-items: stretch;
   justify-content: stretch;
   transition:
-    transform 95ms cubic-bezier(0.22, 1, 0.36, 1),
-    padding 95ms cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 95ms ease,
+    transform 85ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 85ms ease,
     filter 95ms ease;
 }
 
 .kb-cap-dish {
+  position: relative;
   width: 100%;
   min-width: 0;
   border-radius: clamp(3.5px, 0.65vw, 5px);
-  background: linear-gradient(180deg, var(--dish-top) 0%, var(--dish-bg) 100%);
+  background: radial-gradient(115% 95% at 50% 42%, var(--dish-bg) 38%, var(--dish-top) 100%);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.62),
-    inset 0 -1px 2px rgba(0, 0, 0, 0.14),
-    0 1px 2px rgba(0, 0, 0, 0.32);
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.5),
+    inset 0 -1.5px 3px rgba(0, 0, 0, 0.22),
+    0 1px 2px rgba(0, 0, 0, 0.34);
   padding: clamp(2px, 0.5vw, 4px);
   display: flex;
   flex-direction: column;
@@ -1837,6 +1977,19 @@ html[data-mode="hack"] .kb-plate {
   justify-content: center;
   gap: 2px;
   overflow: hidden;
+}
+
+.kb-cap[data-sam-key="u"] .kb-cap-dish::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: clamp(3px, 0.55vw, 5px);
+  translate: -50% 0;
+  width: clamp(10px, 2.2vw, 16px);
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.45;
 }
 
 /* Warm Cream Keycaps (like S D F G H & Fn / Backcnns in reference photo) */
@@ -1919,13 +2072,18 @@ html[data-mode="hack"] .kb-cap--enter {
   --skirt-top: #8f140e;
   --skirt-bot: #610c08;
   --cap-ink: #fff8f7;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 190, 180, 0.28),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.48),
+    0 3px 4px rgba(0, 0, 0, 0.85);
 }
 
 /* Left Modifier Keys (Esc, Tab, Shift) */
 .kb-mod-dish {
   align-items: center;
   justify-content: center;
-  padding: clamp(2px, 0.5vw, 5px) clamp(2px, 0.6vw, 7px);
+  gap: 1px;
+  padding: clamp(2px, 0.45vw, 5px) clamp(2px, 0.5vw, 6px);
   text-align: center;
 }
 
@@ -1950,9 +2108,22 @@ html[data-mode="hack"] .kb-cap--enter {
 .kb-mod-code {
   font-family: var(--font);
   font-weight: 800;
-  font-size: clamp(0.7rem, 1.12vw, 0.86rem);
+  font-size: clamp(0.6875rem, 1.08vw, 0.86rem);
+  line-height: 1.05;
   letter-spacing: -0.01em;
   white-space: nowrap;
+}
+
+.kb-mod-idx {
+  font-family: var(--mono);
+  font-size: clamp(0.6875rem, 0.85vw, 0.72rem);
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0.66;
+}
+
+.kb-mod[aria-pressed="true"] .kb-mod-idx {
+  opacity: 0.9;
 }
 
 /* Large Centered Tech Icon inside the 3D Dish; Short Tech Name Appears ONLY in Floating Top Badge on Hover */
@@ -1987,11 +2158,16 @@ html[data-mode="hack"] .kb-cap--enter {
   white-space: nowrap;
 }
 
-/* Center 3D Spacebar Dish (Only says "Space") */
+/* Center Convex 3D Spacebar Dish (Only says "Space") */
 .kb-space-dish {
   flex-direction: column;
   justify-content: center;
   gap: clamp(2px, 0.45vw, 4px);
+  background: linear-gradient(180deg, var(--dish-top) 0%, var(--dish-bg) 68%, var(--skirt-top) 100%);
+  box-shadow:
+    inset 0 2px 2px rgba(255, 255, 255, 0.42),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.24),
+    0 1px 2px rgba(0, 0, 0, 0.36);
 }
 
 .kb-space-barline {
@@ -2004,20 +2180,15 @@ html[data-mode="hack"] .kb-cap--enter {
 
 .kb-space-text {
   font-family: var(--font);
-  font-size: clamp(0.7rem, 1.08vw, 0.78rem);
+  font-size: clamp(0.6875rem, 1.08vw, 0.78rem);
   font-weight: 800;
   letter-spacing: 0.01em;
   white-space: nowrap;
 }
 
-/* Physical 3D Keycap Hover Bump & Click Depression (Uniform Across All Keys) */
+/* Tactile Physical Switch Highlight & Click Stem Travel (Uniform Across All Keys) */
 .kb-cap:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.04);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.38),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.44),
-    0 5px 8px rgba(0, 0, 0, 0.76);
+  filter: brightness(1.045);
 }
 
 .kb-cap:focus,
@@ -2027,15 +2198,15 @@ html[data-mode="hack"] .kb-cap--enter {
 
 .kb-cap:active,
 .kb-cap.is-down {
-  transform: translateY(2.5px);
-  padding-bottom: clamp(2.5px, 0.65vw, 5px);
-  filter: brightness(0.96);
+  transform: translateY(3px);
+  filter: brightness(0.95);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.3),
-    0 1px 2px rgba(0, 0, 0, 0.78);
+    inset 0 1px 0 rgba(255, 255, 255, 0.26),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.45),
+    0 1px 1px rgba(0, 0, 0, 0.8);
 }
 
-/* Top-Layer Floating Hover Badge (Mounted Outside .kb-plate at z-index: 999 so NEVER Behind Anything!) */
+/* Row-Aware Floating Tooltip (above Top Tabs, inter-row gap for Mid rows, below chassis chin for Row 4) */
 .kb-hover-tip {
   position: absolute;
   left: 0;
@@ -2046,15 +2217,29 @@ html[data-mode="hack"] .kb-cap--enter {
   border-radius: 6px;
   background: var(--oled-bg);
   color: var(--oled-ink);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   font-family: var(--mono);
   font-size: 0.72rem;
   font-weight: 700;
   white-space: nowrap;
   pointer-events: none;
   opacity: 0;
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.52);
-  transition: opacity 120ms var(--ease-out), translate 120ms var(--ease-out);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.54);
+  transition: opacity 110ms var(--ease-out), translate 110ms var(--ease-out);
+}
+
+.kb-hover-tip::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: calc(100% - 4px);
+  width: 7px;
+  height: 7px;
+  translate: -50% 0;
+  rotate: 45deg;
+  background: var(--oled-bg);
+  border-right: 1px solid rgba(255, 255, 255, 0.16);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .kb-hover-tip.is-visible {
@@ -2062,9 +2247,26 @@ html[data-mode="hack"] .kb-cap--enter {
   translate: -50% -100%;
 }
 
+.kb-hover-tip[data-place="below"] {
+  translate: -50% -4px;
+}
+
+.kb-hover-tip[data-place="below"].is-visible {
+  translate: -50% 0;
+}
+
+.kb-hover-tip[data-place="below"]::after {
+  top: auto;
+  bottom: calc(100% - 4px);
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
 @media (max-width: 580px) {
   .kb-usb-port {
-    scale: 0.72;
+    scale: 0.78;
     transform-origin: center top;
   }
   .kb-top-tabs {
@@ -2074,11 +2276,14 @@ html[data-mode="hack"] .kb-cap--enter {
   .stack-pill {
     padding: 0.36rem 0.5rem 0.44rem;
     min-height: 36px;
-    font-size: 0.7rem;
+    font-size: 0.6875rem;
     gap: 0.24rem;
   }
   .stack-pill-code {
     display: none;
+  }
+  .kb-bot-main {
+    font-size: 0.6875rem;
   }
   .kb-bottom-row {
     grid-template-columns: 1fr 1fr 1fr 2.1fr 2fr 1.5fr;
@@ -2107,7 +2312,10 @@ html[data-mode="hack"] .kb-cap--enter {
   flex-direction: column;
   justify-content: space-between;
   gap: 1.25rem;
-  transition: border-color 180ms var(--ease-out), transform 180ms var(--ease-out), background-color 180ms var(--ease-out);
+  transition:
+    border-color var(--morph-t),
+    transform 180ms var(--ease-out),
+    background-color var(--morph-t);
 }
 
 .exp-channel:hover {
@@ -2134,6 +2342,7 @@ html[data-mode="hack"] .kb-cap--enter {
   font-size: 0.8125rem;
   font-weight: 700;
   color: var(--accent-text);
+  transition: color var(--morph-t);
 }
 
 .exp-ch-led {
@@ -2147,6 +2356,7 @@ html[data-mode="hack"] .kb-cap--enter {
   font-family: var(--mono);
   font-size: 0.75rem;
   color: var(--ink-3);
+  transition: color var(--morph-t);
 }
 
 .exp-ch-body {
@@ -2164,6 +2374,7 @@ html[data-mode="hack"] .kb-cap--enter {
   color: var(--ink-2);
   font-size: 0.96rem;
   line-height: 1.58;
+  transition: color var(--morph-t);
 }
 
 .exp-ch-Schematic {
@@ -2213,7 +2424,10 @@ html[data-mode="hack"] .kb-cap--enter {
   flex-direction: column;
   justify-content: space-between;
   gap: 1.15rem;
-  transition: border-color 180ms var(--ease-out), transform 180ms var(--ease-out);
+  transition:
+    background-color var(--morph-t),
+    border-color var(--morph-t),
+    transform 180ms var(--ease-out);
 }
 
 .proj-card:hover {
@@ -2264,6 +2478,7 @@ html[data-mode="hack"] .kb-cap--enter {
   color: var(--ink-2);
   font-size: 0.96rem;
   line-height: 1.58;
+  transition: color var(--morph-t);
 }
 
 .proj-foot {
@@ -2274,6 +2489,7 @@ html[data-mode="hack"] .kb-cap--enter {
   justify-content: space-between;
   gap: 0.85rem;
   border-top: 1px solid var(--line);
+  transition: border-color var(--morph-t);
 }
 
 @media (max-width: 900px) {
@@ -2514,7 +2730,9 @@ html[data-mode="hack"] .kb-cap--enter {
 /* ---------- 12. Inner Pages (Work, About, Contact) ---------- */
 .page-head {
   padding: 52px 0 40px;
+  background-color: var(--ground);
   border-bottom: 1px solid var(--line);
+  transition: background-color var(--morph-t), border-color var(--morph-t);
 }
 
 .split-enclosure {
@@ -2527,12 +2745,14 @@ html[data-mode="hack"] .kb-cap--enter {
   gap: 16px;
   padding: 16px;
   overflow: hidden;
+  transition: background-color var(--morph-t), border-color var(--morph-t);
 }
 
 .split-pane {
   padding: 28px;
   border-radius: 14px;
   background: var(--surface-2);
+  transition: background-color var(--morph-t);
 }
 
 .split-pane h2,
@@ -2658,6 +2878,7 @@ html[data-mode="hack"] .kb-cap--enter {
   background: #121317;
   color: #b5b1a8;
   padding-bottom: 3.5rem;
+  transition: background-color var(--morph-t), color var(--morph-t);
 }
 
 html[data-mode="hack"] .site-footer {
@@ -2685,7 +2906,7 @@ html[data-mode="hack"] .site-footer {
 
 .footer-seam-wave path {
   fill: var(--ground);
-  transition: fill 480ms var(--ease-out);
+  transition: fill var(--morph-t);
 }
 
 .peeker {

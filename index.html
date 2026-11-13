@@ -177,65 +177,92 @@
           <div>
             <h2 data-loadout-title data-scramble>Key Stack in the Board</h2>
             <p class="section-sub" data-loadout-sub>
-              Every keycap on this 3D mechanical board is a language, framework, AI pipeline, or cloud system I build with. Switch stack layers, click any keycap to inspect my stack, or yank the board to test the cable physics.
+              Every keycap on this 3D mechanical board is a language, framework, AI pipeline, or cloud system I build with. Switch stack layers at the top, type S-A-M-U-B-I-N, or yank the board to test the cable physics.
             </p>
           </div>
         </div>
 
         <div class="hanging-kb-rig" data-hanging-kb>
-          <!-- Dual Power Cables Stage (Both Left & Right identical cables; Left cable unplugs & swings when yanked) -->
+          <!-- Detached Dynamic Wall Shadow behind the Hanging Board -->
+          <div class="kb-wall-shadow" data-kb-shadow aria-hidden="true"></div>
+
+          <!-- Dual Power Cables Stage (Left cable unplugs & swings on strong pull) -->
           <svg class="kb-cables" data-kb-cables aria-hidden="true">
-            <!-- Ceiling power outlet mounts on left and right -->
-            <rect class="power-mount" data-mount-l x="0" y="0" width="24" height="8" rx="3" />
-            <rect class="power-mount" data-mount-r x="0" y="0" width="24" height="8" rx="3" />
+            <!-- Wall/Panel Cable Grommet Mounts (Left & Right) -->
+            <g class="power-mount-group" data-mount-l>
+              <rect class="power-mount-plate" x="-18" y="-4" width="36" height="12" rx="4" />
+              <circle class="power-mount-screw" cx="-12" cy="2" r="1.4" />
+              <circle class="power-mount-screw" cx="12" cy="2" r="1.4" />
+              <rect class="power-mount-collar" x="-6.5" y="4" width="13" height="6" rx="2" />
+            </g>
+            <g class="power-mount-group" data-mount-r>
+              <rect class="power-mount-plate" x="-18" y="-4" width="36" height="12" rx="4" />
+              <circle class="power-mount-screw" cx="-12" cy="2" r="1.4" />
+              <circle class="power-mount-screw" cx="12" cy="2" r="1.4" />
+              <rect class="power-mount-collar" x="-6.5" y="4" width="13" height="6" rx="2" />
+            </g>
 
             <!-- Left-side Power Cable (Unplugs on strong pull & swings freely with its USB-C tip) -->
             <path class="cable-shadow" data-cable-l d="" />
             <path class="cable-body" data-cable-l d="" />
+            <path class="cable-braid" data-cable-l d="" />
             <path class="cable-spec" data-cable-l d="" />
 
             <!-- Unplugged Left USB-C Connector Tip (Visible at the end of the loose left cable when detached) -->
             <g class="free-usb-plug" data-free-plug-l transform="translate(0,0)">
-              <rect class="free-usb-boot" x="-5.5" y="-2" width="11" height="8" rx="2" />
+              <rect class="free-usb-boot" x="-5.5" y="-3" width="11" height="9" rx="2.5" />
               <rect class="free-usb-collar" x="-8" y="6" width="16" height="5" rx="1" />
               <rect class="free-usb-housing" x="-12" y="11" width="24" height="12" rx="3" />
-              <rect class="free-usb-pin" x="-5" y="23" width="10" height="5" rx="1.5" />
+              <rect class="free-usb-led" x="-4.5" y="15.5" width="9" height="3" rx="1.5" />
+              <rect class="free-usb-pin" x="-5" y="23" width="10" height="5.5" rx="1.5" />
             </g>
 
             <!-- Right-side Power Cable (Always 100% locked to right USB-C plug tip) -->
             <path class="cable-shadow" data-cable-r d="" />
             <path class="cable-body" data-cable-r d="" />
+            <path class="cable-braid" data-cable-r d="" />
             <path class="cable-spec" data-cable-r d="" />
           </svg>
 
           <!-- Realistic 3D Sculpted Mechanical Keyboard with One-Piece Molded Plastic Top Extension -->
           <div class="kb-shell" data-kb-chassis title="Drag or pull hard to unplug left cable · Hover any keycap for tech name!">
-            <!-- Unified One-Piece Molded Plastic Chassis SVG (Seamless Fillets & Continuous Border) -->
+            <!-- Unified One-Piece Molded Plastic Chassis SVG (Seamless Fillets, Bevel & Screws) -->
             <svg class="kb-case-svg" data-kb-case-svg aria-hidden="true">
               <defs>
                 <linearGradient id="kbCaseGradDev" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#f4f2ed" />
-                  <stop offset="22%" stop-color="#efece4" />
-                  <stop offset="76%" stop-color="#dcd8cf" />
-                  <stop offset="100%" stop-color="#bfb9ad" />
+                  <stop offset="0%" stop-color="#f6f4ef" />
+                  <stop offset="18%" stop-color="#eeeae1" />
+                  <stop offset="78%" stop-color="#dad5ca" />
+                  <stop offset="100%" stop-color="#c2bcb0" />
                 </linearGradient>
                 <linearGradient id="kbCaseGradHack" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#2e171a" />
-                  <stop offset="24%" stop-color="#261215" />
-                  <stop offset="78%" stop-color="#180b0d" />
-                  <stop offset="100%" stop-color="#100708" />
+                  <stop offset="0%" stop-color="#31181b" />
+                  <stop offset="22%" stop-color="#251114" />
+                  <stop offset="80%" stop-color="#170a0c" />
+                  <stop offset="100%" stop-color="#0f0607" />
                 </linearGradient>
+                <filter id="kbCaseGrain" x="0" y="0" width="100%" height="100%">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="noise" />
+                  <feColorMatrix type="saturate" values="0" in="noise" result="gray" />
+                  <feComponentTransfer in="gray" result="faint">
+                    <feFuncA type="linear" slope="0.045" />
+                  </feComponentTransfer>
+                  <feComposite in="faint" in2="SourceAlpha" operator="in" result="masked" />
+                  <feBlend in="SourceGraphic" in2="masked" mode="overlay" />
+                </filter>
                 <clipPath id="kbCaseClip">
                   <path data-kb-case-clip d="" />
                 </clipPath>
               </defs>
               <path class="kb-case-lip" data-kb-case-lip d="" />
-              <path class="kb-case-body" data-kb-case-body d="" />
+              <path class="kb-case-body" data-kb-case-body filter="url(#kbCaseGrain)" d="" />
+              <path class="kb-case-seam" data-kb-case-seam d="" />
               <path class="kb-case-spec" data-kb-case-spec clip-path="url(#kbCaseClip)" d="" />
               <path class="kb-case-border" data-kb-case-border d="" />
+              <g class="kb-case-screws" data-kb-case-screws></g>
             </svg>
 
-            <!-- Recessed Upper Slot for Short, Clean Stack Switcher Buttons (Molded into the Same Plastic) -->
+            <!-- Recessed Upper Slot for Stack Switcher Buttons (Molded into the Same Plastic) -->
             <div class="kb-top-extension">
               <div class="kb-top-tabs" data-stack-pills role="tablist" aria-label="Technology Stack Categories"></div>
             </div>
@@ -250,7 +277,9 @@
                   <span class="usb-led"></span>
                 </span>
               </div>
-              <span class="kb-usb-socket" title="Left USB-C Socket"></span>
+              <span class="kb-usb-socket" title="Left USB-C Socket">
+                <span class="kb-usb-socket-tongue"></span>
+              </span>
             </div>
 
             <!-- Right Bezel: Identical Metal USB-C Power Port & Plug (Always connected) -->
@@ -263,7 +292,9 @@
                   <span class="usb-led"></span>
                 </span>
               </div>
-              <span class="kb-usb-socket" title="Right USB-C Socket"></span>
+              <span class="kb-usb-socket" title="Right USB-C Socket">
+                <span class="kb-usb-socket-tongue"></span>
+              </span>
             </div>
 
             <div class="kb-plate" data-loadout-board></div>

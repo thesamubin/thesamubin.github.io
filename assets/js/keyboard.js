@@ -62,7 +62,7 @@ export function triggerSamubinCipher() {
   // Scramble all visible headings, paragraphs, and key labels on the page, then decrypt back
   const targets = [
     ...document.querySelectorAll(
-      "main h1, main h2, main h3, main .hero-lead, main .section-sub, main .index-title, main .oled-text"
+      "main h1, main h2, main h3, main .hero-lead, main .section-sub, main .index-title"
     ),
   ].filter((el) => {
     const r = el.getBoundingClientRect();
