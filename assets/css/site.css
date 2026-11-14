@@ -170,6 +170,8 @@ body {
 
 main {
   flex: 1;
+  display: flex;
+  align-items: center;
 }
 
 /* Lights-out brief dip when pulling hoodie up */
@@ -784,8 +786,8 @@ kbd {
 /* ---------- 8. Hero Section & Articulated Teenage Cartoon Avatar ---------- */
 .hero {
   position: relative;
+  width: 100%;
   padding: 52px 0 44px;
-  border-bottom: 1px solid var(--line);
 }
 
 .hero-grid {

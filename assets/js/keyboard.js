@@ -6,7 +6,6 @@
 import { sound } from "./sound.js";
 import { reduceMotion } from "./mode.js";
 import { notifyAvatarKeystroke, celebrateAvatars } from "./avatar.js";
-import { flashKeypadAuth, pressKeypadLetter } from "./keypad.js";
 
 const GLYPHS = "0123456789abcdef";
 const running = new WeakSet();
@@ -56,7 +55,6 @@ export function crypt(el, { hold = 320, dur = 820 } = {}) {
 export function triggerSamubinCipher() {
   sound.play("whoosh");
   setTimeout(() => sound.play("auth"), 90);
-  flashKeypadAuth(3200);
   celebrateAvatars("SAMUBIN cipher verified — decrypting page!");
 
   // Scramble all visible headings, paragraphs, and key labels on the page, then decrypt back
@@ -94,9 +92,6 @@ export function initKeyboard() {
     notifyAvatarKeystroke();
 
     const k = e.key.toLowerCase();
-    if ("samubin".includes(k) && k.length === 1) {
-      pressKeypadLetter(k);
-    }
 
     if (k.length === 1 && k >= "a" && k <= "z") {
       buffer = (buffer + k).slice(-14);
