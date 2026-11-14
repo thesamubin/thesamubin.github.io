@@ -833,27 +833,22 @@ kbd {
 .avatar-stage {
   position: relative;
   width: 100%;
-  max-width: 520px;
+  max-width: 480px;
   aspect-ratio: 1.08 / 1;
   border-radius: 28px;
-  overflow: hidden;
-  background: radial-gradient(85% 80% at 50% 34%, #1d212b 0%, #13151b 78%);
-  border: 1px solid var(--line);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 28px 56px -24px rgba(0, 0, 0, 0.82);
+  overflow: visible;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
   display: grid;
   place-items: end center;
   user-select: none;
-  transition: border-color 320ms var(--ease-out), box-shadow 320ms var(--ease-out);
 }
 
 html[data-mode="hack"] .avatar-stage {
-  background: radial-gradient(85% 80% at 50% 34%, #241013 0%, #12080a 78%);
-  border-color: var(--line-strong);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 110, 99, 0.12),
-    0 28px 56px -24px rgba(0, 0, 0, 0.9);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
 }
 
 .avatar-stage--compact {
@@ -2806,20 +2801,43 @@ html[data-mode="hack"] .peeker .pk-hood-canopy {
   transform: translateY(0);
 }
 
-.footer-grid {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
-  padding-top: 1rem;
+.footer-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) repeat(2, minmax(0, 1fr));
+  gap: 2rem;
+  padding-top: 1.25rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-name {
   font-weight: 800;
-  font-size: 1.05rem;
+  font-size: 1.12rem;
   color: #f4f3ef;
+  letter-spacing: -0.015em;
+}
+
+.footer-handle {
+  margin-top: 0.2rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
+.footer-tagline {
+  margin-top: 0.55rem;
+  font-size: 0.92rem;
+  color: #b5b1a8;
+  max-width: 34ch;
+}
+
+.footer-col-title {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9e998f;
+  margin-bottom: 0.65rem;
 }
 
 .footer-links {
@@ -2829,17 +2847,63 @@ html[data-mode="hack"] .peeker .pk-hood-canopy {
   font-size: 0.92rem;
 }
 
+.footer-links--col {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
 .footer-links a {
   color: #d4d0c8;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  min-height: 38px;
-  padding-block: 0.3rem;
+  min-height: 36px;
+  padding-block: 0.2rem;
+  transition: color 140ms var(--ease-out);
 }
 .footer-links a:hover {
   color: #ffffff;
   text-decoration: underline;
+}
+
+.footer-meta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  font-size: 0.88rem;
+  color: #9e998f;
+}
+
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding-top: 1.15rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  font-size: 0.84rem;
+  color: #8f8a80;
+}
+
+.footer-hint kbd {
+  display: inline-block;
+  padding: 0.08rem 0.42rem;
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: #d4d0c8;
+}
+
+@media (max-width: 720px) {
+  .footer-main {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
 }
 
 /* Safelight Photographic Field Notes (Illuminated in darkroom, heightened under torch) */

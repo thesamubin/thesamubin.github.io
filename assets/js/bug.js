@@ -89,7 +89,7 @@ export function initBugs() {
   function collectLedges() {
     const candidates = [
       ...document.querySelectorAll(
-        ".kb-shell, .proj-card, .exp-channel, .split-enclosure, .ledger-enclosure, .index-enclosure, .dispatch-console, .avatar-stage, .macropad-shell, .spring-card, .work-card, .bench, .idcard, .composer-box, .teach-box"
+        ".site-footer, .avatar-dock"
       ),
     ];
     ledges = candidates.filter(
