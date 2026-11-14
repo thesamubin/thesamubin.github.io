@@ -831,35 +831,55 @@ kbd {
 .avatar-stage {
   position: relative;
   width: 100%;
-  max-width: 470px;
-  aspect-ratio: 1.04 / 1;
-  border-radius: 26px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  box-shadow: var(--shadow-enclosure);
-  display: grid;
-  place-items: center;
+  max-width: 520px;
+  aspect-ratio: 1.08 / 1;
+  border-radius: 28px;
   overflow: hidden;
+  background: radial-gradient(85% 80% at 50% 34%, #1d212b 0%, #13151b 78%);
+  border: 1px solid var(--line);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 28px 56px -24px rgba(0, 0, 0, 0.82);
+  display: grid;
+  place-items: end center;
   user-select: none;
-  transition: background-color 420ms var(--ease-out), border-color 420ms var(--ease-out);
 }
 
-/* Subtle anodized studio grid inside stage */
-.avatar-stage::before {
-  content: "";
+.avatar-stage--compact {
+  max-width: 370px;
+  aspect-ratio: 1.05 / 1;
+}
+
+.avatar-wave {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(var(--line) 1px, transparent 1px);
-  background-size: 20px 20px;
-  opacity: 0.55;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
+}
+
+.avatar-hit {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  padding: 1rem 1rem 0.35rem;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  display: grid;
+  place-items: end center;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .avatar-mount {
-  position: relative;
-  z-index: 2;
-  width: min(88%, 380px);
+  display: block;
+  width: min(82%, 340px);
   pointer-events: none;
+}
+
+.avatar-stage--compact .avatar-mount {
+  width: min(84%, 270px);
 }
 
 .av-svg {
@@ -868,70 +888,42 @@ kbd {
   overflow: visible;
 }
 
-.av-root,
-.av-torso,
 .av-head,
 .av-face,
 .av-hair-front,
-.av-arm-l,
-.av-arm-r,
-.av-laptop {
+.av-body,
+.av-root {
   transform-box: fill-box;
   transform-origin: center;
   will-change: transform;
 }
 
-.av-arm-l,
-.av-arm-r {
-  transition: transform 140ms var(--ease-out);
-}
-
-/* Hoodie Up / Down anatomical layer transitions */
-.av-hood-up-back,
-.av-hood-up-front,
-.av-hack-face-glow {
-  opacity: 0;
-  transform: translateY(18px) scale(0.95);
-  transform-box: fill-box;
-  transform-origin: center bottom;
-  transition: opacity 380ms var(--ease-out), transform 460ms var(--ease-out);
-}
-
-.avatar-stage.is-hood-up .av-hood-up-back,
-.avatar-stage.is-hood-up .av-hood-up-front,
-.avatar-stage.is-hood-up .av-hack-face-glow {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.avatar-stage.is-hood-up .av-hair-front {
-  transform: scale(0.92) translateY(5px);
-}
-
-.avatar-stage.is-hood-up .av-hood-down-back {
-  opacity: 0;
-}
-
-/* Laptop shell adapts in Darkroom mode */
-.avatar-stage.is-hood-up .av-laptop-shell,
-.avatar-stage.is-hood-up .av-laptop-base {
-  fill: #1f1416;
-}
-.avatar-stage.is-hood-up .av-laptop-glyph {
-  stroke: #e0352b;
-}
-
-/* Facial expression states */
+/* Avatar facial expression states */
 .av-eyes-happy,
+.av-eyes-dizzy,
 .av-mouth-laugh,
-.av-arm-wave {
+.av-arm-wave,
+.av-sparks {
   opacity: 0;
   pointer-events: none;
-  transition: opacity 130ms var(--ease-out);
+  transition: opacity 120ms var(--ease-out);
+}
+
+.av-shades {
+  opacity: 0;
+  transform: translateY(-14px);
+  pointer-events: none;
+  transition: opacity 180ms var(--ease-out), transform 240ms var(--ease-out);
+}
+
+.avatar-stage.has-shades .av-shades {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .avatar-stage.is-blinking .av-eyes-open,
-.avatar-stage.is-happy .av-eyes-open {
+.avatar-stage.is-happy .av-eyes-open,
+.avatar-stage.is-dizzy .av-eyes-open {
   opacity: 0;
 }
 
@@ -943,17 +935,29 @@ kbd {
 .avatar-stage.is-happy .av-mouth-calm {
   opacity: 0;
 }
-.avatar-stage.is-happy .av-mouth-laugh {
+
+.avatar-stage.is-happy .av-mouth-laugh,
+.avatar-stage.is-happy .av-sparks {
   opacity: 1;
 }
 
-.avatar-stage.is-waving .av-arm-r {
+.avatar-stage.is-dizzy .av-eyes-dizzy {
+  opacity: 1;
+}
+
+.avatar-stage.is-waving .av-arm-rest-r {
   opacity: 0;
 }
+
 .avatar-stage.is-waving .av-arm-wave {
   opacity: 1;
-  transform-origin: 282px 202px;
-  animation: av-wave 0.34s ease-in-out infinite alternate;
+  transform-origin: 202px 176px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .avatar-stage.is-waving .av-arm-wave {
+    animation: av-wave 0.34s ease-in-out infinite alternate;
+  }
 }
 
 @keyframes av-wave {
@@ -965,63 +969,33 @@ kbd {
   }
 }
 
-/* Accessible Hit Overlay Buttons on Avatar Stage */
-.avatar-hits {
-  position: absolute;
-  inset: 0;
-  z-index: 3;
-}
-
-.av-hit-face {
-  position: absolute;
-  left: 31%;
-  top: 12%;
-  width: 38%;
-  height: 30%;
-  background: transparent;
-  border: 0;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.av-hit-hood {
-  position: absolute;
-  left: 24%;
-  top: 42%;
-  width: 52%;
-  height: 20%;
-  background: transparent;
-  border: 0;
-  border-radius: 16px;
-  cursor: pointer;
-}
-
-/* Avatar Speech Pill */
 .avatar-badge {
   position: absolute;
-  top: 0.9rem;
+  top: 1rem;
   left: 50%;
   z-index: 4;
-  transform: translate(-50%, -6px);
-  opacity: 0;
-  pointer-events: none;
+  translate: -50% 0;
+  padding: 0.42rem 0.85rem;
+  border-radius: 999px;
+  background: #ece8df;
+  color: #141518;
+  border: 1px solid #c9c2b2;
+  box-shadow: 0 10px 22px -8px rgba(0, 0, 0, 0.75);
+  font-size: 0.84rem;
+  font-weight: 700;
+  white-space: nowrap;
   max-width: calc(100% - 1.5rem);
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 0.36rem 0.85rem;
-  border-radius: 999px;
-  background: var(--ink);
-  color: var(--surface);
-  font-weight: 700;
-  font-size: 0.82rem;
-  white-space: nowrap;
-  box-shadow: 0 8px 18px -4px rgba(0, 0, 0, 0.35);
-  transition: opacity 160ms var(--ease-out), transform 180ms var(--ease-out);
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+  transition: opacity 180ms var(--ease-out), transform 220ms var(--ease-out);
 }
 
 .avatar-badge.is-on {
   opacity: 1;
-  transform: translate(-50%, 0);
+  transform: translateY(0);
 }
 
 /* Avatar Control Dock */
@@ -2875,4 +2849,145 @@ html[data-mode="hack"] .darkroom-note:focus-within {
   html[data-mode="hack"] body::after {
     display: none;
   }
+}
+
+/* ---------- Funny Comic Bug & Speech Bubble ---------- */
+.bug-wrap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 30;
+  width: 34px;
+  height: 30px;
+  pointer-events: none;
+}
+
+.bug {
+  pointer-events: auto;
+  width: 34px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform-origin: 50% 65%;
+  transition: transform 220ms var(--ease-out);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bug--twin {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 29;
+  pointer-events: none;
+  transition: opacity 300ms var(--ease-out);
+}
+
+.bug--twin.is-poof {
+  opacity: 0;
+}
+
+.bug svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.55));
+}
+
+.bug .legs-b,
+.bug .bug-eyes-ko,
+.bug .bug-shades,
+.bug .bug-jet {
+  display: none;
+}
+
+.bug.has-shades .bug-shades {
+  display: block;
+}
+
+.bug.is-faint {
+  transform: rotate(180deg) translateY(-3px);
+}
+
+.bug.is-faint .bug-eyes-open {
+  display: none;
+}
+
+.bug.is-faint .bug-eyes-ko {
+  display: block;
+}
+
+.bug.is-jet .bug-jet {
+  display: block;
+}
+
+.bug.is-walking .legs-a {
+  animation: legs-a 0.16s steps(1) infinite;
+}
+
+.bug.is-walking .legs-b {
+  display: block;
+  animation: legs-b 0.16s steps(1) infinite;
+}
+
+@keyframes legs-a {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes legs-b {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.bug .wings {
+  opacity: 0;
+  transform-origin: 12px 7px;
+}
+
+.bug.is-flying .wings {
+  opacity: 0.9;
+  animation: flutter 0.06s linear infinite alternate;
+}
+
+@keyframes flutter {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0.35);
+  }
+}
+
+.bug-bubble {
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 50%;
+  transform: translate3d(calc(-50% + var(--b-shift, 0px)), 6px, 0);
+  padding: 0.34rem 0.68rem;
+  border-radius: 10px;
+  background: #ece8df;
+  color: #141518;
+  border: 1.5px solid #141518;
+  box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.7);
+  font-size: 0.8125rem;
+  font-weight: 720;
+  line-height: 1.25;
+  white-space: nowrap;
+  max-width: min(270px, 86vw);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  transition: opacity 160ms var(--ease-out), transform 200ms var(--ease-out);
+}
+
+.bug-bubble.is-on {
+  opacity: 1;
+  transform: translate3d(calc(-50% + var(--b-shift, 0px)), 0, 0);
 }

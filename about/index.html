@@ -155,23 +155,18 @@
         </div>
 
         <div class="avatar-col">
-          <div class="avatar-stage" data-avatar data-avatar-greet="false">
-            <span class="avatar-badge" data-avatar-badge>SA MUBIN</span>
-            <div class="avatar-mount" data-avatar-mount></div>
-            <div class="avatar-hits">
-              <button class="av-hit-hood" type="button" data-avatar-hood aria-label="Toggle avatar hoodie mode" title="Click hood to flip mode (H)"></button>
-              <button class="av-hit-face" type="button" data-avatar-face aria-label="Interact with Sakib Alam Mubin avatar"></button>
-            </div>
+          <div class="avatar-stage avatar-stage--compact" data-avatar="compact">
+            <canvas class="avatar-wave" aria-hidden="true"></canvas>
+            <span class="avatar-badge" data-avatar-badge role="status" aria-live="polite"></span>
+            <button class="avatar-hit" type="button" data-avatar-hit aria-label="Interact with SA Mubin's avatar portrait">
+              <span class="avatar-mount" data-avatar-mount></span>
+            </button>
           </div>
 
-          <div class="avatar-dock" role="toolbar" aria-label="Avatar controls">
-            <button class="dock-btn dock-btn--hood" type="button" data-avatar-act="hood">
-              <span data-show="dev">Hoodie Up</span>
-              <span data-show="hack">Hoodie Down</span>
-              <span class="kbd">H</span>
-            </button>
-            <button class="dock-btn" type="button" data-avatar-act="wave"><span>Wave</span></button>
+          <div class="avatar-dock" role="group" aria-label="Portrait expressions">
             <button class="dock-btn" type="button" data-avatar-act="boop"><span>Boop</span></button>
+            <button class="dock-btn" type="button" data-avatar-act="shades" aria-pressed="false"><span>Shades</span></button>
+            <button class="dock-btn" type="button" data-avatar-act="wave"><span>Say Hi</span></button>
           </div>
         </div>
       </div>

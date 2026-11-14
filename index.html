@@ -170,28 +170,22 @@
 
         <div class="avatar-col">
           <div class="avatar-stage" data-avatar>
-            <span class="avatar-badge" data-avatar-badge>DEV · WORKBENCH</span>
-            <div class="avatar-mount" data-avatar-mount></div>
-            <div class="avatar-hits">
-              <button class="av-hit-hood" type="button" data-avatar-hood aria-label="Pull avatar hoodie to toggle Developer and Ethical Hacker mode" title="Click hood to flip mode (H)"></button>
-              <button class="av-hit-face" type="button" data-avatar-face aria-label="Boop Sakib Alam Mubin avatar" title="Click face to interact"></button>
-            </div>
+            <canvas class="avatar-wave" aria-hidden="true"></canvas>
+            <span class="avatar-badge" data-avatar-badge role="status" aria-live="polite"></span>
+            <button class="avatar-hit" type="button" data-avatar-hit aria-label="Interact with SA Mubin's avatar">
+              <span class="avatar-mount" data-avatar-mount></span>
+            </button>
           </div>
 
-          <div class="avatar-dock" role="toolbar" aria-label="Avatar interactions">
-            <button class="dock-btn dock-btn--hood" type="button" data-avatar-act="hood">
-              <span data-show="dev">Pull Hoodie Up</span>
-              <span data-show="hack">Drop Hoodie Down</span>
-              <span class="kbd">H</span>
-            </button>
-            <button class="dock-btn" type="button" data-avatar-act="wave">
-              <span>Wave Hi</span>
-            </button>
+          <div class="avatar-dock" role="group" aria-label="Avatar expressions">
             <button class="dock-btn" type="button" data-avatar-act="boop">
               <span>Boop</span>
             </button>
-            <button class="dock-btn" type="button" data-avatar-act="type">
-              <span>Type Burst</span>
+            <button class="dock-btn" type="button" data-avatar-act="shades" aria-pressed="false">
+              <span>Shades</span>
+            </button>
+            <button class="dock-btn" type="button" data-avatar-act="wave">
+              <span>Say Hi</span>
             </button>
           </div>
         </div>

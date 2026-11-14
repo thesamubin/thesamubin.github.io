@@ -157,6 +157,36 @@ const voices = {
     tone({ freq: 988 * r, to: 1318 * r, dur: 0.08, gain: 0.11, type: "triangle", when: 0.055 });
     emitWave(1.0, "boop");
   },
+  shades() {
+    [329.63, 415.3, 493.88, 659.25].forEach((f, i) =>
+      tone({ freq: f, dur: 0.15, gain: 0.11, type: "triangle", when: i * 0.042 })
+    );
+    emitWave(0.9, "shades");
+  },
+  pop(r) {
+    tone({ freq: 440 * r, to: 960 * r, dur: 0.045, gain: 0.2, type: "sine" });
+    emitWave(0.6, "pop");
+  },
+  boing(r) {
+    tone({ freq: 190 * r, to: 520 * r, dur: 0.11, gain: 0.18, type: "sine" });
+    tone({ freq: 340 * r, to: 640 * r, dur: 0.13, gain: 0.13, type: "triangle", when: 0.08 });
+    emitWave(0.95, "boing");
+  },
+  slide() {
+    tone({ freq: 860, to: 185, dur: 0.26, gain: 0.16, type: "sine" });
+    tone({ freq: 195, to: 145, dur: 0.12, gain: 0.1, type: "triangle", when: 0.24 });
+    emitWave(0.75, "slide");
+  },
+  taDa() {
+    [523.25, 659.25, 783.99, 1046.5].forEach((f, i) =>
+      tone({ freq: f, dur: i === 3 ? 0.24 : 0.11, gain: 0.14, type: "triangle", when: i * 0.065 })
+    );
+    emitWave(1.0, "taDa");
+  },
+  chirp(r) {
+    tone({ freq: 1850 * r, to: 3100, dur: 0.055, gain: 0.08 });
+    tone({ freq: 2350 * r, to: 3600, dur: 0.048, gain: 0.06, when: 0.068 });
+  },
   wave(r) {
     tone({ freq: 523.25 * r, to: 659.25 * r, dur: 0.085, gain: 0.15, type: "sine" });
     tone({ freq: 659.25 * r, to: 880 * r, dur: 0.11, gain: 0.14, type: "sine", when: 0.085 });
