@@ -11,14 +11,14 @@ const BUG_SVG = `
     <path d="M10 19 L12 23 L14 19 Z" fill="#ff5a1f"/>
   </g>
   <!-- Fluttering wings -->
-  <g class="wings" fill="#ece8df" fill-opacity="0.82">
+  <g class="wings" fill="#ece8df" fill-opacity="0.88" stroke="var(--bug-wing-edge, #1a1a1c)" stroke-width="0.65">
     <ellipse cx="6" cy="7" rx="4.2" ry="2.4" transform="rotate(-18 6 7)"/>
     <ellipse cx="18" cy="7" rx="4.2" ry="2.4" transform="rotate(18 18 7)"/>
   </g>
   <g class="shell">
     <!-- Antennae -->
-    <path d="M9 5 Q7 1.5 5.5 2" fill="none" stroke="#ece8df" stroke-width="1.3" stroke-linecap="round"/>
-    <path d="M15 5 Q17 1.5 18.5 2" fill="none" stroke="#ece8df" stroke-width="1.3" stroke-linecap="round"/>
+    <path d="M9 5 Q7 1.5 5.5 2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    <path d="M15 5 Q17 1.5 18.5 2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
     <!-- Shell body -->
     <rect x="5" y="8" width="14" height="9" rx="4.5" fill="#ff5a1f"/>
     <path d="M12 8 L12 17" stroke="#1a1a1c" stroke-width="1.6"/>
@@ -47,13 +47,13 @@ const BUG_SVG = `
     </g>
   </g>
   <!-- Walking legs -->
-  <g class="legs-a" stroke="#ece8df" stroke-width="1.35" stroke-linecap="round">
+  <g class="legs-a" stroke="currentColor" stroke-width="1.45" stroke-linecap="round">
     <line x1="6.5" y1="16.5" x2="5" y2="20"/>
     <line x1="10" y1="17" x2="9.5" y2="20.2"/>
     <line x1="14" y1="17" x2="14.5" y2="20.2"/>
     <line x1="17.5" y1="16.5" x2="19" y2="20"/>
   </g>
-  <g class="legs-b" stroke="#ece8df" stroke-width="1.35" stroke-linecap="round">
+  <g class="legs-b" stroke="currentColor" stroke-width="1.45" stroke-linecap="round">
     <line x1="6.5" y1="16.5" x2="7.5" y2="20"/>
     <line x1="10" y1="17" x2="11" y2="20.2"/>
     <line x1="14" y1="17" x2="13" y2="20.2"/>
@@ -106,21 +106,28 @@ export function initBugs() {
     return { x, y, minX, maxX };
   }
 
+  function syncBubbleSide(x = bx, y = by) {
+    if (!bubbleEl) return;
+    const vw = document.documentElement.clientWidth;
+    const viewX = x - scrollX;
+    let shift = 0;
+    if (viewX < 135) shift = 135 - viewX;
+    else if (viewX > vw - 135) shift = vw - 135 - viewX;
+    bubbleEl.style.setProperty("--b-shift", `${shift.toFixed(0)}px`);
+
+    const headerEl = document.querySelector(".site-header");
+    const headerBottom = headerEl ? headerEl.getBoundingClientRect().bottom : 74;
+    bubbleEl.classList.toggle("is-below", y - scrollY < headerBottom + 48);
+  }
+
   function place(x, y, flip = 1) {
     bx = x;
     by = y;
     if (!wrapEl || !bugEl) return;
     wrapEl.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
     bugEl.querySelector("svg").style.transform = `scaleX(${flip})`;
-    // Keep speech bubble safely inside horizontal viewport
-    if (bubbleEl) {
-      const vw = document.documentElement.clientWidth;
-      const viewX = x - scrollX;
-      let shift = 0;
-      if (viewX < 120) shift = 120 - viewX;
-      else if (viewX > vw - 135) shift = vw - 135 - viewX;
-      bubbleEl.style.setProperty("--b-shift", `${shift.toFixed(0)}px`);
-    }
+    // Keep speech bubble safely inside viewport and clear of the sticky header
+    syncBubbleSide(x, y);
   }
 
   function say(text, ms = 2800) {
@@ -370,6 +377,14 @@ export function initBugs() {
           pupils[1].setAttribute("cy", (6.6 + oy).toFixed(2));
         }
       }
+    },
+    { passive: true }
+  );
+
+  addEventListener(
+    "scroll",
+    () => {
+      if (bubbleEl && bubbleEl.classList.contains("is-on")) syncBubbleSide();
     },
     { passive: true }
   );

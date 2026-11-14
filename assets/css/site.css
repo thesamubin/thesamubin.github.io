@@ -845,6 +845,15 @@ kbd {
   display: grid;
   place-items: end center;
   user-select: none;
+  transition: border-color 320ms var(--ease-out), box-shadow 320ms var(--ease-out);
+}
+
+html[data-mode="hack"] .avatar-stage {
+  background: radial-gradient(85% 80% at 50% 34%, #241013 0%, #12080a 78%);
+  border-color: var(--line-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 110, 99, 0.12),
+    0 28px 56px -24px rgba(0, 0, 0, 0.9);
 }
 
 .avatar-stage--compact {
@@ -893,11 +902,48 @@ kbd {
 .av-head,
 .av-face,
 .av-hair-front,
+.av-hood-back,
+.av-hood-canopy,
+.av-ears,
+.av-hair-back,
 .av-body,
 .av-root {
   transform-box: fill-box;
   transform-origin: center;
   will-change: transform;
+}
+
+/* Pulled-up hood state (active when Darkroom / Hacker mode is enabled) */
+.av-hood-back,
+.av-hood-canopy {
+  opacity: 0;
+  transform: translateY(-6px) scale(0.96);
+  pointer-events: none;
+  transition: opacity 280ms var(--ease-out), transform 320ms var(--ease-out);
+}
+
+.av-ears,
+.av-hair-back {
+  transition: opacity 220ms var(--ease-out);
+}
+
+.av-hair-front {
+  transition: transform 280ms var(--ease-out);
+}
+
+html[data-mode="hack"] .av-hood-back,
+html[data-mode="hack"] .av-hood-canopy {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+html[data-mode="hack"] .av-ears,
+html[data-mode="hack"] .av-hair-back {
+  opacity: 0;
+}
+
+html[data-mode="hack"] .av-hair-front {
+  transform: translateY(6px) scale(0.92);
 }
 
 /* Avatar facial expression states */
@@ -1035,6 +1081,16 @@ kbd {
   box-shadow: inset 0 -1px 0 var(--cap-daily-side);
 }
 
+.dock-btn[aria-pressed="true"] {
+  color: var(--accent-ink);
+  background: linear-gradient(180deg, var(--accent), var(--accent-side));
+  transform: translateY(1.5px);
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.28),
+    inset 0 -2px 0 var(--accent-side),
+    0 2px 6px -2px rgba(0, 0, 0, 0.35);
+}
+
 .dock-btn--hood {
   color: var(--accent-ink);
   background: linear-gradient(180deg, #ff7a47, var(--accent));
@@ -1055,11 +1111,19 @@ html[data-mode="hack"] .dock-btn--hood {
 }
 
 @media (max-width: 900px) {
+  .hero {
+    padding: 28px 0 36px;
+  }
   .hero-grid {
     grid-template-columns: 1fr;
+    gap: 1.75rem;
   }
-  .avatar-col {
-    order: -1;
+  .avatar-stage {
+    max-width: 380px;
+  }
+  .dock-btn {
+    min-height: 44px;
+    padding: 0.55rem 0.95rem 0.72rem;
   }
 }
 
@@ -2631,8 +2695,8 @@ html[data-mode="hack"] .kb-cap--enter {
 }
 
 html[data-mode="hack"] .site-footer {
-  background: #070405;
-  color: #a89089;
+  background: #140b0d;
+  color: #b89f98;
 }
 
 .footer-seam {
@@ -2653,9 +2717,22 @@ html[data-mode="hack"] .site-footer {
   pointer-events: none;
 }
 
-.footer-seam-wave path {
+.footer-seam-wave .footer-seam-fill,
+.footer-seam-wave path:not(.footer-seam-edge) {
   fill: var(--ground);
   transition: fill 480ms var(--ease-out);
+}
+
+.footer-seam-wave .footer-seam-edge {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 1.5px;
+  vector-effect: non-scaling-stroke;
+  transition: stroke 480ms var(--ease-out);
+}
+
+html[data-mode="hack"] .footer-seam-wave .footer-seam-edge {
+  stroke: #5e3036;
 }
 
 .peeker {
@@ -2861,7 +2938,14 @@ html[data-mode="hack"] .darkroom-note:focus-within {
   z-index: 30;
   width: 34px;
   height: 30px;
+  color: #23262d;
+  --bug-wing-edge: #23262d;
   pointer-events: none;
+}
+
+html[data-mode="hack"] .bug-wrap {
+  color: #ece8df;
+  --bug-wing-edge: #1a1a1c;
 }
 
 .bug {
@@ -2982,11 +3066,17 @@ html[data-mode="hack"] .darkroom-note:focus-within {
   font-weight: 720;
   line-height: 1.25;
   white-space: nowrap;
-  max-width: min(270px, 86vw);
+  max-width: min(270px, calc(100vw - 32px));
   overflow: hidden;
   text-overflow: ellipsis;
   opacity: 0;
   transition: opacity 160ms var(--ease-out), transform 200ms var(--ease-out);
+}
+
+.bug-bubble.is-below {
+  bottom: auto;
+  top: calc(100% + 8px);
+  transform: translate3d(calc(-50% + var(--b-shift, 0px)), -6px, 0);
 }
 
 .bug-bubble.is-on {

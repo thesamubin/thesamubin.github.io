@@ -1,7 +1,7 @@
 // Interactive 3D-clay-shaded developer avatar (Hero + About) + cursor-reactive wave.
 // Zero external assets; 60fps rAF when visible.
 import { sound } from "./sound.js";
-import { reduceMotion } from "./mode.js";
+import { reduceMotion, getMode } from "./mode.js";
 
 let uidSeq = 0;
 
@@ -40,6 +40,10 @@ function avatarSvg(prefix, { compact = false } = {}) {
       <stop offset="0%" stop-color="#ff8a57"/>
       <stop offset="52%" stop-color="#ff5a1f"/>
       <stop offset="100%" stop-color="#a83208"/>
+    </radialGradient>
+    <radialGradient id="${prefix}-hood-in" cx="50%" cy="42%" r="65%">
+      <stop offset="0%" stop-color="#3c1106"/>
+      <stop offset="100%" stop-color="#1c0603"/>
     </radialGradient>
     <linearGradient id="${prefix}-chest" x1="30%" y1="0%" x2="70%" y2="100%">
       <stop offset="0%" stop-color="#f8f4ec"/>
@@ -145,8 +149,11 @@ function avatarSvg(prefix, { compact = false } = {}) {
 
     <!-- Sculpted 3D Head & Hair -->
     <g class="av-head">
+      <!-- Recessed dark interior of pulled-up hood (Hacker mode) -->
+      <path class="av-hood-back" d="M160 44 C118 44, 100 78, 102 122 C104 150, 116 165, 128 170 L192 170 C204 165, 216 150, 218 122 C220 78, 202 44, 160 44 Z" fill="url(#${prefix}-hood-in)"/>
+
       <!-- Back hair mass -->
-      <path d="M104 114 C100 72, 126 46, 162 46 C198 46, 220 72, 216 114 C215 132, 208 144, 200 148 L120 148 C112 144, 105 132, 104 114 Z" fill="url(#${prefix}-hair)"/>
+      <path class="av-hair-back" d="M104 114 C100 72, 126 46, 162 46 C198 46, 220 72, 216 114 C215 132, 208 144, 200 148 L120 148 C112 144, 105 132, 104 114 Z" fill="url(#${prefix}-hair)"/>
 
       <!-- Ears -->
       <g class="av-ears">
@@ -238,6 +245,30 @@ function avatarSvg(prefix, { compact = false } = {}) {
         <path d="M140 62 Q165 53 187 65" fill="none" stroke="rgba(255,245,235,0.2)" stroke-width="3" stroke-linecap="round"/>
         <path d="M129 79 Q148 70 165 77" fill="none" stroke="rgba(255,245,235,0.16)" stroke-width="2.4" stroke-linecap="round"/>
       </g>
+
+      <!-- Pulled-up 3D clay hood canopy (shown when Hood Up / Hacker mode is active) -->
+      <g class="av-hood-canopy">
+        <path
+          fill-rule="evenodd"
+          d="M160 33 C110 33, 91 70, 94 119 C96 149, 108 164, 118 171 L202 171 C212 164, 224 149, 226 119 C229 70, 210 33, 160 33 Z M160 76 C132 76, 115 92, 115 119 C115 147, 132 164, 160 164 C188 164, 205 147, 205 119 C205 92, 188 76, 160 76 Z"
+          fill="url(#${prefix}-hood)"
+        />
+        <path
+          d="M119 156 C108 139, 106 94, 121 77 C137 64, 183 64, 199 77 C214 94, 212 139, 201 156"
+          fill="none"
+          stroke="rgba(255,228,210,0.34)"
+          stroke-width="2.6"
+          stroke-linecap="round"
+        />
+        <path
+          d="M160 36 C160 48, 160 61, 160 72"
+          fill="none"
+          stroke="rgba(130,30,5,0.38)"
+          stroke-width="2.4"
+          stroke-dasharray="4 4"
+          stroke-linecap="round"
+        />
+      </g>
     </g>
 
     <!-- Joyful SVG burst sparks on boop -->
@@ -251,20 +282,28 @@ function avatarSvg(prefix, { compact = false } = {}) {
 }
 
 // Multi-hue palette for the cursor-reactive radial capsule-dash wave
-const WAVE_STOPS = [
+const WAVE_STOPS_DEV = [
   [255, 90, 31],   // #ff5a1f safety orange
   [251, 146, 60],  // #fb923c warm amber
   [168, 85, 247],  // #a855f7 vivid orchid
   [56, 189, 248],  // #38bdf8 electric sky
 ];
 
-function sampleWaveColor(t) {
+const WAVE_STOPS_HACK = [
+  [220, 38, 38],   // #dc2626 safelight crimson
+  [255, 90, 31],   // #ff5a1f hot ember
+  [190, 24, 93],   // #be185d darkroom magenta
+  [244, 63, 94],   // #f43f5e neon rose
+];
+
+function sampleWaveColor(t, hack = false) {
+  const stops = hack ? WAVE_STOPS_HACK : WAVE_STOPS_DEV;
   const clamped = Math.max(0, Math.min(1, t));
-  const scaled = clamped * (WAVE_STOPS.length - 1);
-  const idx = Math.min(WAVE_STOPS.length - 2, Math.floor(scaled));
+  const scaled = clamped * (stops.length - 1);
+  const idx = Math.min(stops.length - 2, Math.floor(scaled));
   const f = scaled - idx;
-  const a = WAVE_STOPS[idx];
-  const b = WAVE_STOPS[idx + 1];
+  const a = stops[idx];
+  const b = stops[idx + 1];
   const r = Math.round(a[0] + (b[0] - a[0]) * f);
   const g = Math.round(a[1] + (b[1] - a[1]) * f);
   const bl = Math.round(a[2] + (b[2] - a[2]) * f);
@@ -300,6 +339,7 @@ function initWaveCanvas(canvas, stage) {
 
   function drawFrame() {
     ctx.clearRect(0, 0, w, h);
+    const hack = getMode() === "hack";
     const ox = fx * w;
     const oy = fy * h;
     const maxDist = Math.hypot(w, h) * 1.05;
@@ -336,7 +376,7 @@ function initWaveCanvas(canvas, stage) {
         const y2 = oy + dy * (dist + segLen) + ny * wave2;
 
         if (x2 > -24 && x1 < w + 24 && y2 > -24 && y1 < h + 24) {
-          ctx.strokeStyle = sampleWaveColor(tNorm * 0.86 + (i / rays) * 0.14);
+          ctx.strokeStyle = sampleWaveColor(tNorm * 0.86 + (i / rays) * 0.14, hack);
           ctx.globalAlpha = 0.36 + (1 - tNorm) * 0.48;
           ctx.lineWidth = w < 460 ? 5.5 : 7.0;
           ctx.beginPath();
@@ -380,6 +420,9 @@ function initWaveCanvas(canvas, stage) {
     { threshold: 0.05 }
   );
   io.observe(stage);
+
+  const mo = new MutationObserver(() => drawFrame());
+  mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-mode"] });
 
   addEventListener("resize", resize, { passive: true });
   resize();
