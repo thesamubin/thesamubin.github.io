@@ -389,17 +389,21 @@ export function initBugs() {
     { passive: true }
   );
 
-  addEventListener(
-    "resize",
-    () => {
-      collectLedges();
-      if (wrapEl && ledges[ledgeIdx] && !busy) {
-        const c = ledgeCoords(ledges[ledgeIdx], 0.76);
-        place(c.x, c.y, dir);
-      }
-    },
-    { passive: true }
-  );
+  function reanchor() {
+    collectLedges();
+    if (wrapEl && ledges[ledgeIdx] && !busy) {
+      const c = ledgeCoords(ledges[ledgeIdx], 0.76);
+      place(c.x, c.y, dir);
+    }
+  }
+
+  addEventListener("resize", reanchor, { passive: true });
+
+  // Re-perch immediately when toggling Dev <-> Hacker mode shifts mobile card offsets
+  new MutationObserver(() => requestAnimationFrame(reanchor)).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-mode"],
+  });
 
   spawn();
 }
